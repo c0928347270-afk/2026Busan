@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Busan Trip Handbook 💖</title>
+    <title>2026 Busan Trip 🇰🇷</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&family=Nunito:wght@400;700;900&family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&family=Nunito:wght400;700;900&family=Noto+Sans+TC:wght500;700&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -129,41 +129,29 @@
         }
     </style>
 </head>
-<body class="h-screen flex flex-col overflow-hidden text-gray-700">
-
-<div id="app" class="flex flex-col h-full">
-
-    <header class="pt-8 pb-4 px-5 z-10 relative overflow-hidden flex justify-between items-center">
+<body class="text-gray-700"> <div id="app"> <header class="pt-8 pb-4 px-5 z-10 relative overflow-hidden flex justify-between items-center">
         <div>
             <h1 class="text-3xl font-black text-gray-800 tracking-wide leading-tight flex items-center gap-2">
-                2026 韓國釜山 5 日遊
+                2025 韓國釜山 5 日遊
                 <i class="ph ph-paper-plane-tilt text-macaron-pink text-2xl"></i>
             </h1>
-            <p class="text-sm font-body text-gray-700 font-bold opacity-70 mt-0.5">Jan 21 - Jan 25, 2026</p>
+            <p class="text-sm font-body text-gray-700 font-bold opacity-70 mt-0.5">Jan 21 - Jan 25, 2025</p>
         </div>
     </header>
 
-    <main class="flex-1 overflow-y-auto p-5 pt-2 pb-28 space-y-5">
-        
-        <div v-if="currentTab === 'itinerary'" class="space-y-4">
+    <main class="p-5 pt-2 pb-28 space-y-5"> <div v-if="currentTab === 'itinerary'" class="space-y-4">
             <div class="flex space-x-3 overflow-x-auto pb-2 no-scrollbar px-1">
                 <button v-for="i in 5" :key="i" 
                     @click="activeDay = i"
                     :class="activeDay === i ? 'bg-macaron-blue text-white ring-2 ring-macaron-blue ring-offset-2' : 'bg-white text-gray-400 border border-gray-100'"
                     class="flex-shrink-0 w-16 h-16 rounded-3xl flex flex-col items-center justify-center shadow-md transition-all duration-300 btn-press">
-                    <span class="text-[10px] uppercase font-bold">Day</span>
-                    <span class="text-xl font-black leading-none">{{ i }}</span>
-                    <span class="text-xs mt-1">{{ getWeatherIcon(simulatedWeather[i].code) }}</span>
-                </button>
+                    <span class="text-[10px] uppercase font-bold">{{ getDayInfo(i).day }}</span> <span class="text-xl font-black leading-none">{{ getDayInfo(i).date.slice(3) }}</span> </button>
             </div>
 
             <div class="space-y-4 pt-2">
                 <div class="flex justify-between items-center px-1 mb-2">
-                    <h2 class="text-lg font-bold text-gray-800">Day {{ activeDay }} 行程</h2>
-                    <div class="flex items-center gap-1.5 text-sm font-bold bg-macaron-yellow/50 px-3 py-1.5 rounded-full border border-yellow-100 shadow-sm">
-                        <span class="text-xl leading-none">{{ getWeatherIcon(simulatedWeather[activeDay].code) }}</span>
-                        <span class="font-body text-gray-700">{{ simulatedWeather[activeDay].temp }}°</span>
-                    </div>
+                    <h2 class="text-lg font-bold text-gray-800">{{ getDayInfo(activeDay).fullDay }} 行程</h2> <div class="flex items-center gap-1.5 text-base font-bold bg-macaron-yellow/50 px-3 py-1.5 rounded-full border border-yellow-100 shadow-sm">
+                        <span class="text-3xl leading-none">{{ getWeatherIcon(simulatedWeather[activeDay].code) }}</span> <span class="font-body text-gray-700 text-xl">{{ simulatedWeather[activeDay].temp }}°</span> </div>
                 </div>
 
                 <div v-if="filteredItinerary.length === 0" class="text-center py-10 text-gray-400 cute-card">
@@ -223,7 +211,7 @@
                     <h3 class="font-bold text-gray-700"><i class="ph ph-calculator text-macaron-purple"></i> 匯率計算機</h3>
                     <div class="flex items-center gap-2 bg-white px-3 py-1 rounded-xl border border-gray-200 shadow-sm">
                         <span class="text-[10px] text-gray-400 font-body">目前匯率</span>
-                        <input v-model.number="exchangeRate" type="number" class="w-12 text-right font-bold text-sm outline-none text-blue-500 font-body" min="1" step="0.1">
+                        <input v-model.number="exchangeRate" type="number" class="w-12 text-right font-bold text-sm outline-none text-blue-500 font-body" min="0.01" step="0.01">
                     </div>
                 </div>
                 
@@ -273,7 +261,7 @@
                         <div class="flex items-center gap-3">
                             <div class="text-right font-body">
                                 <p class="font-bold text-gray-400 text-xs">₩{{ formatNumber(exp.amount) }}</p>
-                                <p class="text-sm font-bold text-blue-500">NT$ {{ formatNumber(Math.round(exp.amount / exchangeRate)) }}</p>
+                                <p class="text-sm font-bold text-blue-500">NT$ {{ formatNumber(exchangeRate > 0 ? Math.round(exp.amount / exchangeRate) : 0) }}</p>
                             </div>
                             <button @click="removeExpense(index)" class="text-gray-300 hover:text-red-400 p-1 btn-press"><i class="ph ph-x-circle"></i></button>
                         </div>
@@ -305,12 +293,20 @@
                         <span class="font-bold text-gray-800">{{ flightInfo.departure.arrAirport }} (PUS)</span>
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-[10px] text-gray-400 uppercase">Gate / Time</span>
-                        <span class="font-bold text-gray-800">{{ flightInfo.departure.gate }} / {{ flightInfo.departure.depTime }}</span>
+                        <span class="text-[10px] text-gray-400 uppercase">Terminal / Gate</span>
+                        <span class="font-bold text-gray-800">{{ flightInfo.departure.terminal }} / {{ flightInfo.departure.gate }}</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-gray-400 uppercase">Boarding Time</span>
+                        <span class="font-bold text-gray-800">{{ flightInfo.departure.boardingTime }}</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-gray-400 uppercase">Flight Time</span>
+                        <span class="font-bold text-gray-800">{{ flightInfo.departure.depTime }}</span>
                     </div>
                     <div class="flex flex-col">
                         <span class="text-[10px] text-gray-400 uppercase">Date</span>
-                        <span class="font-bold text-gray-800">Jan 21, 2026</span>
+                        <span class="font-bold text-gray-800">Jan 21, 2025</span>
                     </div>
                 </div>
             </div>
@@ -332,12 +328,20 @@
                         <span class="font-bold text-gray-800">{{ flightInfo.return.arrAirport }} (TPE)</span>
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-[10px] text-gray-400 uppercase">Gate / Time</span>
-                        <span class="font-bold text-gray-800">{{ flightInfo.return.gate }} / {{ flightInfo.return.depTime }}</span>
+                        <span class="text-[10px] text-gray-400 uppercase">Terminal / Gate</span>
+                        <span class="font-bold text-gray-800">{{ flightInfo.return.terminal }} / {{ flightInfo.return.gate }}</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-gray-400 uppercase">Boarding Time</span>
+                        <span class="font-bold text-gray-800">{{ flightInfo.return.boardingTime }}</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-gray-400 uppercase">Flight Time</span>
+                        <span class="font-bold text-gray-800">{{ flightInfo.return.depTime }}</span>
                     </div>
                     <div class="flex flex-col">
                         <span class="text-[10px] text-gray-400 uppercase">Date</span>
-                        <span class="font-bold text-gray-800">Jan 25, 2026</span>
+                        <span class="font-bold text-gray-800">Jan 25, 2025</span>
                     </div>
                 </div>
             </div>
@@ -437,7 +441,10 @@
             </div>
             
             <div class="flex-1 rounded-3xl overflow-hidden shadow-2xl border-4 border-white relative bg-gray-100">
-                <iframe width="100%" height="100%" style="border:0" loading="lazy" src="https://www.google.com/maps/search/$"></iframe>
+                <iframe width="100%" height="100%" style="border:0" loading="lazy" 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d102716.27850871927!2d129.0838128!3d35.1584949!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568e89f81216d8f%3A0x6a0c5c36af1c944d!2sBusan%2C%20South%20Korea!5e0!3m2!1sen!2stw!4v1703649600000!5m2!1sen!2stw" 
+                    allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
                 <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-xl text-xs font-bold text-gray-500 shadow-md font-body">
                     僅供概覽，導航請使用上方按鈕
                 </div>
@@ -533,6 +540,15 @@
 
             // --- Fixed Data ---
             
+            // Trip Date Mapping (Jan 21 - Jan 25, 2025)
+            const tripDates = {
+                1: { date: '01/21', day: '週二', fullDay: '1月21日 (週二)' },
+                2: { date: '01/22', day: '週三', fullDay: '1月22日 (週三)' },
+                3: { date: '01/23', day: '週四', fullDay: '1月23日 (週四)' },
+                4: { date: '01/24', day: '週五', fullDay: '1月24日 (週五)' },
+                5: { date: '01/25', day: '週六', fullDay: '1月25日 (週六)' },
+            };
+
             // Simulated Daily Weather
             const simulatedWeather = ref({
                 1: { code: 2, temp: 8, rain: 20 }, // Cloudy
@@ -568,21 +584,80 @@
                 { name: '旅遊諮詢熱線', number: '1330', desc: 'Korea Travel Hotline' }
             ];
 
-            // Itinerary Default Data (Used to extract flight/hotel info)
+            // Itinerary Default Data (UPDATED based on user's detailed schedule)
             const defaultItinerary = [
-                // Day 1 Departure Flight
-                { id: 101, day: 1, time: '14:25', title: '去程: 長榮航空 BR164', location: 'Taoyuan Intl Airport T2', desc: '經濟艙 V | 17:40 抵達釜山', isFlight: true, flightNo: 'BR164', depAirport: 'TPE', arrAirport: 'PUS', depTime: '14:25', gate: 'TBD', type: 'departure' },
-                // Day 5 Return Flight
-                { id: 504, day: 5, time: '18:55', title: '回程: 長榮航空 BR163', location: 'Gimhae International Airport', desc: '經濟艙 V | 20:25 抵達桃園', isFlight: true, flightNo: 'BR163', depAirport: 'PUS', arrAirport: 'TPE', depTime: '18:55', gate: 'TBD', type: 'return' },
+                // --- Day 1 (Jan 21) ---
+                { id: 100, day: 1, time: '09:00', title: '從家裡出發', location: '桃園', desc: '前往桃園機場 T2', isFlight: false },
+                { id: 101, day: 1, time: '11:00', title: '抵達桃園機場 T2', location: '桃園國際機場 T2', desc: '辦理報到、托運、出境流程。', isFlight: false },
+                // Flight Departure (BR180)
+                { 
+                    id: 102, day: 1, time: '14:25', title: '長榮航空 BR180 (桃園→釜山) 啟程', 
+                    location: '桃園國際機場 T2', 
+                    desc: '預計 17:40 抵達釜山金海機場 (PUS)。', 
+                    isFlight: true, flightNo: 'BR180',
+                    depAirport: 'TPE', arrAirport: 'PUS', depTime: '14:25', 
+                    terminal: 'T2', gate: 'TBD', boardingTime: '13:55', type: 'departure' 
+                },
+                { id: 103, day: 1, time: '17:40', title: '抵達釜山金海機場 (PUS)', location: 'Gimhae International Airport', desc: '入境與領取行李 (約 20-30 分鐘)。', isFlight: false },
+                { id: 104, day: 1, time: '18:20', title: '機場 $\rightarrow$ 飯店 (交通轉乘)', location: '釜山金海機場', desc: '輕軌：金海機場站 $\rightarrow$ 沙上站 / 地鐵：沙上 $\rightarrow$ 西面 $\rightarrow$ 南浦站。總交通時間約 60 分鐘。', isFlight: false },
+                { id: 105, day: 1, time: '19:00', title: '釜山亞雲樹飯店 Check-in', location: 'Hotel Aventree Busan', desc: '辦理入住手續。', isFlight: false },
+                { id: 106, day: 1, time: '20:00', title: '晚餐與夜間自由活動', location: '南浦洞 (扎嘎其市場/BIFF/富平)', desc: '晚餐建議：南浦蔘雞湯 / 元祖釜山豬腳。\n活動：扎嘎其市場、BIFF 廣場（小吃）、國際市場、富平市場（罐頭市場）。', isFlight: false },
                 
-                // Day 1 Hotel Check-in (Used for Hotel Info)
-                { id: 102, day: 1, time: '19:00', title: '飯店 Check-in', location: 'Aventree Hotel Busan', desc: '地址：6 Gwangbok-ro 39beon-gil' },
-                
-                // Other days... 
-                { id: 103, day: 1, time: '20:00', title: '扎嘎其市場 / BIFF廣場', location: 'Jagalchi Market', desc: '晚餐、逛夜市' },
-                { id: 201, day: 2, time: '09:00', title: '海雲台傳統市場', location: 'Haeundae Traditional Market', desc: '早餐：刀削麵、飯捲' },
-                { id: 301, day: 3, time: '09:00', title: 'KKday一日遊集合', location: 'Busan Station', desc: '前往慶州' },
-                { id: 401, day: 4, time: '09:30', title: '松島天空步道', location: 'Songdo Cloud Trails', desc: '海上步道' },
+                // --- Day 2 (Jan 22) ---
+                { id: 201, day: 2, time: '08:00', title: '從南浦洞出發 $\rightarrow$ 海雲台站', location: '海雲台站', desc: '地鐵約 50 分鐘，計程車約 25-30 分鐘（推薦計程車）。', isFlight: false },
+                { id: 202, day: 2, time: '09:00', title: '海雲台傳統市場 (早餐)', location: '해운대 전통시장', desc: '推薦：手工飯捲、海鮮煎餅等在地美食。停留約 40 分鐘。', isFlight: false },
+                { id: 203, day: 2, time: '09:45', title: '海雲台海邊散步', location: '海雲台海邊', desc: '簡單散步、拍照。', isFlight: false },
+                { id: 204, day: 2, time: '10:00', title: '前往海東龍宮寺', location: '海東龍宮寺', desc: '交通：計程車車程約 15-18 分鐘（最省時）。', isFlight: false },
+                { id: 205, day: 2, time: '10:20', title: '海東龍宮寺 參觀', location: '해동용궁사', desc: '參觀：龍門石橋、觀音像、海岸步道。停留約 1.2 小時。', isFlight: false },
+                { id: 206, day: 2, time: '11:40', title: '樂天 Outlet (東釜山店)', location: '롯데프리미엄아울렛 동부산점', desc: '可在此用餐及購物 (彈性行程)。', isFlight: false },
+                { id: 207, day: 2, time: '14:10', title: '新世界百貨 (Centum City)', location: '신세계백화점 센텀시티', desc: '逛街、小點心。', isFlight: false },
+                { id: 208, day: 2, time: '15:00', title: 'SPA LAND 汗蒸幕', location: 'SPA LAND (新世界百貨 B1)', desc: '休息放鬆，體驗設施。停留約 2 小時。', isFlight: false },
+                { id: 209, day: 2, time: '17:20', title: '返回南浦洞 (地鐵)', location: '南浦站', desc: '地鐵：Centum City $\rightarrow$ 西面 $\rightarrow$ 南浦洞 (約 45 分鐘)。', isFlight: false },
+                { id: 210, day: 2, time: '18:10', title: '南浦洞晚餐與夜間逛街', location: '南浦洞 / 西面地下街', desc: '晚餐建議：伍班長燒肉 (海雲台) / 南浦洞周邊餐廳。活動：(A) 西面地下街文創店 (B) 南浦洞 KPOP 唱片行。', isFlight: false },
+
+                // --- Day 3 (Jan 23) ---
+                { id: 301, day: 3, time: '09:00', title: 'KKday 釜山一日遊 集合出發', location: '釜山站 1 號出口', desc: '交通方式：一日遊巴士。', isFlight: false },
+                { id: 302, day: 3, time: '10:30', title: '天空膠囊 (藍線公園)', location: '海邊列車 (청사포)', desc: '體驗海岸膠囊列車。', isFlight: false },
+                { id: 303, day: 3, time: '13:10', title: '海東龍宮寺 (本日第二次造訪)', location: '해동용궁사', desc: 'KKday 行程安排。午餐建議：道熙家海鮮 (近青沙浦)。', isFlight: false },
+                { id: 304, day: 3, time: '15:00', title: '佛國寺 (慶州世界遺產)', location: '佛國寺', desc: '慶州世界遺產。', isFlight: false },
+                { id: 305, day: 3, time: '16:40', title: '大陵院 + 皇理團路', location: '慶州大陵院 / 皇理團路', desc: '慶州歷史文化區散策。', isFlight: false },
+                { id: 306, day: 3, time: '19:00', title: '東宮與月池 (雁鴨池) 夜景', location: '東宮與月池', desc: '欣賞慶州著名夜景。', isFlight: false },
+                { id: 307, day: 3, time: '21:50', title: '一日遊返回釜山站', location: '釜山站', desc: '可選擇在西面站提前下車，逛西面大創 2 號店。', isFlight: false },
+
+                // --- Day 4 (Jan 24) ---
+                { id: 401, day: 4, time: '08:00', title: '飯店出發 / 早餐', location: '南浦洞', desc: '從飯店出發，準備前往松島。', isFlight: false },
+                { id: 402, day: 4, time: '09:30', title: '松島天空步道', location: '송도스카이워크', desc: '交通：從札嘎其站叫車約 5 分鐘抵達。停留約 20-30 分鐘。', isFlight: false },
+                { id: 403, day: 4, time: '10:20', title: '松島海上纜車 (Air Cruise)', location: '송도해상케이블카', desc: '建議搭乘來回，觀賞海景。約 1 小時。', isFlight: false },
+                { id: 404, day: 4, time: '11:30', title: '午餐 (樂天百貨光復店)', location: '롯데백화점 광복점', desc: '在百貨內用餐。', isFlight: false },
+                { id: 405, day: 4, time: '13:20', title: '樂天百貨頂樓 (星光花園)', location: '樂天百貨光復店頂樓', desc: '提早抵達觀景位，準備觀賞開橋儀式。', isFlight: false },
+                { id: 406, day: 4, time: '14:00', title: '觀賞影島大橋開橋儀式', location: '影島大橋 (觀賞點)', desc: '準時開始，約 5-7 分鐘。為最佳俯瞰角度。', isFlight: false },
+                { id: 407, day: 4, time: '15:00', title: '白淺灘文化村', location: '흰여울문화마을', desc: '交通：計程車從樂天百貨搭車約 10-12 分鐘。停留約 40-60 分鐘。', isFlight: false },
+                { id: 408, day: 4, time: '16:00', title: '太宗台遊園地', location: '태종대유원지', desc: '需搭乘「丹青列車」遊覽燈塔、觀景台。停留約 1.5 小時。', isFlight: false },
+                { id: 409, day: 4, time: '18:30', title: '返回南浦洞晚餐', location: '南浦洞', desc: '車程約 20 分鐘。', isFlight: false },
+                { id: 410, day: 4, time: '20:00', title: '釜山塔夜景', location: '부산타워/용두산공원', desc: '步行/手扶梯至龍頭山公園，俯瞰南浦夜景。停留約 40-60 分鐘。', isFlight: false },
+                { id: 411, day: 4, time: '21:00', title: '南浦洞自由逛街 / BIFF 廣場', location: '南浦洞 / BIFF 광장', desc: '夜間自由活動。', isFlight: false },
+
+                // --- Day 5 (Jan 25) ---
+                { id: 501, day: 5, time: '08:00', title: '早餐 + 整理行李', location: '釜山亞雲樹飯店', desc: 'Check Out Time：11:00 AM，行李寄放櫃檯。', isFlight: false },
+                { id: 502, day: 5, time: '09:00', title: '飯店 $\rightarrow$ 甘川洞文化村', location: '甘川洞文化村', desc: '交通：計程車從南浦洞搭車約 10-15 分鐘。', isFlight: false },
+                { id: 503, day: 5, time: '09:15', title: '甘川洞文化村散策', location: '감천문화마을', desc: '建議參觀：小王子拍照點、觀景平台。停留約 2 小時。', isFlight: false },
+                { id: 504, day: 5, time: '11:30', title: '返回南浦洞', location: '南浦洞', desc: '交通：計程車車程約 10-15 分鐘。', isFlight: false },
+                { id: 505, day: 5, time: '11:45', title: '午餐 (南浦洞)', location: '南浦洞', desc: '可選擇元祖蔘雞湯、富平市場小吃等。', isFlight: false },
+                { id: 506, day: 5, time: '13:00', title: '南浦洞自由活動/購物', location: '光復路購物街', desc: '進行最後的購物補貨。', isFlight: false },
+                { id: 507, day: 5, time: '14:30', title: '回飯店領行李', location: '釜山亞雲樹飯店', desc: '檢查護照、退稅單等重要物品。', isFlight: false },
+                { id: 508, day: 5, time: '15:00', title: '南浦洞 $\rightarrow$ 金海機場', location: 'Gimhae International Airport', desc: '交通：地鐵 $\rightarrow$ 輕軌。需預留足夠時間 (全程約 60 分鐘)。', isFlight: false },
+                { id: 509, day: 5, time: '16:00', title: '抵達金海機場', location: 'Gimhae International Airport', desc: '辦理報到、托運、KIOSK 掃描退稅條碼。', isFlight: false },
+                { id: 510, day: 5, time: '17:20', title: '候機/免稅店購物/領退稅金', location: 'Gimhae International Airport', desc: '出境後到 4 號區域的退稅櫃檯領取現金。', isFlight: false },
+                // Flight Return (BR163)
+                { 
+                    id: 511, day: 5, time: '18:55', title: '回程: 長榮航空 BR163 (釜山→桃園) 啟程', 
+                    location: 'Gimhae International Airport', 
+                    desc: '預計 20:25 抵達桃園機場 T2。', 
+                    isFlight: true, flightNo: 'BR163',
+                    depAirport: 'PUS', arrAirport: 'TPE', depTime: '18:55', 
+                    terminal: 'Intl', gate: 'TBD', boardingTime: '18:25', type: 'return' 
+                },
+                { id: 512, day: 5, time: '20:25', title: '抵達桃園機場', location: '桃園國際機場 T2', desc: '旅行結束', isFlight: false },
             ];
 
             const itinerary = ref([]);
@@ -592,22 +667,28 @@
                 newExpense.value.date = new Date().toISOString().split('T')[0];
 
                 // Load from LocalStorage
-                const savedItinerary = localStorage.getItem('busan_2026_v5_itinerary');
+                // NOTE: Changed storage key to v6 to force new default data load
+                const savedItinerary = localStorage.getItem('busan_2026_v6_itinerary'); 
                 const savedExpenses = localStorage.getItem('busan_2026_v5_expenses');
                 const savedRate = localStorage.getItem('busan_2026_rate');
                 const savedLuggage = localStorage.getItem('busan_2026_luggage_v5');
                 const savedMustBuy = localStorage.getItem('busan_2026_mustbuy_v5');
                 
+                // If saved itinerary is missing, use the new default data
                 itinerary.value = savedItinerary ? JSON.parse(savedItinerary) : defaultItinerary;
                 if (savedExpenses) expenses.value = JSON.parse(savedExpenses);
-                if (savedRate) exchangeRate.value = parseFloat(savedRate);
+                if (savedRate && parseFloat(savedRate) > 0) {
+                     exchangeRate.value = parseFloat(savedRate);
+                } else {
+                     exchangeRate.value = 41.5; // Default if saved is 0 or invalid
+                }
                 luggageList.value = savedLuggage ? JSON.parse(savedLuggage) : defaultLuggage;
                 mustBuyList.value = savedMustBuy ? JSON.parse(savedMustBuy) : defaultMustBuy;
             });
 
             // --- Watchers for Auto-Save ---
             watch([itinerary, expenses, exchangeRate, luggageList, mustBuyList], () => {
-                localStorage.setItem('busan_2026_v5_itinerary', JSON.stringify(itinerary.value));
+                localStorage.setItem('busan_2026_v6_itinerary', JSON.stringify(itinerary.value));
                 localStorage.setItem('busan_2026_v5_expenses', JSON.stringify(expenses.value));
                 localStorage.setItem('busan_2026_rate', exchangeRate.value);
                 localStorage.setItem('busan_2026_luggage_v5', JSON.stringify(luggageList.value));
@@ -623,25 +704,30 @@
 
             const totalExpenseTWD = computed(() => {
                 const totalKRW = expenses.value.reduce((sum, item) => sum + item.amount, 0);
-                return Math.round(totalKRW / (exchangeRate.value || 1));
+                const rate = Number(exchangeRate.value);
+                if (rate <= 0 || isNaN(rate)) return 0;
+                return Math.round(totalKRW / rate);
             });
             
-            // Calculator fix
             const calculatedTWD = computed(() => {
                 const krw = Number(calcKRW.value) || 0;
-                const rate = Number(exchangeRate.value) || 1;
-                if (rate === 0) return 0;
+                const rate = Number(exchangeRate.value); 
+                
+                if (rate <= 0 || isNaN(rate)) {
+                    return 0; // Return 0 if rate is unusable
+                }
+                
                 return Math.round(krw / rate);
             });
 
-            // Flight Info Extraction (Now includes both departure and return)
+            // Flight Info Extraction (Now includes terminal and boarding time)
             const flightInfo = computed(() => {
                 const dep = itinerary.value.find(i => i.isFlight && i.type === 'departure');
                 const ret = itinerary.value.find(i => i.isFlight && i.type === 'return');
                 
-                // Default placeholders based on the provided itinerary data structure
-                const defaultDep = { flightNo: 'BR164', depAirport: 'TPE', arrAirport: 'PUS', depTime: '14:25', gate: 'TBD' };
-                const defaultRet = { flightNo: 'BR163', depAirport: 'PUS', arrAirport: 'TPE', depTime: '18:55', gate: 'TBD' };
+                // Default placeholders (UPDATED with BR180/BR163)
+                const defaultDep = { flightNo: 'BR180', depAirport: 'TPE', arrAirport: 'PUS', depTime: '14:25', terminal: 'T2', gate: 'TBD', boardingTime: '13:55' };
+                const defaultRet = { flightNo: 'BR163', depAirport: 'PUS', arrAirport: 'TPE', depTime: '18:55', terminal: 'Intl', gate: 'TBD', boardingTime: '18:25' };
 
                 return {
                     departure: dep || defaultDep,
@@ -649,19 +735,20 @@
                 };
             });
 
-            // Hotel Info Extraction (Using Day 1 check-in for the card)
+            // Hotel Info Extraction (UPDATED)
             const hotelInfo = computed(() => {
-                const hotelItem = itinerary.value.find(i => i.location === 'Aventree Hotel Busan');
                 return {
                     name: '釜山亞雲樹飯店 (Hotel Aventree Busan)',
-                    address: '6 Gwangbok-ro 39beon-gil, Jung-gu, Busan, 南韓',
+                    address: '釜山廣域市中區南浦街 25 / 부산 중구 남포길 25', // Updated Address
                 };
             });
 
 
             // --- Methods ---
             
-            // Itinerary Methods
+            // Utility Methods
+            const getDayInfo = (dayIndex) => tripDates[dayIndex] || { date: `Day ${dayIndex}`, day: '', fullDay: `Day ${dayIndex}` };
+            
             const openModal = (item) => {
                 if (item) {
                     isEditMode.value = true;
@@ -732,10 +819,10 @@
                 const q = mapQuery.value || 'Busan';
                 window.open(`https://map.naver.com/p/search/${encodeURIComponent(q)}`, '_blank');
             };
+            // FIX: Use a proper Google Maps search URL
             const searchGoogleMap = () => {
                 const q = mapQuery.value || 'Busan';
-                // Note: Placeholder URL for Google Map Search.
-                window.open(`https://www.google.com/maps/search/$$${encodeURIComponent(q)}`, '_blank');
+                window.open(`https://www.google.com/maps/search/${encodeURIComponent(q)}`, '_blank');
             };
             const getNaverMapLink = (query) => `https://map.naver.com/p/search/${encodeURIComponent(query)}`;
             
@@ -755,11 +842,11 @@
                 itinerary, expenses, exchangeRate, filteredItinerary,
                 totalExpenseTWD, newExpense, mapQuery,
                 luggageList, newLuggageItem, mustBuyList, newMustBuyItem,
-                flightInfo, hotelInfo, emergencyContacts, simulatedWeather,
+                flightInfo, hotelInfo, emergencyContacts, simulatedWeather, tripDates,
                 calculatedTWD, calcKRW,
                 openModal, saveItem, deleteItem, addExpense, removeExpense,
                 addLuggage, removeLuggage, addMustBuy, removeMustBuy,
-                formatNumber, searchNaverMap, searchGoogleMap, getNaverMapLink, getWeatherIcon
+                formatNumber, searchNaverMap, searchGoogleMap, getNaverMapLink, getWeatherIcon, getDayInfo
             };
         }
     }).mount('#app');
