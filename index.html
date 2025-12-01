@@ -68,7 +68,6 @@
             border-color: #bae6fd;
         }
 
-        /* Custom Input for Calculator */
         .calc-input {
             font-size: 1.5rem;
             font-weight: bold;
@@ -77,6 +76,34 @@
             background: transparent;
             outline: none;
             width: 100%;
+        }
+
+        /* Checkbox Custom Style */
+        .custom-checkbox {
+            appearance: none;
+            background-color: #fff;
+            margin: 0;
+            font: inherit;
+            color: currentColor;
+            width: 1.2em;
+            height: 1.2em;
+            border: 2px solid #CDB4DB;
+            border-radius: 0.35em;
+            display: grid;
+            place-content: center;
+        }
+        .custom-checkbox::before {
+            content: "";
+            width: 0.65em;
+            height: 0.65em;
+            transform: scale(0);
+            transition: 120ms transform ease-in-out;
+            box-shadow: inset 1em 1em #CDB4DB;
+            transform-origin: center;
+            clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+        }
+        .custom-checkbox:checked::before {
+            transform: scale(1);
         }
     </style>
 </head>
@@ -91,8 +118,7 @@
             </h1>
             <p class="text-xs text-gray-700 font-bold mt-1 opacity-70">Jan 21 - Jan 25</p>
         </div>
-        <button @click="resetData" class="text-[10px] bg-white/60 px-3 py-1.5 rounded-full text-red-500 font-bold hover:bg-white transition shadow-sm">重置資料</button>
-    </header>
+        </header>
 
     <main class="flex-1 overflow-y-auto p-5 pb-28 space-y-5">
         
@@ -160,7 +186,6 @@
         </div>
 
         <div v-if="currentTab === 'money'" class="space-y-6">
-            
             <div>
                 <div class="flex justify-between items-end mb-2 px-1">
                     <h3 class="font-bold text-gray-700"><i class="ph ph-calculator text-macaron-purple"></i> 匯率計算機</h3>
@@ -229,9 +254,9 @@
         </div>
 
         <div v-if="currentTab === 'hotel'" class="space-y-5 h-full flex flex-col">
-            <div class="cute-card p-5 bg-white shadow-md relative overflow-hidden">
+            
+            <div class="cute-card p-5 bg-white shadow-md relative overflow-hidden flex-shrink-0">
                 <div class="absolute top-0 left-0 w-full h-2 bg-macaron-purple"></div>
-                
                 <h2 class="text-xl font-bold text-gray-800 mb-1">Aventree Hotel Busan</h2>
                 <p class="text-xs text-gray-500 mb-4 font-mono select-all">6 Gwangbok-ro 39beon-gil</p>
                 
@@ -245,55 +270,97 @@
                 </div>
 
                 <div class="bg-gray-50 p-3 rounded-xl border border-gray-200">
-                    <label class="text-[10px] text-gray-400 font-bold uppercase block mb-1">Booking Reference No. (訂房編號)</label>
+                    <label class="text-[10px] text-gray-400 font-bold uppercase block mb-1">訂房編號 (Booking No.)</label>
                     <div class="flex items-center gap-2">
                         <i class="ph ph-hash text-gray-400"></i>
-                        <input v-model="hotelBookingId" type="text" placeholder="點擊輸入編號..." class="bg-transparent w-full outline-none font-mono font-bold text-gray-700 placeholder-gray-300">
+                        <input v-model="hotelBookingId" type="text" placeholder="點擊輸入..." class="bg-transparent w-full outline-none font-mono font-bold text-gray-700 placeholder-gray-300">
                     </div>
                 </div>
             </div>
 
-            <div class="flex-1 rounded-2xl overflow-hidden shadow-sm border-2 border-white bg-gray-100 relative">
-                <iframe 
-                    width="100%" 
-                    height="100%" 
-                    style="border:0" 
-                    loading="lazy" 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3265.234509876357!2d129.0284883!3d35.0995777!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568e90865842881%3A0xc486422201e5233c!2sAventree%20Hotel%20Busan!5e0!3m2!1sen!2stw!4v1700000000000!5m2!1sen!2stw">
-                </iframe>
+            <div class="flex-1 overflow-hidden flex flex-col">
+                <div class="flex justify-between items-center px-1 mb-2">
+                    <h3 class="font-bold text-gray-700"><i class="ph ph-suitcase-rolling text-macaron-purple"></i> 出國行李清單</h3>
+                    <span class="text-xs text-gray-400">{{ luggageList.filter(i => i.checked).length }} / {{ luggageList.length }}</span>
+                </div>
+                
+                <div class="cute-card flex-1 overflow-y-auto p-4 bg-gray-50 flex flex-col">
+                    <div class="flex gap-2 mb-4">
+                         <input v-model="newLuggageItem" @keyup.enter="addLuggage" type="text" placeholder="新增物品..." class="flex-1 bg-white p-2.5 rounded-xl text-sm outline-none border focus:border-macaron-purple">
+                         <button @click="addLuggage" class="bg-macaron-purple text-white w-10 h-10 rounded-xl flex items-center justify-center btn-press"><i class="ph ph-plus-bold"></i></button>
+                    </div>
+
+                    <div class="space-y-2">
+                        <div v-for="(item, index) in luggageList" :key="index" class="flex items-center bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
+                            <input type="checkbox" v-model="item.checked" class="custom-checkbox text-macaron-purple flex-shrink-0 cursor-pointer">
+                            <span class="ml-3 flex-1 text-sm font-bold text-gray-700" :class="{'line-through text-gray-300': item.checked}">{{ item.text }}</span>
+                            <button @click="removeLuggage(index)" class="text-gray-200 hover:text-red-400 px-2"><i class="ph ph-trash"></i></button>
+                        </div>
+                        <div v-if="luggageList.length === 0" class="text-center text-xs text-gray-300 mt-4">清單是空的</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="currentTab === 'map'" class="h-full flex flex-col">
+            <div class="bg-white p-4 rounded-2xl shadow-sm mb-4 border border-green-50">
+                <input v-model="mapQuery" @keyup.enter="searchNaverMap" type="text" placeholder="輸入地點搜尋 (例如：海雲台)" class="w-full bg-gray-50 px-4 py-3 rounded-xl text-sm outline-none font-bold mb-3 focus:bg-white focus:ring-2 focus:ring-green-100 transition">
+                
+                <div class="flex gap-2">
+                    <button @click="searchNaverMap" class="flex-1 bg-[#03C75A] text-white py-3 rounded-xl font-bold text-sm shadow-md btn-press flex items-center justify-center gap-2">
+                        <i class="ph ph-navigation-arrow"></i> Naver Map
+                    </button>
+                    <button @click="searchGoogleMap" class="flex-1 bg-blue-50 text-blue-500 border border-blue-100 py-3 rounded-xl font-bold text-sm shadow-sm btn-press flex items-center justify-center gap-2">
+                        <i class="ph ph-map-pin"></i> Google Map
+                    </button>
+                </div>
+            </div>
+            
+            <div class="flex-1 rounded-3xl overflow-hidden shadow-sm border-4 border-white relative bg-gray-100">
+                <iframe width="100%" height="100%" style="border:0" loading="lazy" src="http://googleusercontent.com/maps.google.com/8"></iframe>
+                <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-lg text-xs font-bold text-gray-500 shadow-sm">
+                    僅供概覽，導航請使用上方按鈕
+                </div>
             </div>
         </div>
 
         <div v-if="currentTab === 'weather'" class="space-y-4">
              <div class="cute-card p-6 text-center bg-gradient-to-b from-sky-50 to-white">
                 <h2 class="text-lg font-bold text-gray-600 uppercase tracking-widest mb-2">Busan</h2>
-                <div v-if="weatherLoading" class="py-8 text-gray-400 text-sm">載入中...</div>
+                <div v-if="weatherLoading" class="py-8 text-gray-400 text-sm">正在抓取氣象資料...</div>
                 <div v-else>
                     <div class="text-6xl my-2">{{ getWeatherIcon(currentWeather.code) }}</div>
                     <p class="text-5xl font-black text-gray-800">{{ currentWeather.temp }}°</p>
                     <div class="mt-4 flex justify-center gap-4 text-xs font-bold text-gray-500">
-                        <span>降雨 {{ currentWeather.rain }}%</span>
-                        <span>{{ currentWeather.desc }}</span>
+                        <span class="bg-white px-3 py-1 rounded-full shadow-sm">降雨機率 {{ currentWeather.rain }}%</span>
+                        <span class="bg-white px-3 py-1 rounded-full shadow-sm">{{ currentWeather.desc }}</span>
                     </div>
                 </div>
             </div>
-            <a href="https://www.google.com/search?q=釜山天氣" target="_blank" class="block text-center text-xs text-blue-400 font-bold bg-white p-3 rounded-xl shadow-sm">
-                前往 Google 查看詳細天氣
-            </a>
-        </div>
-
-        <div v-if="currentTab === 'map'" class="h-full flex flex-col">
-            <div class="bg-white p-3 rounded-2xl shadow-sm mb-4 border border-green-50">
-                <div class="flex gap-2">
-                    <input v-model="mapQuery" @keyup.enter="searchNaver" type="text" placeholder="輸入地點 (韓文/英文)" class="flex-1 bg-gray-50 px-4 py-2.5 rounded-xl text-sm outline-none">
-                    <button @click="searchNaver" class="bg-[#03C75A] text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md btn-press">
-                        Naver Map
-                    </button>
+            
+            <div class="cute-card p-4">
+                <h3 class="font-bold mb-3 text-xs text-gray-400 uppercase ml-1">未來 5 天預報</h3>
+                <div v-if="!weatherLoading" class="space-y-1">
+                    <div v-for="(day, index) in forecast" :key="index" class="flex items-center justify-between py-3 border-b border-gray-50 last:border-0 px-2 hover:bg-gray-50 rounded-lg transition">
+                        <div class="w-20">
+                            <p class="font-bold text-gray-700 text-sm">{{ day.dateStr }}</p>
+                        </div>
+                        <div class="flex-1 text-center text-xl">
+                            {{ getWeatherIcon(day.code) }}
+                        </div>
+                        <div class="w-24 text-right flex gap-2 justify-end text-sm">
+                            <span class="text-gray-400">{{ day.min }}°</span>
+                            <span class="text-gray-300">/</span>
+                            <span class="font-bold text-gray-800">{{ day.max }}°</span>
+                        </div>
+                    </div>
                 </div>
+                <div v-else class="text-center py-5 text-gray-300 text-xs">載入中...</div>
             </div>
-            <div class="flex-1 rounded-3xl overflow-hidden shadow-sm border-4 border-white relative bg-gray-100">
-                <iframe width="100%" height="100%" style="border:0" loading="lazy" src="http://googleusercontent.com/maps.google.com/8"></iframe>
-            </div>
+
+            <a href="https://www.google.com/search?q=釜山天氣" target="_blank" class="block text-center text-xs text-blue-400 font-bold bg-white p-3 rounded-xl shadow-sm border border-blue-50">
+                前往 Google 查看更多詳情
+            </a>
         </div>
 
     </main>
@@ -308,8 +375,8 @@
             <span class="text-[10px] font-bold mt-1">匯率/記帳</span>
         </button>
         <button @click="currentTab = 'hotel'" :class="currentTab === 'hotel' ? 'text-macaron-purple tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
-            <i class="ph ph-bed text-2xl" :weight="currentTab === 'hotel' ? 'fill' : 'regular'"></i>
-            <span class="text-[10px] font-bold mt-1">住宿</span>
+            <i class="ph ph-suitcase-rolling text-2xl" :weight="currentTab === 'hotel' ? 'fill' : 'regular'"></i>
+            <span class="text-[10px] font-bold mt-1">住宿/行李</span>
         </button>
         <button @click="currentTab = 'map'" :class="currentTab === 'map' ? 'text-macaron-mint tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
             <i class="ph ph-map-trifold text-2xl" :weight="currentTab === 'map' ? 'fill' : 'regular'"></i>
@@ -367,12 +434,14 @@
             const isEditMode = ref(false);
             const mapQuery = ref('');
             
-            // Hotel
+            // Hotel & Luggage
             const hotelBookingId = ref('');
+            const luggageList = ref([]);
+            const newLuggageItem = ref('');
 
             // Calculator
             const calcKRW = ref('');
-            const exchangeRate = ref(41.5); // 1 TWD = 41.5 KRW
+            const exchangeRate = ref(41.5); 
             
             // Expenses
             const expenses = ref([]);
@@ -381,7 +450,19 @@
             // Modal Form
             const modalForm = ref({ id: null, time: '', title: '', location: '', desc: '' });
 
-            // Default Itinerary
+            // Default Data
+            const defaultLuggage = [
+                { text: '護照 / 簽證', checked: false },
+                { text: '韓幣現金 / 信用卡', checked: false },
+                { text: 'WOWPASS 卡', checked: false },
+                { text: '轉接頭 (韓國圓孔)', checked: false },
+                { text: '行動電源 / 充電線', checked: false },
+                { text: '牙刷牙膏 (韓國環保不提供)', checked: false },
+                { text: '個人常備藥品', checked: false },
+                { text: '保暖衣物 / 圍巾', checked: false },
+                { text: '網卡 / eSim', checked: false }
+            ];
+
             const defaultItinerary = [
                 // Day 1
                 { id: 101, day: 1, time: '14:25', title: '去程: 長榮航空 BR164', location: 'Taoyuan Intl Airport T2', desc: '經濟艙 V | 17:40 抵達釜山', isFlight: true },
@@ -410,32 +491,38 @@
             ];
 
             const itinerary = ref([]);
+            
+            // Weather
             const weatherLoading = ref(true);
             const currentWeather = ref({ temp: '--', desc: '--', rain: 0, code: 0 });
+            const forecast = ref([]);
 
             // --- Lifecycle ---
             onMounted(() => {
                 newExpense.value.date = new Date().toISOString().split('T')[0];
 
-                const savedItinerary = localStorage.getItem('busan_2026_v2_itinerary');
-                const savedExpenses = localStorage.getItem('busan_2026_v2_expenses');
+                const savedItinerary = localStorage.getItem('busan_2026_v3_itinerary');
+                const savedExpenses = localStorage.getItem('busan_2026_v3_expenses');
                 const savedRate = localStorage.getItem('busan_2026_rate');
                 const savedBooking = localStorage.getItem('busan_2026_booking');
+                const savedLuggage = localStorage.getItem('busan_2026_luggage');
                 
                 itinerary.value = savedItinerary ? JSON.parse(savedItinerary) : defaultItinerary;
                 if (savedExpenses) expenses.value = JSON.parse(savedExpenses);
                 if (savedRate) exchangeRate.value = parseFloat(savedRate);
                 if (savedBooking) hotelBookingId.value = savedBooking;
+                luggageList.value = savedLuggage ? JSON.parse(savedLuggage) : defaultLuggage;
 
                 fetchWeather();
             });
 
             // --- Watchers for Auto-Save ---
-            watch([itinerary, expenses, exchangeRate, hotelBookingId], () => {
-                localStorage.setItem('busan_2026_v2_itinerary', JSON.stringify(itinerary.value));
-                localStorage.setItem('busan_2026_v2_expenses', JSON.stringify(expenses.value));
+            watch([itinerary, expenses, exchangeRate, hotelBookingId, luggageList], () => {
+                localStorage.setItem('busan_2026_v3_itinerary', JSON.stringify(itinerary.value));
+                localStorage.setItem('busan_2026_v3_expenses', JSON.stringify(expenses.value));
                 localStorage.setItem('busan_2026_rate', exchangeRate.value);
                 localStorage.setItem('busan_2026_booking', hotelBookingId.value);
+                localStorage.setItem('busan_2026_luggage', JSON.stringify(luggageList.value));
             }, { deep: true });
 
             // --- Computed ---
@@ -492,33 +579,59 @@
                 if(confirm('刪除這筆帳目？')) expenses.value.splice(index, 1);
             };
 
-            const resetData = () => {
-                if(confirm('確定重置所有資料嗎？')) {
-                    itinerary.value = [...defaultItinerary];
-                    expenses.value = [];
-                    hotelBookingId.value = '';
-                    localStorage.removeItem('busan_2026_v2_itinerary');
-                    localStorage.removeItem('busan_2026_v2_expenses');
-                    localStorage.removeItem('busan_2026_booking');
-                }
+            // Luggage Methods
+            const addLuggage = () => {
+                if(!newLuggageItem.value) return;
+                luggageList.value.push({ text: newLuggageItem.value, checked: false });
+                newLuggageItem.value = '';
+            };
+            const removeLuggage = (index) => {
+                luggageList.value.splice(index, 1);
             };
 
+            // Map Methods
+            const searchNaverMap = () => {
+                const q = mapQuery.value || 'Busan';
+                window.open(`https://map.naver.com/p/search/${encodeURIComponent(q)}`, '_blank');
+            };
+            const searchGoogleMap = () => {
+                const q = mapQuery.value || 'Busan';
+                window.open(`https://www.google.com/maps/search/${encodeURIComponent(q)}`, '_blank');
+            };
             const getNaverMapLink = (query) => `https://map.naver.com/p/search/${encodeURIComponent(query)}`;
-            const searchNaver = () => mapQuery.value && window.open(getNaverMapLink(mapQuery.value), '_blank');
+            
             const formatNumber = (num) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
+            // Weather Fetch
             const fetchWeather = async () => {
                 try {
-                    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=35.1796&longitude=129.0756&current=temperature_2m,weather_code,precipitation_probability&timezone=Asia%2FTokyo`);
+                    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=35.1796&longitude=129.0756&current=temperature_2m,weather_code,precipitation_probability&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo`);
                     const data = await res.json();
+                    
                     currentWeather.value = {
                         temp: Math.round(data.current.temperature_2m),
-                        desc: data.current.weather_code <= 3 ? '多雲/晴' : '陰/雨',
+                        desc: getWeatherDesc(data.current.weather_code),
                         rain: data.current.precipitation_probability || 0,
                         code: data.current.weather_code
                     };
+
+                    forecast.value = data.daily.time.map((date, idx) => ({
+                        dateStr: new Date(date).toLocaleDateString('zh-TW', { month: 'numeric', day: 'numeric', weekday: 'short' }),
+                        code: data.daily.weather_code[idx],
+                        max: Math.round(data.daily.temperature_2m_max[idx]),
+                        min: Math.round(data.daily.temperature_2m_min[idx])
+                    })).slice(0, 5);
+
                     weatherLoading.value = false;
                 } catch (e) { weatherLoading.value = false; }
+            };
+
+            const getWeatherDesc = (code) => {
+                if (code === 0) return '晴朗';
+                if (code <= 3) return '多雲';
+                if (code <= 67) return '雨天';
+                if (code <= 77) return '雪';
+                return '陰天';
             };
 
             const getWeatherIcon = (code) => {
@@ -532,10 +645,11 @@
                 currentTab, activeDay, showModal, isEditMode, modalForm,
                 itinerary, expenses, exchangeRate, filteredItinerary,
                 totalExpenseTWD, newExpense, mapQuery,
-                hotelBookingId, calcKRW,
+                hotelBookingId, calcKRW, luggageList, newLuggageItem,
                 openModal, saveItem, deleteItem, addExpense, removeExpense,
-                weatherLoading, currentWeather, getWeatherIcon,
-                formatNumber, searchNaver, getNaverMapLink, resetData
+                addLuggage, removeLuggage,
+                weatherLoading, currentWeather, forecast, getWeatherIcon,
+                formatNumber, searchNaverMap, searchGoogleMap, getNaverMapLink
             };
         }
     }).mount('#app');
