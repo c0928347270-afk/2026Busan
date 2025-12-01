@@ -118,7 +118,7 @@
             </h1>
             <p class="text-xs text-gray-700 font-bold mt-1 opacity-70">Jan 21 - Jan 25</p>
         </div>
-        </header>
+    </header>
 
     <main class="flex-1 overflow-y-auto p-5 pb-28 space-y-5">
         
@@ -203,7 +203,7 @@
                     <div class="flex items-center pt-2">
                         <span class="text-gray-400 font-bold w-12">TWD</span>
                         <div class="w-full text-right text-2xl font-bold text-macaron-purple">
-                            {{ formatNumber(Math.round((calcKRW || 0) / exchangeRate)) }}
+                            {{ formatNumber(calculatedTWD) }}
                         </div>
                     </div>
                 </div>
@@ -255,43 +255,61 @@
 
         <div v-if="currentTab === 'hotel'" class="space-y-5 h-full flex flex-col">
             
-            <div class="cute-card p-5 bg-white shadow-md relative overflow-hidden flex-shrink-0">
-                <div class="absolute top-0 left-0 w-full h-2 bg-macaron-purple"></div>
-                <h2 class="text-xl font-bold text-gray-800 mb-1">Aventree Hotel Busan</h2>
-                <p class="text-xs text-gray-500 mb-4 font-mono select-all">6 Gwangbok-ro 39beon-gil</p>
-                
-                <div class="flex gap-2 mb-4">
-                    <a href="https://map.naver.com/p/search/Aventree%20Hotel%20Busan" target="_blank" class="flex-1 bg-[#03C75A] text-white py-2.5 rounded-xl font-bold text-sm text-center shadow-sm btn-press">
-                        <i class="ph ph-navigation-arrow"></i> Naver 導航
-                    </a>
-                    <a href="https://www.google.com/maps/search/?api=1&query=Aventree+Hotel+Busan" target="_blank" class="flex-1 bg-blue-50 text-blue-500 border border-blue-100 py-2.5 rounded-xl font-bold text-sm text-center shadow-sm btn-press">
-                        Google 地圖
-                    </a>
-                </div>
-
-                <div class="bg-gray-50 p-3 rounded-xl border border-gray-200">
-                    <label class="text-[10px] text-gray-400 font-bold uppercase block mb-1">訂房編號 (Booking No.)</label>
-                    <div class="flex items-center gap-2">
-                        <i class="ph ph-hash text-gray-400"></i>
-                        <input v-model="hotelBookingId" type="text" placeholder="點擊輸入..." class="bg-transparent w-full outline-none font-mono font-bold text-gray-700 placeholder-gray-300">
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex-1 overflow-hidden flex flex-col">
-                <div class="flex justify-between items-center px-1 mb-2">
-                    <h3 class="font-bold text-gray-700"><i class="ph ph-suitcase-rolling text-macaron-purple"></i> 出國行李清單</h3>
-                    <span class="text-xs text-gray-400">{{ luggageList.filter(i => i.checked).length }} / {{ luggageList.length }}</span>
-                </div>
-                
-                <div class="cute-card flex-1 overflow-y-auto p-4 bg-gray-50 flex flex-col">
+            <template v-if="!isLuggageView">
+                <div class="cute-card p-5 bg-white shadow-md relative overflow-hidden flex-shrink-0">
+                    <div class="absolute top-0 left-0 w-full h-2 bg-macaron-purple"></div>
+                    <h2 class="text-xl font-bold text-gray-800 mb-1">Aventree Hotel Busan</h2>
+                    <p class="text-xs text-gray-500 mb-4 font-mono select-all">6 Gwangbok-ro 39beon-gil</p>
+                    
                     <div class="flex gap-2 mb-4">
+                        <a href="https://map.naver.com/p/search/Aventree%20Hotel%20Busan" target="_blank" class="flex-1 bg-[#03C75A] text-white py-2.5 rounded-xl font-bold text-sm text-center shadow-sm btn-press">
+                            <i class="ph ph-navigation-arrow"></i> Naver 導航
+                        </a>
+                        <a href="https://www.google.com/maps/search/?api=1&query=Aventree+Hotel+Busan" target="_blank" class="flex-1 bg-blue-50 text-blue-500 border border-blue-100 py-2.5 rounded-xl font-bold text-sm text-center shadow-sm btn-press">
+                            Google 地圖
+                        </a>
+                    </div>
+
+                    <div class="bg-gray-50 p-3 rounded-xl border border-gray-200">
+                        <label class="text-[10px] text-gray-400 font-bold uppercase block mb-1">訂房編號 (Booking No.)</label>
+                        <div class="flex items-center gap-2">
+                            <i class="ph ph-hash text-gray-400"></i>
+                            <input v-model="hotelBookingId" type="text" placeholder="點擊輸入..." class="bg-transparent w-full outline-none font-mono font-bold text-gray-700 placeholder-gray-300">
+                        </div>
+                    </div>
+                    
+                    <button @click="isLuggageView = true" class="w-full mt-4 py-3.5 bg-macaron-pink text-gray-800 font-bold rounded-xl shadow-lg btn-press flex items-center justify-center gap-2 border border-pink-100">
+                        <i class="ph ph-suitcase-rolling"></i> 查看行李清單
+                    </button>
+                </div>
+
+                <div class="flex-1 rounded-2xl overflow-hidden shadow-sm border-2 border-white bg-gray-100 relative">
+                    <iframe 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0" 
+                        loading="lazy" 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3265.234509876357!2d129.0284883!3d35.0995777!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568e90865842881%3A0xc486422201e5233c!2sAventree%20Hotel%20Busan!5e0!3m2!1sen!2stw!4v1700000000000!5m2!1sen!2stw">
+                    </iframe>
+                </div>
+            </template>
+
+            <template v-else>
+                <div class="flex justify-between items-center px-1 mb-2 flex-shrink-0">
+                     <button @click="isLuggageView = false" class="text-gray-500 hover:text-gray-700 btn-press flex items-center gap-1 font-bold text-sm">
+                        <i class="ph ph-arrow-left"></i> 返回住宿資訊
+                    </button>
+                    <span class="text-xs text-gray-400">已帶 {{ luggageList.filter(i => i.checked).length }} / {{ luggageList.length }}</span>
+                </div>
+                
+                <div class="cute-card flex-1 overflow-hidden flex flex-col p-4 bg-gray-50">
+                    <div class="flex gap-2 mb-4 flex-shrink-0">
                          <input v-model="newLuggageItem" @keyup.enter="addLuggage" type="text" placeholder="新增物品..." class="flex-1 bg-white p-2.5 rounded-xl text-sm outline-none border focus:border-macaron-purple">
                          <button @click="addLuggage" class="bg-macaron-purple text-white w-10 h-10 rounded-xl flex items-center justify-center btn-press"><i class="ph ph-plus-bold"></i></button>
                     </div>
 
-                    <div class="space-y-2">
-                        <div v-for="(item, index) in luggageList" :key="index" class="flex items-center bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
+                    <div class="space-y-2 overflow-y-auto">
+                        <div v-for="(item, index) in luggageList" :key="index" class="flex items-center bg-white p-3 rounded-xl border border-gray-100 shadow-sm transition" :class="{'opacity-70': item.checked}">
                             <input type="checkbox" v-model="item.checked" class="custom-checkbox text-macaron-purple flex-shrink-0 cursor-pointer">
                             <span class="ml-3 flex-1 text-sm font-bold text-gray-700" :class="{'line-through text-gray-300': item.checked}">{{ item.text }}</span>
                             <button @click="removeLuggage(index)" class="text-gray-200 hover:text-red-400 px-2"><i class="ph ph-trash"></i></button>
@@ -299,7 +317,7 @@
                         <div v-if="luggageList.length === 0" class="text-center text-xs text-gray-300 mt-4">清單是空的</div>
                     </div>
                 </div>
-            </div>
+            </template>
         </div>
 
         <div v-if="currentTab === 'map'" class="h-full flex flex-col">
@@ -317,7 +335,7 @@
             </div>
             
             <div class="flex-1 rounded-3xl overflow-hidden shadow-sm border-4 border-white relative bg-gray-100">
-                <iframe width="100%" height="100%" style="border:0" loading="lazy" src="http://googleusercontent.com/maps.google.com/8"></iframe>
+                <iframe width="100%" height="100%" style="border:0" loading="lazy" src="https://www.google.com/maps/search/$"></iframe>
                 <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-lg text-xs font-bold text-gray-500 shadow-sm">
                     僅供概覽，導航請使用上方按鈕
                 </div>
@@ -342,7 +360,7 @@
                 <h3 class="font-bold mb-3 text-xs text-gray-400 uppercase ml-1">未來 5 天預報</h3>
                 <div v-if="!weatherLoading" class="space-y-1">
                     <div v-for="(day, index) in forecast" :key="index" class="flex items-center justify-between py-3 border-b border-gray-50 last:border-0 px-2 hover:bg-gray-50 rounded-lg transition">
-                        <div class="w-20">
+                        <div class="w-24"> 
                             <p class="font-bold text-gray-700 text-sm">{{ day.dateStr }}</p>
                         </div>
                         <div class="flex-1 text-center text-xl">
@@ -366,23 +384,23 @@
     </main>
 
     <nav class="fixed bottom-0 w-full pb-safe pt-2 px-2 flex justify-between items-center bg-white/95 backdrop-blur-md rounded-t-[30px] shadow-[0_-5px_20px_rgba(0,0,0,0.05)] z-30 border-t border-gray-100">
-        <button @click="currentTab = 'itinerary'" :class="currentTab === 'itinerary' ? 'text-macaron-pink tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
+        <button @click="currentTab = 'itinerary'; isLuggageView = false" :class="currentTab === 'itinerary' ? 'text-macaron-pink tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
             <i class="ph ph-notebook text-2xl" :weight="currentTab === 'itinerary' ? 'fill' : 'regular'"></i>
             <span class="text-[10px] font-bold mt-1">行程</span>
         </button>
-        <button @click="currentTab = 'money'" :class="currentTab === 'money' ? 'text-macaron-blue tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
+        <button @click="currentTab = 'money'; isLuggageView = false" :class="currentTab === 'money' ? 'text-macaron-blue tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
             <i class="ph ph-currency-krw text-2xl" :weight="currentTab === 'money' ? 'fill' : 'regular'"></i>
             <span class="text-[10px] font-bold mt-1">匯率/記帳</span>
         </button>
-        <button @click="currentTab = 'hotel'" :class="currentTab === 'hotel' ? 'text-macaron-purple tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
+        <button @click="currentTab = 'hotel'; isLuggageView = false" :class="currentTab === 'hotel' ? 'text-macaron-purple tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
             <i class="ph ph-suitcase-rolling text-2xl" :weight="currentTab === 'hotel' ? 'fill' : 'regular'"></i>
             <span class="text-[10px] font-bold mt-1">住宿/行李</span>
         </button>
-        <button @click="currentTab = 'map'" :class="currentTab === 'map' ? 'text-macaron-mint tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
+        <button @click="currentTab = 'map'; isLuggageView = false" :class="currentTab === 'map' ? 'text-macaron-mint tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
             <i class="ph ph-map-trifold text-2xl" :weight="currentTab === 'map' ? 'fill' : 'regular'"></i>
             <span class="text-[10px] font-bold mt-1">地圖</span>
         </button>
-        <button @click="currentTab = 'weather'" :class="currentTab === 'weather' ? 'text-yellow-400 tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
+        <button @click="currentTab = 'weather'; isLuggageView = false" :class="currentTab === 'weather' ? 'text-yellow-400 tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
             <i class="ph ph-sun-horizon text-2xl" :weight="currentTab === 'weather' ? 'fill' : 'regular'"></i>
             <span class="text-[10px] font-bold mt-1">天氣</span>
         </button>
@@ -438,6 +456,7 @@
             const hotelBookingId = ref('');
             const luggageList = ref([]);
             const newLuggageItem = ref('');
+            const isLuggageView = ref(false); // Sub-view state for Hotel tab
 
             // Calculator
             const calcKRW = ref('');
@@ -501,8 +520,8 @@
             onMounted(() => {
                 newExpense.value.date = new Date().toISOString().split('T')[0];
 
-                const savedItinerary = localStorage.getItem('busan_2026_v3_itinerary');
-                const savedExpenses = localStorage.getItem('busan_2026_v3_expenses');
+                const savedItinerary = localStorage.getItem('busan_2026_v4_itinerary');
+                const savedExpenses = localStorage.getItem('busan_2026_v4_expenses');
                 const savedRate = localStorage.getItem('busan_2026_rate');
                 const savedBooking = localStorage.getItem('busan_2026_booking');
                 const savedLuggage = localStorage.getItem('busan_2026_luggage');
@@ -518,8 +537,8 @@
 
             // --- Watchers for Auto-Save ---
             watch([itinerary, expenses, exchangeRate, hotelBookingId, luggageList], () => {
-                localStorage.setItem('busan_2026_v3_itinerary', JSON.stringify(itinerary.value));
-                localStorage.setItem('busan_2026_v3_expenses', JSON.stringify(expenses.value));
+                localStorage.setItem('busan_2026_v4_itinerary', JSON.stringify(itinerary.value));
+                localStorage.setItem('busan_2026_v4_expenses', JSON.stringify(expenses.value));
                 localStorage.setItem('busan_2026_rate', exchangeRate.value);
                 localStorage.setItem('busan_2026_booking', hotelBookingId.value);
                 localStorage.setItem('busan_2026_luggage', JSON.stringify(luggageList.value));
@@ -534,7 +553,15 @@
 
             const totalExpenseTWD = computed(() => {
                 const totalKRW = expenses.value.reduce((sum, item) => sum + item.amount, 0);
-                return Math.round(totalKRW / exchangeRate.value);
+                return Math.round(totalKRW / (exchangeRate.value || 1));
+            });
+            
+            // New computed property for Calculator fix
+            const calculatedTWD = computed(() => {
+                const krw = Number(calcKRW.value) || 0;
+                const rate = Number(exchangeRate.value) || 1;
+                if (rate === 0) return 0;
+                return Math.round(krw / rate);
             });
 
             // --- Methods ---
@@ -596,7 +623,8 @@
             };
             const searchGoogleMap = () => {
                 const q = mapQuery.value || 'Busan';
-                window.open(`https://www.google.com/maps/search/${encodeURIComponent(q)}`, '_blank');
+                // Note: Placeholder URL for Google Map Search.
+                window.open(`https://www.google.com/maps/search/$${encodeURIComponent(q)}`, '_blank');
             };
             const getNaverMapLink = (query) => `https://map.naver.com/p/search/${encodeURIComponent(query)}`;
             
@@ -616,6 +644,7 @@
                     };
 
                     forecast.value = data.daily.time.map((date, idx) => ({
+                        // Format: 12/1 (一)
                         dateStr: new Date(date).toLocaleDateString('zh-TW', { month: 'numeric', day: 'numeric', weekday: 'short' }),
                         code: data.daily.weather_code[idx],
                         max: Math.round(data.daily.temperature_2m_max[idx]),
@@ -645,10 +674,10 @@
                 currentTab, activeDay, showModal, isEditMode, modalForm,
                 itinerary, expenses, exchangeRate, filteredItinerary,
                 totalExpenseTWD, newExpense, mapQuery,
-                hotelBookingId, calcKRW, luggageList, newLuggageItem,
+                hotelBookingId, calcKRW, calculatedTWD, luggageList, newLuggageItem, isLuggageView,
+                forecast, weatherLoading, currentWeather, getWeatherIcon,
                 openModal, saveItem, deleteItem, addExpense, removeExpense,
                 addLuggage, removeLuggage,
-                weatherLoading, currentWeather, forecast, getWeatherIcon,
                 formatNumber, searchNaverMap, searchGoogleMap, getNaverMapLink
             };
         }
