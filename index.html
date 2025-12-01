@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Busan Trip 2026 💖</title>
+    <title>Busan Trip Handbook 💖</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300;500&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&family=Nunito:wght@400;700;900&family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -25,7 +25,9 @@
                         }
                     },
                     fontFamily: {
-                        cute: ['"Kiwi Maru"', '"Nunito"', 'sans-serif']
+                        // Using a cute/playful font mix
+                        cute: ['"Hachi Maru Pop"', '"Nunito"', '"Noto Sans TC"', 'sans-serif'],
+                        body: ['"Nunito"', '"Noto Sans TC"', 'sans-serif']
                     }
                 }
             }
@@ -34,8 +36,8 @@
 
     <style>
         body {
-            font-family: 'Kiwi Maru', 'Nunito', sans-serif;
-            background-color: #FFF9FA;
+            font-family: 'Hachi Maru Pop', 'Nunito', 'Noto Sans TC', sans-serif;
+            background-color: #F8F8FF; /* Light Lavender Background */
             color: #555;
             -webkit-tap-highlight-color: transparent;
         }
@@ -43,8 +45,9 @@
         .cute-card {
             background: #FFFFFF;
             border-radius: 20px;
-            box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.05);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05); /* Softer Shadow */
             border: 2px solid #FFF0F5;
+            transition: transform 0.2s;
         }
 
         .btn-press {
@@ -62,23 +65,26 @@
             color: #FF6B6B;
             transform: scale(1.1);
         }
-        
-        .flight-gradient {
-            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
-            border-color: #bae6fd;
+
+        /* Boarding Pass Style */
+        .boarding-pass {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 5px solid #A2D2FF;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .boarding-pass::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: 0;
+            width: 10px;
+            height: calc(100% - 40px);
+            background: repeating-linear-gradient(to bottom, #F8F8FF 0, #F8F8FF 5px, transparent 5px, transparent 10px);
+            border-left: 2px dashed #CDB4DB;
         }
 
-        .calc-input {
-            font-size: 1.5rem;
-            font-weight: bold;
-            text-align: right;
-            border: none;
-            background: transparent;
-            outline: none;
-            width: 100%;
-        }
-
-        /* Checkbox Custom Style */
+        /* Checklist Custom Style (Reusing previous cute style) */
         .custom-checkbox {
             appearance: none;
             background-color: #fff;
@@ -105,45 +111,71 @@
         .custom-checkbox:checked::before {
             transform: scale(1);
         }
+        
+        /* Currency Calculator Fix */
+        .calc-input {
+            width: 100%;
+            text-align: right;
+            font-size: 1.75rem; /* text-3xl */
+            font-weight: 900; /* font-black */
+            outline: none;
+            padding: 0;
+            line-height: 1;
+            background: none;
+            border: none;
+        }
+        .calc-input::placeholder {
+            color: #E5E7EB;
+        }
     </style>
 </head>
 <body class="h-screen flex flex-col overflow-hidden text-gray-700">
 
 <div id="app" class="flex flex-col h-full">
 
-    <header class="pt-10 pb-4 px-6 bg-macaron-pink rounded-b-[30px] shadow-sm z-10 flex justify-between items-center relative overflow-hidden">
+    <header class="pt-8 pb-4 px-5 z-10 relative overflow-hidden flex justify-between items-center">
         <div>
-            <h1 class="text-2xl font-bold text-gray-800 tracking-wide">
-                釜山行 2026 🇰🇷
+            <h1 class="text-3xl font-black text-gray-800 tracking-wide leading-tight flex items-center gap-2">
+                2026 韓國釜山 5 日遊
+                <i class="ph ph-paper-plane-tilt text-macaron-pink text-2xl"></i>
             </h1>
-            <p class="text-xs text-gray-700 font-bold mt-1 opacity-70">Jan 21 - Jan 25</p>
+            <p class="text-sm font-body text-gray-700 font-bold opacity-70 mt-0.5">Jan 21 - Jan 25, 2026</p>
         </div>
     </header>
 
-    <main class="flex-1 overflow-y-auto p-5 pb-28 space-y-5">
+    <main class="flex-1 overflow-y-auto p-5 pt-2 pb-28 space-y-5">
         
         <div v-if="currentTab === 'itinerary'" class="space-y-4">
             <div class="flex space-x-3 overflow-x-auto pb-2 no-scrollbar px-1">
                 <button v-for="i in 5" :key="i" 
                     @click="activeDay = i"
                     :class="activeDay === i ? 'bg-macaron-blue text-white ring-2 ring-macaron-blue ring-offset-2' : 'bg-white text-gray-400 border border-gray-100'"
-                    class="flex-shrink-0 w-14 h-14 rounded-2xl flex flex-col items-center justify-center shadow-sm transition-all duration-300">
+                    class="flex-shrink-0 w-16 h-16 rounded-3xl flex flex-col items-center justify-center shadow-md transition-all duration-300 btn-press">
                     <span class="text-[10px] uppercase font-bold">Day</span>
-                    <span class="text-lg font-black leading-none">{{ i }}</span>
+                    <span class="text-xl font-black leading-none">{{ i }}</span>
+                    <span class="text-xs mt-1">{{ getWeatherIcon(simulatedWeather[i].code) }}</span>
                 </button>
             </div>
 
-            <div class="space-y-4">
-                <div v-if="filteredItinerary.length === 0" class="text-center py-10 text-gray-400">
+            <div class="space-y-4 pt-2">
+                <div class="flex justify-between items-center px-1 mb-2">
+                    <h2 class="text-lg font-bold text-gray-800">Day {{ activeDay }} 行程</h2>
+                    <div class="flex items-center gap-1.5 text-sm font-bold bg-macaron-yellow/50 px-3 py-1.5 rounded-full border border-yellow-100 shadow-sm">
+                        <span class="text-xl leading-none">{{ getWeatherIcon(simulatedWeather[activeDay].code) }}</span>
+                        <span class="font-body text-gray-700">{{ simulatedWeather[activeDay].temp }}°</span>
+                    </div>
+                </div>
+
+                <div v-if="filteredItinerary.length === 0" class="text-center py-10 text-gray-400 cute-card">
                     <p>點擊右下角按鈕新增行程 ✨</p>
                 </div>
 
                 <div v-for="item in filteredItinerary" :key="item.id" 
                     class="cute-card p-4 flex gap-3 relative group"
-                    :class="{'flight-gradient': item.isFlight}">
+                    :class="{'bg-blue-50/50 border-blue-100': item.isFlight, 'bg-white border-white': !item.isFlight}">
                     
-                    <div class="flex flex-col items-center min-w-[60px]">
-                        <span class="bg-macaron-yellow px-2 py-1 rounded-lg text-xs font-bold text-gray-700 shadow-sm border border-yellow-100 font-mono">
+                    <div class="flex flex-col items-center min-w-[60px] flex-shrink-0">
+                        <span class="bg-macaron-pink px-2 py-1 rounded-lg text-xs font-bold text-white shadow-md border border-pink-100 font-mono">
                             {{ item.time }}
                         </span>
                         <div class="h-full w-0.5 bg-gray-200 my-2 border-l-2 border-dotted"></div>
@@ -152,35 +184,35 @@
                     <div class="flex-1 pb-1 min-w-0">
                         <div class="flex justify-between items-start">
                             <h3 class="font-bold text-[16px] text-gray-800 leading-tight pr-6">{{ item.title }}</h3>
-                            <div class="flex gap-2">
-                                <button @click="openModal(item)" class="text-gray-400 hover:text-blue-500 btn-press">
+                            <div class="flex gap-2 flex-shrink-0">
+                                <button @click="openModal(item)" class="text-gray-400 hover:text-blue-500 btn-press p-1">
                                     <i class="ph ph-pencil-simple text-lg"></i>
                                 </button>
-                                <button v-if="!item.isFlight" @click="deleteItem(item.id)" class="text-gray-400 hover:text-red-400 btn-press">
+                                <button v-if="!item.isFlight" @click="deleteItem(item.id)" class="text-gray-400 hover:text-red-400 btn-press p-1">
                                     <i class="ph ph-trash text-lg"></i>
                                 </button>
                             </div>
                         </div>
                         
-                        <div class="mt-1 flex items-center text-xs text-gray-500 font-medium">
+                        <div class="mt-1 flex items-center text-xs text-gray-500 font-medium font-body">
                             <i v-if="item.isFlight" class="ph ph-airplane-tilt mr-1 text-blue-400"></i>
                             <i v-else class="ph ph-map-pin mr-1 text-gray-400"></i>
                             <span class="truncate">{{ item.location }}</span>
                         </div>
 
-                        <p v-if="item.desc" class="text-xs text-gray-600 mt-2 bg-white/60 p-2 rounded-lg inline-block border border-gray-100 w-full whitespace-pre-wrap">
+                        <p v-if="item.desc" class="text-xs text-gray-600 mt-2 bg-gray-50/60 p-2 rounded-xl inline-block border border-gray-100 w-full whitespace-pre-wrap font-body">
                            {{ item.desc }}
                         </p>
 
                         <a v-if="!item.isFlight" :href="getNaverMapLink(item.location)" target="_blank" 
-                           class="mt-3 inline-flex items-center text-[10px] font-bold text-gray-700 bg-macaron-mint px-3 py-1.5 rounded-xl shadow-sm hover:bg-green-300 transition-colors">
-                            <i class="ph ph-navigation-arrow mr-1"></i> Naver Map
+                           class="mt-3 inline-flex items-center text-[10px] font-bold text-gray-700 bg-macaron-mint px-3 py-1.5 rounded-full shadow-sm hover:bg-green-300 transition-colors btn-press font-body">
+                            <i class="ph ph-navigation-arrow"></i> Naver Map
                         </a>
                     </div>
                 </div>
             </div>
             
-            <button @click="openModal(null)" class="fixed bottom-24 right-5 bg-gray-800 text-white w-14 h-14 rounded-2xl shadow-xl flex items-center justify-center text-2xl z-20 hover:scale-105 transition-transform btn-press border-2 border-white">
+            <button @click="openModal(null)" class="fixed bottom-24 right-5 bg-gray-800 text-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center text-2xl z-20 hover:scale-105 transition-transform btn-press border-4 border-white">
                 <i class="ph ph-plus"></i>
             </button>
         </div>
@@ -189,20 +221,20 @@
             <div>
                 <div class="flex justify-between items-end mb-2 px-1">
                     <h3 class="font-bold text-gray-700"><i class="ph ph-calculator text-macaron-purple"></i> 匯率計算機</h3>
-                    <div class="flex items-center gap-2 bg-white px-2 py-1 rounded-lg border border-gray-200">
-                        <span class="text-[10px] text-gray-400">匯率</span>
-                        <input v-model.number="exchangeRate" type="number" class="w-12 text-right font-bold text-sm outline-none text-blue-500">
+                    <div class="flex items-center gap-2 bg-white px-3 py-1 rounded-xl border border-gray-200 shadow-sm">
+                        <span class="text-[10px] text-gray-400 font-body">目前匯率</span>
+                        <input v-model.number="exchangeRate" type="number" class="w-12 text-right font-bold text-sm outline-none text-blue-500 font-body" min="1" step="0.1">
                     </div>
                 </div>
                 
-                <div class="cute-card p-4 bg-gradient-to-r from-gray-50 to-white">
-                    <div class="flex items-center border-b border-gray-200 pb-2 mb-2">
-                        <span class="text-gray-400 font-bold w-12">KRW</span>
-                        <input v-model.number="calcKRW" type="number" placeholder="0" class="calc-input text-gray-800">
+                <div class="cute-card p-5 bg-gradient-to-r from-gray-50 to-white space-y-3">
+                    <div class="flex items-center border-b border-gray-200 pb-2">
+                        <span class="text-gray-400 font-bold w-16 text-sm font-body">KRW (₩)</span>
+                        <input v-model.number="calcKRW" type="number" placeholder="0" class="calc-input text-gray-800 font-body">
                     </div>
                     <div class="flex items-center pt-2">
-                        <span class="text-gray-400 font-bold w-12">TWD</span>
-                        <div class="w-full text-right text-2xl font-bold text-macaron-purple">
+                        <span class="text-gray-400 font-bold w-16 text-sm font-body">TWD (NT$)</span>
+                        <div class="w-full text-right text-3xl font-black text-macaron-purple font-body">
                             {{ formatNumber(calculatedTWD) }}
                         </div>
                     </div>
@@ -213,208 +245,238 @@
                 <div class="flex justify-between items-end px-1 border-t border-gray-200 pt-6">
                     <h3 class="font-bold text-gray-700"><i class="ph ph-receipt text-macaron-purple"></i> 支出記帳</h3>
                     <div class="text-right">
-                        <p class="text-[10px] text-gray-400">總支出</p>
-                        <p class="font-bold text-lg text-blue-500">NT$ {{ formatNumber(totalExpenseTWD) }}</p>
+                        <p class="text-[10px] text-gray-400 font-body">總支出</p>
+                        <p class="font-bold text-xl text-blue-500 font-body">NT$ {{ formatNumber(totalExpenseTWD) }}</p>
                     </div>
                 </div>
 
-                <div class="cute-card p-3 flex flex-col gap-2 bg-gray-50 border-dashed">
+                <div class="cute-card p-3 flex flex-col gap-2 bg-gray-50 border-dashed border-gray-200">
                     <div class="flex gap-2">
-                        <input type="date" v-model="newExpense.date" class="bg-white p-2 rounded-xl text-xs outline-none border w-1/3 text-center">
-                        <input v-model="newExpense.item" placeholder="品項" class="bg-white p-2 rounded-xl text-xs outline-none border flex-1">
+                        <input type="date" v-model="newExpense.date" class="bg-white p-2 rounded-xl text-xs outline-none border w-1/3 text-center font-body shadow-sm">
+                        <input v-model="newExpense.item" placeholder="品項名稱" class="bg-white p-2 rounded-xl text-xs outline-none border flex-1 font-body shadow-sm">
                     </div>
                     <div class="flex gap-2">
                         <div class="relative flex-1">
-                            <input v-model.number="newExpense.amount" type="number" placeholder="韓幣金額" class="w-full bg-white p-2 pl-6 rounded-xl text-sm outline-none border">
+                            <input v-model.number="newExpense.amount" type="number" placeholder="韓幣金額" class="w-full bg-white p-2 pl-6 rounded-xl text-sm outline-none border font-body shadow-sm">
                             <span class="absolute left-2 top-2.5 text-xs text-gray-400">₩</span>
                         </div>
-                        <button @click="addExpense" class="bg-macaron-purple text-white px-4 rounded-xl font-bold text-xs shadow-sm btn-press whitespace-nowrap">新增</button>
+                        <button @click="addExpense" class="bg-macaron-purple text-white px-4 rounded-xl font-bold text-xs shadow-md btn-press whitespace-nowrap font-body">新增</button>
                     </div>
                 </div>
 
                 <div class="space-y-2 pb-8">
-                    <div v-for="(exp, index) in expenses" :key="index" class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center">
+                    <div v-for="(exp, index) in expenses" :key="index" class="bg-white p-3 rounded-xl shadow-md border border-gray-100 flex justify-between items-center">
                         <div class="flex flex-col">
                             <span class="text-sm font-bold text-gray-800">{{ exp.item }}</span>
-                            <span class="text-[10px] text-gray-400">{{ exp.date.slice(5) }}</span>
+                            <span class="text-[10px] text-gray-400 font-body">{{ exp.date.slice(5) }}</span>
                         </div>
                         <div class="flex items-center gap-3">
-                            <div class="text-right">
+                            <div class="text-right font-body">
                                 <p class="font-bold text-gray-400 text-xs">₩{{ formatNumber(exp.amount) }}</p>
                                 <p class="text-sm font-bold text-blue-500">NT$ {{ formatNumber(Math.round(exp.amount / exchangeRate)) }}</p>
                             </div>
-                            <button @click="removeExpense(index)" class="text-gray-300 hover:text-red-400 p-1"><i class="ph ph-x-circle"></i></button>
+                            <button @click="removeExpense(index)" class="text-gray-300 hover:text-red-400 p-1 btn-press"><i class="ph ph-x-circle"></i></button>
                         </div>
                     </div>
-                    <div v-if="expenses.length === 0" class="text-center text-xs text-gray-300 py-4">
+                    <div v-if="expenses.length === 0" class="text-center text-xs text-gray-300 py-4 font-body">
                         還沒有記帳紀錄喔
                     </div>
                 </div>
             </div>
         </div>
 
-        <div v-if="currentTab === 'hotel'" class="space-y-5 h-full flex flex-col">
+        <div v-if="currentTab === 'info'" class="space-y-6">
+            <h3 class="font-bold text-gray-700 px-1"><i class="ph ph-airplane-takeoff text-macaron-blue"></i> 航班資訊 (登機證)</h3>
+
+            <div class="cute-card p-5 boarding-pass relative">
+                <div class="absolute top-0 right-10 text-6xl opacity-10 rotate-12 text-blue-400"><i class="ph ph-airplane-tilt"></i></div>
+                <div class="flex justify-between items-center mb-4 border-b border-dashed border-blue-200 pb-3">
+                    <h2 class="text-xl font-black text-gray-800 font-body">去程 Boarding Pass</h2>
+                    <span class="text-2xl font-black text-blue-500 font-mono">{{ flightInfo.departure.flightNo }}</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-x-4 gap-y-3 font-body text-sm">
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-gray-400 uppercase">Departure</span>
+                        <span class="font-bold text-gray-800">{{ flightInfo.departure.depAirport }} (TPE)</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-gray-400 uppercase">Arrival</span>
+                        <span class="font-bold text-gray-800">{{ flightInfo.departure.arrAirport }} (PUS)</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-gray-400 uppercase">Gate / Time</span>
+                        <span class="font-bold text-gray-800">{{ flightInfo.departure.gate }} / {{ flightInfo.departure.depTime }}</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-gray-400 uppercase">Date</span>
+                        <span class="font-bold text-gray-800">Jan 21, 2026</span>
+                    </div>
+                </div>
+            </div>
             
-            <template v-if="!isLuggageView">
-                <div class="cute-card p-5 bg-white shadow-md relative overflow-hidden flex-shrink-0">
-                    <div class="absolute top-0 left-0 w-full h-2 bg-macaron-purple"></div>
-                    <h2 class="text-xl font-bold text-gray-800 mb-1">Aventree Hotel Busan</h2>
-                    <p class="text-xs text-gray-500 mb-4 font-mono select-all">6 Gwangbok-ro 39beon-gil</p>
-                    
-                    <div class="flex gap-2 mb-4">
-                        <a href="https://map.naver.com/p/search/Aventree%20Hotel%20Busan" target="_blank" class="flex-1 bg-[#03C75A] text-white py-2.5 rounded-xl font-bold text-sm text-center shadow-sm btn-press">
-                            <i class="ph ph-navigation-arrow"></i> Naver 導航
-                        </a>
-                        <a href="https://www.google.com/maps/search/?api=1&query=Aventree+Hotel+Busan" target="_blank" class="flex-1 bg-blue-50 text-blue-500 border border-blue-100 py-2.5 rounded-xl font-bold text-sm text-center shadow-sm btn-press">
-                            Google 地圖
-                        </a>
-                    </div>
-
-                    <div class="bg-gray-50 p-3 rounded-xl border border-gray-200">
-                        <label class="text-[10px] text-gray-400 font-bold uppercase block mb-1">訂房編號 (Booking No.)</label>
-                        <div class="flex items-center gap-2">
-                            <i class="ph ph-hash text-gray-400"></i>
-                            <input v-model="hotelBookingId" type="text" placeholder="點擊輸入..." class="bg-transparent w-full outline-none font-mono font-bold text-gray-700 placeholder-gray-300">
-                        </div>
-                    </div>
-                    
-                    <button @click="isLuggageView = true" class="w-full mt-4 py-3.5 bg-macaron-pink text-gray-800 font-bold rounded-xl shadow-lg btn-press flex items-center justify-center gap-2 border border-pink-100">
-                        <i class="ph ph-suitcase-rolling"></i> 查看行李清單
-                    </button>
+            <div class="cute-card p-5 boarding-pass relative">
+                <div class="absolute top-0 right-10 text-6xl opacity-10 -rotate-12 text-pink-400"><i class="ph ph-airplane-tilt"></i></div>
+                <div class="flex justify-between items-center mb-4 border-b border-dashed border-pink-200 pb-3">
+                    <h2 class="text-xl font-black text-gray-800 font-body">回程 Boarding Pass</h2>
+                    <span class="text-2xl font-black text-pink-500 font-mono">{{ flightInfo.return.flightNo }}</span>
                 </div>
 
-                <div class="flex-1 rounded-2xl overflow-hidden shadow-sm border-2 border-white bg-gray-100 relative">
-                    <iframe 
-                        width="100%" 
-                        height="100%" 
-                        style="border:0" 
-                        loading="lazy" 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3265.234509876357!2d129.0284883!3d35.0995777!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568e90865842881%3A0xc486422201e5233c!2sAventree%20Hotel%20Busan!5e0!3m2!1sen!2stw!4v1700000000000!5m2!1sen!2stw">
-                    </iframe>
+                <div class="grid grid-cols-2 gap-x-4 gap-y-3 font-body text-sm">
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-gray-400 uppercase">Departure</span>
+                        <span class="font-bold text-gray-800">{{ flightInfo.return.depAirport }} (PUS)</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-gray-400 uppercase">Arrival</span>
+                        <span class="font-bold text-gray-800">{{ flightInfo.return.arrAirport }} (TPE)</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-gray-400 uppercase">Gate / Time</span>
+                        <span class="font-bold text-gray-800">{{ flightInfo.return.gate }} / {{ flightInfo.return.depTime }}</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-gray-400 uppercase">Date</span>
+                        <span class="font-bold text-gray-800">Jan 25, 2026</span>
+                    </div>
                 </div>
-            </template>
+            </div>
 
-            <template v-else>
-                <div class="flex justify-between items-center px-1 mb-2 flex-shrink-0">
-                     <button @click="isLuggageView = false" class="text-gray-500 hover:text-gray-700 btn-press flex items-center gap-1 font-bold text-sm">
-                        <i class="ph ph-arrow-left"></i> 返回住宿資訊
-                    </button>
-                    <span class="text-xs text-gray-400">已帶 {{ luggageList.filter(i => i.checked).length }} / {{ luggageList.length }}</span>
+
+            <h3 class="font-bold text-gray-700 pt-4 px-1"><i class="ph ph-buildings text-macaron-purple"></i> 住宿資訊</h3>
+            <div class="cute-card p-5 bg-white shadow-md relative overflow-hidden">
+                <div class="flex items-center mb-3">
+                    <i class="ph ph-bed text-xl text-macaron-purple mr-2"></i>
+                    <h2 class="text-lg font-bold text-gray-800 leading-tight">{{ hotelInfo.name }}</h2>
+                </div>
+                <div class="bg-gray-50 p-3 rounded-xl border border-gray-200 font-body">
+                    <label class="text-[10px] text-gray-400 font-bold uppercase block mb-1">飯店地址 (Address)</label>
+                    <p class="font-bold text-sm text-gray-700 select-all">{{ hotelInfo.address }}</p>
                 </div>
                 
-                <div class="cute-card flex-1 overflow-hidden flex flex-col p-4 bg-gray-50">
-                    <div class="flex gap-2 mb-4 flex-shrink-0">
-                         <input v-model="newLuggageItem" @keyup.enter="addLuggage" type="text" placeholder="新增物品..." class="flex-1 bg-white p-2.5 rounded-xl text-sm outline-none border focus:border-macaron-purple">
-                         <button @click="addLuggage" class="bg-macaron-purple text-white w-10 h-10 rounded-xl flex items-center justify-center btn-press"><i class="ph ph-plus-bold"></i></button>
+                <a :href="getNaverMapLink(hotelInfo.name)" target="_blank" class="w-full mt-4 py-3 bg-macaron-mint text-gray-800 font-bold rounded-xl shadow-md btn-press flex items-center justify-center gap-2 border border-green-100 text-sm font-body">
+                    <i class="ph ph-navigation-arrow"></i> Naver Map 導航
+                </a>
+            </div>
+        </div>
+
+        <div v-if="currentTab === 'guide'" class="space-y-6">
+
+            <div class="cute-card p-5 space-y-5">
+                <div class="space-y-3">
+                    <h3 class="font-bold text-gray-700 text-lg flex items-center gap-2">
+                        <i class="ph ph-suitcase-rolling text-macaron-purple"></i> 行李清單
+                        <span class="text-xs text-gray-400 font-body">({{ luggageList.filter(i => i.checked).length }} / {{ luggageList.length }})</span>
+                    </h3>
+                    
+                    <div class="flex gap-2">
+                         <input v-model="newLuggageItem" @keyup.enter="addLuggage" type="text" placeholder="新增物品..." class="flex-1 bg-gray-50 p-2.5 rounded-xl text-sm outline-none border focus:border-macaron-purple font-body shadow-sm">
+                         <button @click="addLuggage" class="bg-macaron-purple text-white w-10 h-10 rounded-full flex items-center justify-center btn-press shadow-md"><i class="ph ph-plus-bold"></i></button>
                     </div>
 
-                    <div class="space-y-2 overflow-y-auto">
-                        <div v-for="(item, index) in luggageList" :key="index" class="flex items-center bg-white p-3 rounded-xl border border-gray-100 shadow-sm transition" :class="{'opacity-70': item.checked}">
-                            <input type="checkbox" v-model="item.checked" class="custom-checkbox text-macaron-purple flex-shrink-0 cursor-pointer">
-                            <span class="ml-3 flex-1 text-sm font-bold text-gray-700" :class="{'line-through text-gray-300': item.checked}">{{ item.text }}</span>
-                            <button @click="removeLuggage(index)" class="text-gray-200 hover:text-red-400 px-2"><i class="ph ph-trash"></i></button>
+                    <div class="space-y-2">
+                        <div v-for="(item, index) in luggageList" :key="`l-${index}`" class="flex items-center bg-white p-3 rounded-xl border border-gray-100 shadow-sm transition" :class="{'opacity-70': item.checked}">
+                            <input type="checkbox" v-model="item.checked" class="custom-checkbox flex-shrink-0 cursor-pointer">
+                            <span class="ml-3 flex-1 text-sm font-bold text-gray-700 font-body" :class="{'line-through text-gray-300': item.checked}">{{ item.text }}</span>
+                            <button @click="removeLuggage(index)" class="text-gray-200 hover:text-red-400 px-2 btn-press"><i class="ph ph-trash"></i></button>
                         </div>
-                        <div v-if="luggageList.length === 0" class="text-center text-xs text-gray-300 mt-4">清單是空的</div>
                     </div>
                 </div>
-            </template>
+
+                <div class="space-y-3 pt-4 border-t border-gray-100">
+                    <h3 class="font-bold text-gray-700 text-lg flex items-center gap-2">
+                        <i class="ph ph-bag-simple text-macaron-pink"></i> 必買清單
+                        <span class="text-xs text-gray-400 font-body">({{ mustBuyList.filter(i => i.checked).length }} / {{ mustBuyList.length }})</span>
+                    </h3>
+                    
+                    <div class="flex gap-2">
+                         <input v-model="newMustBuyItem" @keyup.enter="addMustBuy" type="text" placeholder="新增品項..." class="flex-1 bg-gray-50 p-2.5 rounded-xl text-sm outline-none border focus:border-macaron-pink font-body shadow-sm">
+                         <button @click="addMustBuy" class="bg-macaron-pink text-white w-10 h-10 rounded-full flex items-center justify-center btn-press shadow-md"><i class="ph ph-plus-bold"></i></button>
+                    </div>
+
+                    <div class="space-y-2">
+                        <div v-for="(item, index) in mustBuyList" :key="`m-${index}`" class="flex items-center bg-white p-3 rounded-xl border border-gray-100 shadow-sm transition" :class="{'opacity-70': item.checked}">
+                            <input type="checkbox" v-model="item.checked" class="custom-checkbox flex-shrink-0 cursor-pointer">
+                            <span class="ml-3 flex-1 text-sm font-bold text-gray-700 font-body" :class="{'line-through text-gray-300': item.checked}">{{ item.text }}</span>
+                            <button @click="removeMustBuy(index)" class="text-gray-200 hover:text-red-400 px-2 btn-press"><i class="ph ph-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cute-card p-5">
+                <h3 class="font-bold text-gray-700 text-lg flex items-center gap-2 mb-4">
+                    <i class="ph ph-phone-call text-red-500"></i> 韓國緊急聯絡電話
+                </h3>
+                <div class="space-y-3 font-body">
+                    <div v-for="contact in emergencyContacts" :key="contact.number" class="flex justify-between items-center bg-red-50 p-3 rounded-xl border border-red-100 shadow-sm">
+                        <div class="flex flex-col">
+                            <span class="font-bold text-red-600 text-sm">{{ contact.name }}</span>
+                            <span class="text-xs text-gray-500">{{ contact.desc }}</span>
+                        </div>
+                        <a :href="`tel:${contact.number}`" class="bg-red-500 text-white px-4 py-2 rounded-full font-bold text-sm btn-press shadow-md">
+                            撥打 {{ contact.number }}
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div v-if="currentTab === 'map'" class="h-full flex flex-col">
-            <div class="bg-white p-4 rounded-2xl shadow-sm mb-4 border border-green-50">
-                <input v-model="mapQuery" @keyup.enter="searchNaverMap" type="text" placeholder="輸入地點搜尋 (例如：海雲台)" class="w-full bg-gray-50 px-4 py-3 rounded-xl text-sm outline-none font-bold mb-3 focus:bg-white focus:ring-2 focus:ring-green-100 transition">
+            <div class="bg-white p-4 rounded-3xl shadow-lg mb-4 border border-green-50">
+                <input v-model="mapQuery" @keyup.enter="searchNaverMap" type="text" placeholder="輸入地點搜尋 (例如：海雲台)" class="w-full bg-gray-50 px-4 py-3 rounded-2xl text-sm outline-none font-bold mb-3 focus:bg-white focus:ring-2 focus:ring-green-100 transition font-body">
                 
-                <div class="flex gap-2">
-                    <button @click="searchNaverMap" class="flex-1 bg-[#03C75A] text-white py-3 rounded-xl font-bold text-sm shadow-md btn-press flex items-center justify-center gap-2">
+                <div class="flex gap-3">
+                    <button @click="searchNaverMap" class="flex-1 bg-macaron-mint text-gray-800 py-3 rounded-2xl font-bold text-sm shadow-md btn-press flex items-center justify-center gap-2 border border-green-100 font-body">
                         <i class="ph ph-navigation-arrow"></i> Naver Map
                     </button>
-                    <button @click="searchGoogleMap" class="flex-1 bg-blue-50 text-blue-500 border border-blue-100 py-3 rounded-xl font-bold text-sm shadow-sm btn-press flex items-center justify-center gap-2">
+                    <button @click="searchGoogleMap" class="flex-1 bg-blue-50 text-blue-500 border border-blue-100 py-3 rounded-2xl font-bold text-sm shadow-sm btn-press flex items-center justify-center gap-2 font-body">
                         <i class="ph ph-map-pin"></i> Google Map
                     </button>
                 </div>
             </div>
             
-            <div class="flex-1 rounded-3xl overflow-hidden shadow-sm border-4 border-white relative bg-gray-100">
+            <div class="flex-1 rounded-3xl overflow-hidden shadow-2xl border-4 border-white relative bg-gray-100">
                 <iframe width="100%" height="100%" style="border:0" loading="lazy" src="https://www.google.com/maps/search/$"></iframe>
-                <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-lg text-xs font-bold text-gray-500 shadow-sm">
+                <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-xl text-xs font-bold text-gray-500 shadow-md font-body">
                     僅供概覽，導航請使用上方按鈕
                 </div>
             </div>
         </div>
-
-        <div v-if="currentTab === 'weather'" class="space-y-4">
-             <div class="cute-card p-6 text-center bg-gradient-to-b from-sky-50 to-white">
-                <h2 class="text-lg font-bold text-gray-600 uppercase tracking-widest mb-2">Busan</h2>
-                <div v-if="weatherLoading" class="py-8 text-gray-400 text-sm">正在抓取氣象資料...</div>
-                <div v-else>
-                    <div class="text-6xl my-2">{{ getWeatherIcon(currentWeather.code) }}</div>
-                    <p class="text-5xl font-black text-gray-800">{{ currentWeather.temp }}°</p>
-                    <div class="mt-4 flex justify-center gap-4 text-xs font-bold text-gray-500">
-                        <span class="bg-white px-3 py-1 rounded-full shadow-sm">降雨機率 {{ currentWeather.rain }}%</span>
-                        <span class="bg-white px-3 py-1 rounded-full shadow-sm">{{ currentWeather.desc }}</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="cute-card p-4">
-                <h3 class="font-bold mb-3 text-xs text-gray-400 uppercase ml-1">未來 5 天預報</h3>
-                <div v-if="!weatherLoading" class="space-y-1">
-                    <div v-for="(day, index) in forecast" :key="index" class="flex items-center justify-between py-3 border-b border-gray-50 last:border-0 px-2 hover:bg-gray-50 rounded-lg transition">
-                        <div class="w-24"> 
-                            <p class="font-bold text-gray-700 text-sm">{{ day.dateStr }}</p>
-                        </div>
-                        <div class="flex-1 text-center text-xl">
-                            {{ getWeatherIcon(day.code) }}
-                        </div>
-                        <div class="w-24 text-right flex gap-2 justify-end text-sm">
-                            <span class="text-gray-400">{{ day.min }}°</span>
-                            <span class="text-gray-300">/</span>
-                            <span class="font-bold text-gray-800">{{ day.max }}°</span>
-                        </div>
-                    </div>
-                </div>
-                <div v-else class="text-center py-5 text-gray-300 text-xs">載入中...</div>
-            </div>
-
-            <a href="https://www.google.com/search?q=釜山天氣" target="_blank" class="block text-center text-xs text-blue-400 font-bold bg-white p-3 rounded-xl shadow-sm border border-blue-50">
-                前往 Google 查看更多詳情
-            </a>
-        </div>
-
     </main>
 
-    <nav class="fixed bottom-0 w-full pb-safe pt-2 px-2 flex justify-between items-center bg-white/95 backdrop-blur-md rounded-t-[30px] shadow-[0_-5px_20px_rgba(0,0,0,0.05)] z-30 border-t border-gray-100">
-        <button @click="currentTab = 'itinerary'; isLuggageView = false" :class="currentTab === 'itinerary' ? 'text-macaron-pink tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
+    <nav class="fixed bottom-0 w-full pb-safe pt-2 px-2 flex justify-between items-center bg-white/95 backdrop-blur-md rounded-t-[30px] shadow-[0_-5px_20px_rgba(0,0,0,0.05)] z-30 border-t border-gray-100 font-body">
+        <button @click="currentTab = 'itinerary'" :class="currentTab === 'itinerary' ? 'text-macaron-pink tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
             <i class="ph ph-notebook text-2xl" :weight="currentTab === 'itinerary' ? 'fill' : 'regular'"></i>
             <span class="text-[10px] font-bold mt-1">行程</span>
         </button>
-        <button @click="currentTab = 'money'; isLuggageView = false" :class="currentTab === 'money' ? 'text-macaron-blue tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
+        <button @click="currentTab = 'money'" :class="currentTab === 'money' ? 'text-macaron-blue tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
             <i class="ph ph-currency-krw text-2xl" :weight="currentTab === 'money' ? 'fill' : 'regular'"></i>
             <span class="text-[10px] font-bold mt-1">匯率/記帳</span>
         </button>
-        <button @click="currentTab = 'hotel'; isLuggageView = false" :class="currentTab === 'hotel' ? 'text-macaron-purple tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
-            <i class="ph ph-suitcase-rolling text-2xl" :weight="currentTab === 'hotel' ? 'fill' : 'regular'"></i>
-            <span class="text-[10px] font-bold mt-1">住宿/行李</span>
+        <button @click="currentTab = 'info'" :class="currentTab === 'info' ? 'text-macaron-purple tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
+            <i class="ph ph-ticket text-2xl" :weight="currentTab === 'info' ? 'fill' : 'regular'"></i>
+            <span class="text-[10px] font-bold mt-1">機票/住宿</span>
         </button>
-        <button @click="currentTab = 'map'; isLuggageView = false" :class="currentTab === 'map' ? 'text-macaron-mint tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
+        <button @click="currentTab = 'guide'" :class="currentTab === 'guide' ? 'text-macaron-pink tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
+            <i class="ph ph-list-checks text-2xl" :weight="currentTab === 'guide' ? 'fill' : 'regular'"></i>
+            <span class="text-[10px] font-bold mt-1">清單</span>
+        </button>
+        <button @click="currentTab = 'map'" :class="currentTab === 'map' ? 'text-macaron-mint tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
             <i class="ph ph-map-trifold text-2xl" :weight="currentTab === 'map' ? 'fill' : 'regular'"></i>
             <span class="text-[10px] font-bold mt-1">地圖</span>
-        </button>
-        <button @click="currentTab = 'weather'; isLuggageView = false" :class="currentTab === 'weather' ? 'text-yellow-400 tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
-            <i class="ph ph-sun-horizon text-2xl" :weight="currentTab === 'weather' ? 'fill' : 'regular'"></i>
-            <span class="text-[10px] font-bold mt-1">天氣</span>
         </button>
     </nav>
 
     <div v-if="showModal" class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl scale-100 transition-transform">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl scale-100 transition-transform cute-card border-2 border-macaron-purple/50">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-lg font-bold text-gray-700">
+                <h3 class="text-xl font-bold text-gray-700 font-body">
                     {{ isEditMode ? '編輯行程 ✏️' : '新增行程 ✨' }}
                 </h3>
-                <button @click="showModal = false" class="bg-gray-100 w-8 h-8 rounded-full text-gray-500 hover:bg-gray-200"><i class="ph ph-x"></i></button>
+                <button @click="showModal = false" class="bg-gray-100 w-8 h-8 rounded-full text-gray-500 hover:bg-gray-200 btn-press"><i class="ph ph-x"></i></button>
             </div>
-            <div class="space-y-3">
+            <div class="space-y-3 font-body">
                 <div>
                     <label class="text-xs text-macaron-purple font-bold ml-1">時間</label>
                     <input v-model="modalForm.time" type="time" class="w-full bg-gray-50 p-3 rounded-xl mt-1 outline-none border focus:border-macaron-purple">
@@ -432,7 +494,7 @@
                     <textarea v-model="modalForm.desc" rows="3" placeholder="例如：營業時間 10:00-22:00" class="w-full bg-gray-50 p-3 rounded-xl mt-1 outline-none border focus:border-macaron-purple resize-none"></textarea>
                 </div>
             </div>
-            <button @click="saveItem" class="w-full mt-6 py-3.5 bg-gray-800 text-white font-bold rounded-xl shadow-lg btn-press">
+            <button @click="saveItem" class="w-full mt-6 py-3.5 bg-gray-800 text-white font-bold rounded-xl shadow-lg btn-press font-body">
                 儲存
             </button>
         </div>
@@ -452,12 +514,12 @@
             const isEditMode = ref(false);
             const mapQuery = ref('');
             
-            // Hotel & Luggage
-            const hotelBookingId = ref('');
+            // Guide
             const luggageList = ref([]);
             const newLuggageItem = ref('');
-            const isLuggageView = ref(false); // Sub-view state for Hotel tab
-
+            const mustBuyList = ref([]);
+            const newMustBuyItem = ref('');
+            
             // Calculator
             const calcKRW = ref('');
             const exchangeRate = ref(41.5); 
@@ -469,11 +531,21 @@
             // Modal Form
             const modalForm = ref({ id: null, time: '', title: '', location: '', desc: '' });
 
-            // Default Data
+            // --- Fixed Data ---
+            
+            // Simulated Daily Weather
+            const simulatedWeather = ref({
+                1: { code: 2, temp: 8, rain: 20 }, // Cloudy
+                2: { code: 0, temp: 12, rain: 0 }, // Sunny
+                3: { code: 51, temp: 6, rain: 70 }, // Rain
+                4: { code: 1, temp: 10, rain: 10 }, // Mostly clear
+                5: { code: 0, temp: 11, rain: 0 }, // Sunny
+            });
+
+            // Default Checklists
             const defaultLuggage = [
                 { text: '護照 / 簽證', checked: false },
                 { text: '韓幣現金 / 信用卡', checked: false },
-                { text: 'WOWPASS 卡', checked: false },
                 { text: '轉接頭 (韓國圓孔)', checked: false },
                 { text: '行動電源 / 充電線', checked: false },
                 { text: '牙刷牙膏 (韓國環保不提供)', checked: false },
@@ -482,66 +554,64 @@
                 { text: '網卡 / eSim', checked: false }
             ];
 
+            const defaultMustBuy = [
+                { text: 'Olive Young 護膚品', checked: false },
+                { text: '零食 (烏龜餅乾)', checked: false },
+                { text: 'Kakao Friends 周邊', checked: false },
+                { text: 'Market O 布朗尼', checked: false },
+                { text: '襪子', checked: false }
+            ];
+
+            const emergencyContacts = [
+                { name: '警察局', number: '112', desc: 'Police' },
+                { name: '消防/救護車', number: '119', desc: 'Fire/Ambulance' },
+                { name: '旅遊諮詢熱線', number: '1330', desc: 'Korea Travel Hotline' }
+            ];
+
+            // Itinerary Default Data (Used to extract flight/hotel info)
             const defaultItinerary = [
-                // Day 1
-                { id: 101, day: 1, time: '14:25', title: '去程: 長榮航空 BR164', location: 'Taoyuan Intl Airport T2', desc: '經濟艙 V | 17:40 抵達釜山', isFlight: true },
+                // Day 1 Departure Flight
+                { id: 101, day: 1, time: '14:25', title: '去程: 長榮航空 BR164', location: 'Taoyuan Intl Airport T2', desc: '經濟艙 V | 17:40 抵達釜山', isFlight: true, flightNo: 'BR164', depAirport: 'TPE', arrAirport: 'PUS', depTime: '14:25', gate: 'TBD', type: 'departure' },
+                // Day 5 Return Flight
+                { id: 504, day: 5, time: '18:55', title: '回程: 長榮航空 BR163', location: 'Gimhae International Airport', desc: '經濟艙 V | 20:25 抵達桃園', isFlight: true, flightNo: 'BR163', depAirport: 'PUS', arrAirport: 'TPE', depTime: '18:55', gate: 'TBD', type: 'return' },
+                
+                // Day 1 Hotel Check-in (Used for Hotel Info)
                 { id: 102, day: 1, time: '19:00', title: '飯店 Check-in', location: 'Aventree Hotel Busan', desc: '地址：6 Gwangbok-ro 39beon-gil' },
+                
+                // Other days... 
                 { id: 103, day: 1, time: '20:00', title: '扎嘎其市場 / BIFF廣場', location: 'Jagalchi Market', desc: '晚餐、逛夜市' },
-                // Day 2
                 { id: 201, day: 2, time: '09:00', title: '海雲台傳統市場', location: 'Haeundae Traditional Market', desc: '早餐：刀削麵、飯捲' },
-                { id: 202, day: 2, time: '10:20', title: '海東龍宮寺', location: 'Haedong Yonggungsa', desc: '海邊寺廟' },
-                { id: 203, day: 2, time: '11:40', title: '樂天 Outlet', location: 'Lotte Premium Outlets Dongbusan', desc: '午餐 + 購物' },
-                { id: 204, day: 2, time: '15:00', title: 'SPA LAND 汗蒸幕', location: 'Spa Land Centum City', desc: '新世界百貨 B1' },
-                // Day 3
                 { id: 301, day: 3, time: '09:00', title: 'KKday一日遊集合', location: 'Busan Station', desc: '前往慶州' },
-                { id: 302, day: 3, time: '10:30', title: '天空膠囊列車', location: 'Haeundae Blueline Park', desc: '藍線公園' },
-                { id: 303, day: 3, time: '15:00', title: '佛國寺', location: 'Bulguksa', desc: '慶州世界遺產' },
-                { id: 304, day: 3, time: '19:00', title: '東宮與月池', location: 'Donggung Palace and Wolji Pond', desc: '夜景' },
-                // Day 4
                 { id: 401, day: 4, time: '09:30', title: '松島天空步道', location: 'Songdo Cloud Trails', desc: '海上步道' },
-                { id: 402, day: 4, time: '10:20', title: '松島海上纜車', location: 'Songdo Marine Cable Car', desc: '水晶車廂' },
-                { id: 403, day: 4, time: '14:00', title: '影島大橋開橋', location: 'Yeongdo Bridge', desc: '樂天百貨頂樓觀看' },
-                { id: 404, day: 4, time: '15:00', title: '白淺灘文化村', location: 'Huinnyeoul Culture Village', desc: '海景咖啡廳' },
-                // Day 5
-                { id: 501, day: 5, time: '09:00', title: '甘川洞文化村', location: 'Gamcheon Culture Village', desc: '小王子拍照' },
-                { id: 502, day: 5, time: '11:30', title: '返回南浦洞', location: 'Nampo Station', desc: '最後採買、拿行李' },
-                { id: 503, day: 5, time: '15:30', title: '前往金海機場', location: 'Gimhae International Airport', desc: '辦理退稅、登機' },
-                { id: 504, day: 5, time: '18:55', title: '回程: 長榮航空 BR163', location: 'Gimhae International Airport', desc: '經濟艙 V | 20:25 抵達桃園', isFlight: true },
             ];
 
             const itinerary = ref([]);
             
-            // Weather
-            const weatherLoading = ref(true);
-            const currentWeather = ref({ temp: '--', desc: '--', rain: 0, code: 0 });
-            const forecast = ref([]);
-
             // --- Lifecycle ---
             onMounted(() => {
                 newExpense.value.date = new Date().toISOString().split('T')[0];
 
-                const savedItinerary = localStorage.getItem('busan_2026_v4_itinerary');
-                const savedExpenses = localStorage.getItem('busan_2026_v4_expenses');
+                // Load from LocalStorage
+                const savedItinerary = localStorage.getItem('busan_2026_v5_itinerary');
+                const savedExpenses = localStorage.getItem('busan_2026_v5_expenses');
                 const savedRate = localStorage.getItem('busan_2026_rate');
-                const savedBooking = localStorage.getItem('busan_2026_booking');
-                const savedLuggage = localStorage.getItem('busan_2026_luggage');
+                const savedLuggage = localStorage.getItem('busan_2026_luggage_v5');
+                const savedMustBuy = localStorage.getItem('busan_2026_mustbuy_v5');
                 
                 itinerary.value = savedItinerary ? JSON.parse(savedItinerary) : defaultItinerary;
                 if (savedExpenses) expenses.value = JSON.parse(savedExpenses);
                 if (savedRate) exchangeRate.value = parseFloat(savedRate);
-                if (savedBooking) hotelBookingId.value = savedBooking;
                 luggageList.value = savedLuggage ? JSON.parse(savedLuggage) : defaultLuggage;
-
-                fetchWeather();
+                mustBuyList.value = savedMustBuy ? JSON.parse(savedMustBuy) : defaultMustBuy;
             });
 
             // --- Watchers for Auto-Save ---
-            watch([itinerary, expenses, exchangeRate, hotelBookingId, luggageList], () => {
-                localStorage.setItem('busan_2026_v4_itinerary', JSON.stringify(itinerary.value));
-                localStorage.setItem('busan_2026_v4_expenses', JSON.stringify(expenses.value));
+            watch([itinerary, expenses, exchangeRate, luggageList, mustBuyList], () => {
+                localStorage.setItem('busan_2026_v5_itinerary', JSON.stringify(itinerary.value));
+                localStorage.setItem('busan_2026_v5_expenses', JSON.stringify(expenses.value));
                 localStorage.setItem('busan_2026_rate', exchangeRate.value);
-                localStorage.setItem('busan_2026_booking', hotelBookingId.value);
-                localStorage.setItem('busan_2026_luggage', JSON.stringify(luggageList.value));
+                localStorage.setItem('busan_2026_luggage_v5', JSON.stringify(luggageList.value));
+                localStorage.setItem('busan_2026_mustbuy_v5', JSON.stringify(mustBuyList.value));
             }, { deep: true });
 
             // --- Computed ---
@@ -556,7 +626,7 @@
                 return Math.round(totalKRW / (exchangeRate.value || 1));
             });
             
-            // New computed property for Calculator fix
+            // Calculator fix
             const calculatedTWD = computed(() => {
                 const krw = Number(calcKRW.value) || 0;
                 const rate = Number(exchangeRate.value) || 1;
@@ -564,10 +634,40 @@
                 return Math.round(krw / rate);
             });
 
+            // Flight Info Extraction (Now includes both departure and return)
+            const flightInfo = computed(() => {
+                const dep = itinerary.value.find(i => i.isFlight && i.type === 'departure');
+                const ret = itinerary.value.find(i => i.isFlight && i.type === 'return');
+                
+                // Default placeholders based on the provided itinerary data structure
+                const defaultDep = { flightNo: 'BR164', depAirport: 'TPE', arrAirport: 'PUS', depTime: '14:25', gate: 'TBD' };
+                const defaultRet = { flightNo: 'BR163', depAirport: 'PUS', arrAirport: 'TPE', depTime: '18:55', gate: 'TBD' };
+
+                return {
+                    departure: dep || defaultDep,
+                    return: ret || defaultRet
+                };
+            });
+
+            // Hotel Info Extraction (Using Day 1 check-in for the card)
+            const hotelInfo = computed(() => {
+                const hotelItem = itinerary.value.find(i => i.location === 'Aventree Hotel Busan');
+                return {
+                    name: '釜山亞雲樹飯店 (Hotel Aventree Busan)',
+                    address: '6 Gwangbok-ro 39beon-gil, Jung-gu, Busan, 南韓',
+                };
+            });
+
+
             // --- Methods ---
+            
+            // Itinerary Methods
             const openModal = (item) => {
                 if (item) {
                     isEditMode.value = true;
+                    // Prevent editing flight items via this modal
+                    if (item.isFlight) return alert('航班資訊請直接在「機票/住宿」頁面中檢視。'); 
+
                     modalForm.value = { ...item };
                 } else {
                     isEditMode.value = false;
@@ -582,7 +682,7 @@
                     const index = itinerary.value.findIndex(i => i.id === modalForm.value.id);
                     if (index !== -1) itinerary.value[index] = { ...modalForm.value };
                 } else {
-                    itinerary.value.push({ ...modalForm.value, day: activeDay.value, location: modalForm.value.location || modalForm.value.title });
+                    itinerary.value.push({ ...modalForm.value, day: activeDay.value, location: modalForm.value.location || modalForm.value.title, isFlight: false });
                 }
                 showModal.value = false;
             };
@@ -591,12 +691,13 @@
                 if(confirm('確定刪除此行程嗎？')) itinerary.value = itinerary.value.filter(item => item.id !== id);
             };
 
+            // Expense Methods
             const addExpense = () => {
                 if (!newExpense.value.item || !newExpense.value.amount) return;
                 expenses.value.unshift({
                     date: newExpense.value.date || new Date().toISOString().split('T')[0],
                     item: newExpense.value.item,
-                    amount: newExpense.value.amount
+                    amount: Number(newExpense.value.amount) // Ensure number type
                 });
                 newExpense.value.item = '';
                 newExpense.value.amount = '';
@@ -616,7 +717,17 @@
                 luggageList.value.splice(index, 1);
             };
 
-            // Map Methods
+            // Must-Buy Methods
+            const addMustBuy = () => {
+                if(!newMustBuyItem.value) return;
+                mustBuyList.value.push({ text: newMustBuyItem.value, checked: false });
+                newMustBuyItem.value = '';
+            };
+            const removeMustBuy = (index) => {
+                mustBuyList.value.splice(index, 1);
+            };
+
+            // Utility Methods
             const searchNaverMap = () => {
                 const q = mapQuery.value || 'Busan';
                 window.open(`https://map.naver.com/p/search/${encodeURIComponent(q)}`, '_blank');
@@ -624,61 +735,31 @@
             const searchGoogleMap = () => {
                 const q = mapQuery.value || 'Busan';
                 // Note: Placeholder URL for Google Map Search.
-                window.open(`https://www.google.com/maps/search/$${encodeURIComponent(q)}`, '_blank');
+                window.open(`https://www.google.com/maps/search/$$${encodeURIComponent(q)}`, '_blank');
             };
             const getNaverMapLink = (query) => `https://map.naver.com/p/search/${encodeURIComponent(query)}`;
             
             const formatNumber = (num) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-            // Weather Fetch
-            const fetchWeather = async () => {
-                try {
-                    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=35.1796&longitude=129.0756&current=temperature_2m,weather_code,precipitation_probability&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo`);
-                    const data = await res.json();
-                    
-                    currentWeather.value = {
-                        temp: Math.round(data.current.temperature_2m),
-                        desc: getWeatherDesc(data.current.weather_code),
-                        rain: data.current.precipitation_probability || 0,
-                        code: data.current.weather_code
-                    };
-
-                    forecast.value = data.daily.time.map((date, idx) => ({
-                        // Format: 12/1 (一)
-                        dateStr: new Date(date).toLocaleDateString('zh-TW', { month: 'numeric', day: 'numeric', weekday: 'short' }),
-                        code: data.daily.weather_code[idx],
-                        max: Math.round(data.daily.temperature_2m_max[idx]),
-                        min: Math.round(data.daily.temperature_2m_min[idx])
-                    })).slice(0, 5);
-
-                    weatherLoading.value = false;
-                } catch (e) { weatherLoading.value = false; }
-            };
-
-            const getWeatherDesc = (code) => {
-                if (code === 0) return '晴朗';
-                if (code <= 3) return '多雲';
-                if (code <= 67) return '雨天';
-                if (code <= 77) return '雪';
-                return '陰天';
-            };
-
+            // Weather Icon Mapping (Simple)
             const getWeatherIcon = (code) => {
-                if (code === 0) return '☀️';
-                if (code <= 3) return '☁️';
-                if (code <= 67) return '🌧️';
-                return '🌥️';
+                if (code === 0) return '☀️'; // Sunny
+                if (code === 1) return '🌥️'; // Mostly Clear
+                if (code <= 3) return '☁️'; // Cloudy
+                if (code <= 67) return '🌧️'; // Rain
+                return '🌥️'; // Default
             };
 
             return {
                 currentTab, activeDay, showModal, isEditMode, modalForm,
                 itinerary, expenses, exchangeRate, filteredItinerary,
                 totalExpenseTWD, newExpense, mapQuery,
-                hotelBookingId, calcKRW, calculatedTWD, luggageList, newLuggageItem, isLuggageView,
-                forecast, weatherLoading, currentWeather, getWeatherIcon,
+                luggageList, newLuggageItem, mustBuyList, newMustBuyItem,
+                flightInfo, hotelInfo, emergencyContacts, simulatedWeather,
+                calculatedTWD, calcKRW,
                 openModal, saveItem, deleteItem, addExpense, removeExpense,
-                addLuggage, removeLuggage,
-                formatNumber, searchNaverMap, searchGoogleMap, getNaverMapLink
+                addLuggage, removeLuggage, addMustBuy, removeMustBuy,
+                formatNumber, searchNaverMap, searchGoogleMap, getNaverMapLink, getWeatherIcon
             };
         }
     }).mount('#app');
