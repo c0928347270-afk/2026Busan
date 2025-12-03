@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>美食X海景X韓流★釜山五日吃喝玩樂</title>
+    <title>2026 釜山五日遊專業規劃</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -136,7 +136,7 @@
             <header class="mb-8">
                 <h1 class="text-2xl font-black text-primary flex items-center gap-2">
                     <i class="ph ph-calendar-check text-3xl" weight="fill"></i>
-                    2026美食X海景X韓流★釜山五日吃喝玩樂
+                    BUSAN 2026
                 </h1>
                 <p class="text-sm text-text/60 font-medium mt-1">專業行程規劃工具</p>
             </header>
@@ -163,7 +163,7 @@
 
             <header class="lg:hidden pb-4 pt-2 flex justify-between items-center">
                  <h1 class="text-2xl font-black text-primary flex items-center gap-2">
-                    <i class="ph ph-map-pin-line text-2xl" weight="fill"></i>
+                    <i :class="currentTabIcon" class="text-2xl" weight="fill"></i>
                     {{ currentTabName }}
                 </h1>
                 <p class="text-sm text-text/60 font-medium mt-1">Busan Trip 2026</p>
@@ -252,7 +252,7 @@
                 </button>
             </div>
 
-            <div v-if="currentTab === 'money'" class="space-y-8">
+            <div v-if="currentTab === 'money'" class="space-y-6">
                 <div class="space-y-3">
                     <div class="flex justify-between items-center px-1">
                         <h3 class="font-bold text-xl text-text flex items-center gap-2"><i class="ph ph-calculator text-primary text-2xl" weight="fill"></i> 匯率計算機</h3>
@@ -317,9 +317,9 @@
                             </select>
                         </div>
                         <div class="flex gap-2">
-                            <input v-model="newExpense.item" placeholder="品項名稱" class="bg-white p-2.5 rounded-lg text-sm outline-none border flex-1 shadow-custom-sm focus:border-primary">
-                            <div class="relative w-1/3">
-                                <input v-model.number="newExpense.amount" type="number" placeholder="韓幣金額" class="w-full bg-white p-2.5 pl-6 rounded-lg text-sm outline-none border shadow-custom-sm focus:border-primary">
+                            <input v-model="newExpense.item" placeholder="品項名稱 (消費內容)" class="bg-white p-2.5 rounded-lg text-sm outline-none border flex-1 shadow-custom-sm focus:border-primary">
+                            <div class="relative w-1/4 min-w-[100px]">
+                                <input v-model.number="newExpense.amount" type="number" placeholder="金額" class="w-full bg-white p-2.5 pl-6 rounded-lg text-sm outline-none border shadow-custom-sm focus:border-primary">
                                 <span class="absolute left-2 top-3 text-xs text-text/40">₩</span>
                             </div>
                             <button @click="addExpense" :disabled="!newExpense.item || !newExpense.amount || !newExpense.category" class="bg-primary text-white px-4 rounded-lg font-bold text-sm shadow-custom-md transform hover:scale-[1.02] transition btn-press disabled:opacity-50 whitespace-nowrap">新增</button>
@@ -328,11 +328,11 @@
 
                     <div class="space-y-2 pb-8">
                         <div v-for="(exp, index) in expenses" :key="index" class="app-card p-3 flex justify-between items-center border-l-4" :class="`border-${exp.category}-300`">
-                            <div class="flex flex-col">
-                                <span class="text-sm font-bold text-text">{{ exp.item }}</span>
+                            <div class="flex flex-col flex-1 truncate pr-2">
+                                <span class="text-sm font-bold text-text truncate">{{ exp.item }}</span>
                                 <span class="text-[10px] text-text/60">{{ exp.date.slice(5) }} · {{ getCategoryName(exp.category) }}</span>
                             </div>
-                            <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-3 flex-shrink-0">
                                 <div class="text-right">
                                     <p class="font-bold text-text/60 text-xs">₩{{ formatNumber(exp.amount) }}</p>
                                     <p class="text-sm font-black text-primary">NT$ {{ formatNumber(exchangeRate > 0 ? Math.round(exp.amount / exchangeRate) : 0) }}</p>
@@ -431,7 +431,7 @@
                         
                         <div class="flex gap-2 p-1 rounded-md bg-gray-50">
                             <input v-model="newLuggageItem" @keyup.enter="addLuggage" type="text" placeholder="新增物品..." class="flex-1 bg-white p-2.5 rounded-lg text-sm outline-none border focus:border-primary shadow-custom-sm">
-                            <button @click="addLuggage" class="bg-primary text-white w-10 h-10 rounded-lg flex items-center justify-center btn-press shadow-custom-md"><i class="ph ph-plus-bold"></i></button>
+                            <button @click="addLuggage" class="bg-primary text-white px-3 h-10 rounded-lg flex items-center justify-center btn-press shadow-custom-md text-sm font-bold whitespace-nowrap"><i class="ph ph-plus-bold mr-1"></i> 新增</button>
                         </div>
 
                         <div class="space-y-2">
@@ -451,7 +451,7 @@
                         
                         <div class="flex gap-2 p-1 rounded-md bg-gray-50">
                             <input v-model="newMustBuyItem" @keyup.enter="addMustBuy" type="text" placeholder="新增品項..." class="flex-1 bg-white p-2.5 rounded-lg text-sm outline-none border focus:border-red-500 shadow-custom-sm">
-                            <button @click="addMustBuy" class="bg-red-500 text-white w-10 h-10 rounded-lg flex items-center justify-center btn-press shadow-custom-md"><i class="ph ph-plus-bold"></i></button>
+                            <button @click="addMustBuy" class="bg-red-500 text-white px-3 h-10 rounded-lg flex items-center justify-center btn-press shadow-custom-md text-sm font-bold whitespace-nowrap"><i class="ph ph-plus-bold mr-1"></i> 新增</button>
                         </div>
 
                         <div class="space-y-2">
@@ -568,7 +568,7 @@
             // --- State ---
             const currentTab = ref('itinerary');
             const activeDay = ref(1);
-            const activeCategory = ref('all'); // New state for filtering
+            const activeCategory = ref('all'); 
             const showModal = ref(false);
             const isEditMode = ref(false);
             const mapQuery = ref('');
@@ -585,7 +585,14 @@
             
             // Expenses
             const expenses = ref([]);
-            const newExpense = ref({ date: '', item: '', amount: '', category: '' });
+            
+            // 🐛 FIX 1: Ensure date is initialized for expense form validation
+            const newExpense = ref({ 
+                date: new Date().toISOString().split('T')[0], 
+                item: '', 
+                amount: null, // Use null for number input
+                category: '' 
+            });
 
             // Modal Form
             const modalForm = ref({ id: null, time: '', title: '', location: '', desc: '', category: '' });
@@ -613,6 +620,12 @@
                 return tab ? tab.name : '規劃總覽';
             });
             
+            // Icon for Mobile Header
+            const currentTabIcon = computed(() => {
+                const tab = desktopTabs.find(t => t.id === currentTab.value);
+                return tab ? tab.icon : 'ph-map-pin-line';
+            });
+            
             // Trip Date Mapping (Jan 21 - Jan 25, 2026)
             const tripDates = {
                 1: { date: '01/21', day: '週三', fullDay: '1月21日 (週三)' },
@@ -632,7 +645,7 @@
             });
 
             const filterCategories = [
-                { key: 'all', name: '所有項目', icon: 'ph-list-checks', color: 'text-text' },
+                { key: 'all', name: '所有項目', icon: 'ph-list-checks', color: 'text-text' , colorCode: '#E2E8F0'},
                 { key: 'food', name: '美食餐飲', icon: 'ph-fork-knife', color: 'text-accent-food', colorCode: '#EF4444' },
                 { key: 'shopping', name: '購物消費', icon: 'ph-shopping-bag', color: 'text-accent-shopping', colorCode: '#3B82F6' },
                 { key: 'sightseeing', name: '景點活動', icon: 'ph-mountain', color: 'text-accent-sightseeing', colorCode: '#10B981' },
@@ -711,7 +724,7 @@
 
                 // --- Day 5 (Jan 25) ---
                 { id: 501, day: 5, time: '08:00', title: '早餐 + 整理行李', location: '釜山亞雲樹飯店', desc: 'Check Out Time：11:00 AM，行李寄放櫃檯。', isFlight: false, category: 'food' },
-                { id: 502, day: 5, time: '09:00', title: '飯店 $\rightarrow$ 甘川洞文化村', location: '甘川洞文化村', desc: '交通：計程車從南浦洞搭車約 10-15 分鐘。', isFlight: false, category: 'travel' },
+                { id: 502, day: 5, time: '09:00', title: '飯店出發 $\rightarrow$ 甘川洞文化村', location: '甘川洞文化村', desc: '交通：計程車從南浦洞搭車約 10-15 分鐘。', isFlight: false, category: 'travel' },
                 { id: 503, day: 5, time: '09:15', title: '甘川洞文化村散策', location: '감천문화마을', desc: '建議參觀：小王子拍照點、觀景平台。停留約 2 小時。', isFlight: false, category: 'sightseeing' },
                 { id: 504, day: 5, time: '11:30', title: '返回南浦洞', location: '南浦洞', desc: '交通：計程車車程約 10-15 分鐘。', isFlight: false, category: 'travel' },
                 { id: 505, day: 5, time: '11:45', title: '午餐 (南浦洞)', location: '南浦洞', desc: '可選擇元祖蔘雞湯、富平市場小吃等。', isFlight: false, category: 'food' },
@@ -729,14 +742,15 @@
             
             // --- Lifecycle ---
             onMounted(() => {
+                // 🐛 FIX 1: Set default date for newExpense on mount
                 newExpense.value.date = new Date().toISOString().split('T')[0];
 
-                // Load from LocalStorage (Changed key to v8 for new clean design/data structure)
-                const savedItinerary = localStorage.getItem('busan_2026_v8_itinerary'); 
-                const savedExpenses = localStorage.getItem('busan_2026_v8_expenses');
-                const savedRate = localStorage.getItem('busan_2026_rate_v8');
-                const savedLuggage = localStorage.getItem('busan_2026_luggage_v8');
-                const savedMustBuy = localStorage.getItem('busan_2026_mustbuy_v8');
+                // Load from LocalStorage (Changed key to v9 for new clean design/data structure)
+                const savedItinerary = localStorage.getItem('busan_2026_v9_itinerary'); 
+                const savedExpenses = localStorage.getItem('busan_2026_v9_expenses');
+                const savedRate = localStorage.getItem('busan_2026_rate_v9');
+                const savedLuggage = localStorage.getItem('busan_2026_luggage_v9');
+                const savedMustBuy = localStorage.getItem('busan_2026_mustbuy_v9');
                 
                 // If saved itinerary is missing, use the new default data
                 itinerary.value = savedItinerary ? JSON.parse(savedItinerary) : defaultItinerary;
@@ -752,11 +766,11 @@
 
             // --- Watchers for Auto-Save ---
             watch([itinerary, expenses, exchangeRate, luggageList, mustBuyList], () => {
-                localStorage.setItem('busan_2026_v8_itinerary', JSON.stringify(itinerary.value));
-                localStorage.setItem('busan_2026_v8_expenses', JSON.stringify(expenses.value));
-                localStorage.setItem('busan_2026_rate_v8', exchangeRate.value);
-                localStorage.setItem('busan_2026_luggage_v8', JSON.stringify(luggageList.value));
-                localStorage.setItem('busan_2026_mustbuy_v8', JSON.stringify(mustBuyList.value));
+                localStorage.setItem('busan_2026_v9_itinerary', JSON.stringify(itinerary.value));
+                localStorage.setItem('busan_2026_v9_expenses', JSON.stringify(expenses.value));
+                localStorage.setItem('busan_2026_rate_v9', exchangeRate.value);
+                localStorage.setItem('busan_2026_luggage_v9', JSON.stringify(luggageList.value));
+                localStorage.setItem('busan_2026_mustbuy_v9', JSON.stringify(mustBuyList.value));
             }, { deep: true });
 
             // --- Computed ---
@@ -773,8 +787,6 @@
                 if (activeCategory.value === 'all') {
                     return filteredItinerary.value;
                 }
-                // Also show flight items if a specific category is selected, unless the category is 'flight' itself, as they are non-editable.
-                // We'll exclude flight category for general filtering to focus on actionable items.
                 return filteredItinerary.value.filter(item => item.category === activeCategory.value);
             });
 
@@ -908,15 +920,18 @@
 
             // Expense Methods
             const addExpense = () => {
-                if (!newExpense.value.item || !newExpense.value.amount || !newExpense.value.category) return;
+                // 🐛 FIX 1: Ensure amount is a positive number
+                const amount = Number(newExpense.value.amount);
+                if (!newExpense.value.item || amount <= 0 || !newExpense.value.category) return;
+                
                 expenses.value.unshift({
                     date: newExpense.value.date || new Date().toISOString().split('T')[0],
                     item: newExpense.value.item,
-                    amount: Number(newExpense.value.amount), 
+                    amount: amount, 
                     category: newExpense.value.category
                 });
                 newExpense.value.item = '';
-                newExpense.value.amount = '';
+                newExpense.value.amount = null; // Reset to null for number input
                 // Keep the date and category selected for quick entry
             };
 
@@ -954,7 +969,10 @@
             };
             const getNaverMapLink = (query) => `https://map.naver.com/p/search/${encodeURIComponent(query)}`;
             
-            const formatNumber = (num) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            const formatNumber = (num) => {
+                if (num === null || num === undefined) return '0';
+                return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            };
 
             // Weather Icon Mapping (Simple)
             const getWeatherIcon = (code) => {
@@ -966,7 +984,7 @@
             };
 
             return {
-                currentTab, activeDay, currentTabName, activeCategory,
+                currentTab, activeDay, currentTabName, currentTabIcon, activeCategory,
                 showModal, isEditMode, modalForm,
                 itinerary, expenses, exchangeRate, filteredItineraryByCat,
                 totalExpenseTWD, newExpense, mapQuery,
