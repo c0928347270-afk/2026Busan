@@ -3,31 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 Busan Trip 🇰🇷</title>
+    <title>美食X海景X韓流★釜山五日吃喝玩樂</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&family=Nunito:wght400;700;900&family=Noto+Sans+TC:wght500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        macaron: {
-                            pink: '#FFC8DD',
-                            blue: '#A2D2FF',
-                            yellow: '#FDFD96',
-                            green: '#BDE0FE',
-                            mint: '#C1E1C1',
-                            purple: '#CDB4DB',
-                            dark: '#555555'
+                        primary: {
+                            light: '#E6F8F6', // 淺色背景
+                            DEFAULT: '#00A389', // 專業藍綠色
+                            dark: '#007A66',
+                        },
+                        text: '#2D3748', // 深灰文字
+                        background: '#F8F9FA', // 淺色背景
+                        card: '#FFFFFF', // 卡片白色
+                        accent: {
+                            food: '#EF4444',     // Red for Food
+                            shopping: '#3B82F6', // Blue for Shopping
+                            sightseeing: '#10B981', // Green for Sightseeing
+                            travel: '#F59E0B',   // Yellow for Travel
                         }
                     },
                     fontFamily: {
-                        // Using a cute/playful font mix
-                        cute: ['"Hachi Maru Pop"', '"Nunito"', '"Noto Sans TC"', 'sans-serif'],
-                        body: ['"Nunito"', '"Noto Sans TC"', 'sans-serif']
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'custom-sm': '0 1px 3px 0 rgba(0, 0, 0, 0.05)',
+                        'custom-md': '0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04)',
+                        'custom-lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05)',
                     }
                 }
             }
@@ -36,473 +44,516 @@
 
     <style>
         body {
-            font-family: 'Hachi Maru Pop', 'Nunito', 'Noto Sans TC', sans-serif;
-            background-color: #F8F8FF; /* Light Lavender Background */
-            color: #555;
+            background-color: #F8F9FA;
+            color: #2D3748;
+            font-family: 'Noto Sans TC', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
-        
-        .cute-card {
-            background: #FFFFFF;
-            border-radius: 20px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05); /* Softer Shadow */
-            border: 2px solid #FFF0F5;
-            transition: transform 0.2s;
+
+        /* Card Style */
+        .app-card {
+            background-color: #FFFFFF; 
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Soft, professional shadow */
+            border: 1px solid #E2E8F0;
         }
 
-        .btn-press {
-            transition: all 0.1s;
-        }
-        .btn-press:active {
-            transform: scale(0.95);
+        /* Timeline Dot */
+        .timeline-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--dot-color, #E2E8F0);
+            border: 3px solid #FFFFFF;
+            box-shadow: 0 0 0 2px var(--dot-color, #E2E8F0);
         }
 
-        /* Hide Scrollbar */
+        /* Scrollbar Hide for Tabs */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        .tab-active {
-            color: #FF6B6B;
-            transform: scale(1.1);
+        /* General Button Press Effect */
+        .btn-press:active {
+            transform: scale(0.98);
+            box-shadow: none !important;
         }
 
-        /* Boarding Pass Style */
-        .boarding-pass {
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            border-left: 5px solid #A2D2FF;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-            position: relative;
+        /* Mobile Bottom Nav Bar */
+        @media (max-width: 1023px) {
+            .mobile-nav-bar {
+                background-color: #FFFFFF;
+                box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.03);
+            }
         }
-        .boarding-pass::after {
-            content: '';
+
+        /* Desktop Layout */
+        @media (min-width: 1024px) {
+            #app-container {
+                display: grid;
+                grid-template-columns: 280px 1fr; /* Fixed left sidebar, flexible content */
+                min-height: 100vh;
+            }
+            .main-content {
+                padding: 32px 40px;
+            }
+            .sidebar {
+                border-right: 1px solid #E2E8F0;
+                background-color: #FFFFFF;
+                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.02);
+            }
+        }
+
+        /* Chart Tooltip */
+        .chart-tooltip {
+            visibility: hidden;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 10px;
             position: absolute;
-            top: 20px;
-            right: 0;
-            width: 10px;
-            height: calc(100% - 40px);
-            background: repeating-linear-gradient(to bottom, #F8F8FF 0, #F8F8FF 5px, transparent 5px, transparent 10px);
-            border-left: 2px dashed #CDB4DB;
+            z-index: 10;
+            bottom: 125%; /* Position above the bar */
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
-        /* Checklist Custom Style (Reusing previous cute style) */
-        .custom-checkbox {
-            appearance: none;
-            background-color: #fff;
-            margin: 0;
-            font: inherit;
-            color: currentColor;
-            width: 1.2em;
-            height: 1.2em;
-            border: 2px solid #CDB4DB;
-            border-radius: 0.35em;
-            display: grid;
-            place-content: center;
-        }
-        .custom-checkbox::before {
-            content: "";
-            width: 0.65em;
-            height: 0.65em;
-            transform: scale(0);
-            transition: 120ms transform ease-in-out;
-            box-shadow: inset 1em 1em #CDB4DB;
-            transform-origin: center;
-            clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
-        }
-        .custom-checkbox:checked::before {
-            transform: scale(1);
-        }
-        
-        /* Currency Calculator Fix */
-        .calc-input {
-            width: 100%;
-            text-align: right;
-            font-size: 1.75rem; /* text-3xl */
-            font-weight: 900; /* font-black */
-            outline: none;
-            padding: 0;
-            line-height: 1;
-            background: none;
-            border: none;
-        }
-        .calc-input::placeholder {
-            color: #E5E7EB;
+        .chart-bar:hover .chart-tooltip {
+            visibility: visible;
+            opacity: 1;
         }
     </style>
 </head>
-<body class="text-gray-700"> <div id="app"> <header class="pt-8 pb-4 px-5 z-10 relative overflow-hidden flex justify-between items-center">
-        <div>
-            <h1 class="text-3xl font-black text-gray-800 tracking-wide leading-tight flex items-center gap-2">
-                2025 韓國釜山 5 日遊
-                <i class="ph ph-paper-plane-tilt text-macaron-pink text-2xl"></i>
-            </h1>
-            <p class="text-sm font-body text-gray-700 font-bold opacity-70 mt-0.5">Jan 21 - Jan 25, 2025</p>
-        </div>
-    </header>
+<body>
 
-    <main class="p-5 pt-2 pb-28 space-y-5"> <div v-if="currentTab === 'itinerary'" class="space-y-4">
-            <div class="flex space-x-3 overflow-x-auto pb-2 no-scrollbar px-1">
-                <button v-for="i in 5" :key="i" 
-                    @click="activeDay = i"
-                    :class="activeDay === i ? 'bg-macaron-blue text-white ring-2 ring-macaron-blue ring-offset-2' : 'bg-white text-gray-400 border border-gray-100'"
-                    class="flex-shrink-0 w-16 h-16 rounded-3xl flex flex-col items-center justify-center shadow-md transition-all duration-300 btn-press">
-                    <span class="text-[10px] uppercase font-bold">{{ getDayInfo(i).day }}</span> <span class="text-xl font-black leading-none">{{ getDayInfo(i).date.slice(3) }}</span> </button>
+<div id="app" class="min-h-screen">
+    <div id="app-container" class="lg:grid">
+
+        <aside class="sidebar fixed top-0 left-0 h-full w-72 p-6 lg:block hidden">
+            <header class="mb-8">
+                <h1 class="text-2xl font-black text-primary flex items-center gap-2">
+                    <i class="ph ph-calendar-check text-3xl" weight="fill"></i>
+                    2026美食X海景X韓流★釜山五日吃喝玩樂
+                </h1>
+                <p class="text-sm text-text/60 font-medium mt-1">專業行程規劃工具</p>
+            </header>
+            
+            <nav class="space-y-1">
+                <button v-for="tab in desktopTabs" :key="tab.id"
+                    @click="currentTab = tab.id"
+                    :class="currentTab === tab.id ? 'bg-primary/10 text-primary font-bold' : 'text-text/80 hover:bg-background'"
+                    class="w-full text-left p-3 rounded-lg flex items-center gap-3 transition-colors text-base btn-press">
+                    <i :class="tab.icon" class="text-xl" :weight="currentTab === tab.id ? 'fill' : 'regular'"></i>
+                    {{ tab.name }}
+                </button>
+            </nav>
+
+            <div class="absolute bottom-6 left-6 right-6 pt-4 border-t border-gray-100">
+                 <div class="text-xs text-text/50">
+                    <i class="ph ph-info-circle mr-1"></i>
+                    行程日期：2026.01.21 - 01.25
+                 </div>
             </div>
+        </aside>
 
-            <div class="space-y-4 pt-2">
-                <div class="flex justify-between items-center px-1 mb-2">
-                    <h2 class="text-lg font-bold text-gray-800">{{ getDayInfo(activeDay).fullDay }} 行程</h2> <div class="flex items-center gap-1.5 text-base font-bold bg-macaron-yellow/50 px-3 py-1.5 rounded-full border border-yellow-100 shadow-sm">
-                        <span class="text-3xl leading-none">{{ getWeatherIcon(simulatedWeather[activeDay].code) }}</span> <span class="font-body text-gray-700 text-xl">{{ simulatedWeather[activeDay].temp }}°</span> </div>
+        <main class="main-content lg:col-start-2 lg:pb-8 pb-28 p-5">
+
+            <header class="lg:hidden pb-4 pt-2 flex justify-between items-center">
+                 <h1 class="text-2xl font-black text-primary flex items-center gap-2">
+                    <i class="ph ph-map-pin-line text-2xl" weight="fill"></i>
+                    {{ currentTabName }}
+                </h1>
+                <p class="text-sm text-text/60 font-medium mt-1">Busan Trip 2026</p>
+            </header>
+            
+            <div v-if="currentTab === 'itinerary'" class="space-y-6">
+                <div class="app-card p-3 overflow-x-auto no-scrollbar shadow-custom-sm">
+                    <div class="flex space-x-3">
+                        <button v-for="i in 5" :key="i" 
+                            @click="activeDay = i"
+                            :class="activeDay === i ? 'bg-primary text-white shadow-custom-md' : 'bg-background text-text/80 border border-gray-200 hover:bg-gray-100'"
+                            class="flex-shrink-0 w-16 h-16 rounded-lg flex flex-col items-center justify-center transition-all duration-300 btn-press text-sm font-bold">
+                            <span class="text-[10px] uppercase opacity-80">{{ getDayInfo(i).date.slice(3) }}</span> 
+                            <span class="text-xl font-black leading-none mt-0.5">{{ getDayInfo(i).day.slice(1) }}</span>
+                        </button>
+                    </div>
                 </div>
 
-                <div v-if="filteredItinerary.length === 0" class="text-center py-10 text-gray-400 cute-card">
-                    <p>點擊右下角按鈕新增行程 ✨</p>
+                <div class="flex justify-between items-center px-1 mb-2 border-b border-gray-200 pb-3">
+                    <h2 class="text-xl font-bold text-text">{{ getDayInfo(activeDay).fullDay }} 日程</h2>
+                    <div class="flex items-center gap-2 text-base font-bold bg-primary/10 px-3 py-1.5 rounded-full text-primary">
+                        <span class="text-xl leading-none">{{ getWeatherIcon(simulatedWeather[activeDay].code) }}</span>
+                        <span class="text-lg font-black">{{ simulatedWeather[activeDay].temp }}°C</span>
+                    </div>
                 </div>
 
-                <div v-for="item in filteredItinerary" :key="item.id" 
-                    class="cute-card p-4 flex gap-3 relative group"
-                    :class="{'bg-blue-50/50 border-blue-100': item.isFlight, 'bg-white border-white': !item.isFlight}">
-                    
-                    <div class="flex flex-col items-center min-w-[60px] flex-shrink-0">
-                        <span class="bg-macaron-pink px-2 py-1 rounded-lg text-xs font-bold text-white shadow-md border border-pink-100 font-mono">
-                            {{ item.time }}
-                        </span>
-                        <div class="h-full w-0.5 bg-gray-200 my-2 border-l-2 border-dotted"></div>
+                <div class="flex space-x-3 overflow-x-auto no-scrollbar pb-2">
+                    <button v-for="cat in filterCategories" :key="cat.key"
+                        @click="activeCategory = cat.key"
+                        :class="[
+                            activeCategory === cat.key ? 'bg-primary text-white shadow-custom-md' : 'bg-white text-text/80 border border-gray-300 hover:bg-gray-100',
+                            cat.key !== 'all' ? cat.color : ''
+                        ]"
+                        class="flex-shrink-0 px-4 py-2 rounded-full flex items-center gap-2 text-sm font-medium transition-colors btn-press">
+                        <i :class="cat.icon" :weight="activeCategory === cat.key ? 'fill' : 'regular'"></i>
+                        {{ cat.name }}
+                    </button>
+                </div>
+
+
+                <div class="space-y-4 pt-2">
+                    <div v-if="filteredItineraryByCat.length === 0" class="text-center py-10 text-text/40 app-card border-dashed">
+                        <p>本日無符合「{{ filterCategories.find(c => c.key === activeCategory)?.name }}」的行程 📝</p>
                     </div>
 
-                    <div class="flex-1 pb-1 min-w-0">
-                        <div class="flex justify-between items-start">
-                            <h3 class="font-bold text-[16px] text-gray-800 leading-tight pr-6">{{ item.title }}</h3>
-                            <div class="flex gap-2 flex-shrink-0">
-                                <button @click="openModal(item)" class="text-gray-400 hover:text-blue-500 btn-press p-1">
-                                    <i class="ph ph-pencil-simple text-lg"></i>
-                                </button>
-                                <button v-if="!item.isFlight" @click="deleteItem(item.id)" class="text-gray-400 hover:text-red-400 btn-press p-1">
-                                    <i class="ph ph-trash text-lg"></i>
-                                </button>
-                            </div>
-                        </div>
+                    <div v-for="item in filteredItineraryByCat" :key="item.id" 
+                        class="app-card p-4 flex gap-4 relative transition-all duration-200 hover:shadow-custom-lg border-l-4"
+                        :class="{'border-primary/50': item.isFlight, 'border-primary/20': !item.isFlight}">
                         
-                        <div class="mt-1 flex items-center text-xs text-gray-500 font-medium font-body">
-                            <i v-if="item.isFlight" class="ph ph-airplane-tilt mr-1 text-blue-400"></i>
-                            <i v-else class="ph ph-map-pin mr-1 text-gray-400"></i>
-                            <span class="truncate">{{ item.location }}</span>
+                        <div class="flex flex-col items-center min-w-[60px] flex-shrink-0">
+                            <span class="text-sm font-bold text-primary px-1 font-mono leading-tight">
+                                {{ item.time }}
+                            </span>
+                            <div class="h-full w-px bg-gray-300 my-2"></div>
                         </div>
 
-                        <p v-if="item.desc" class="text-xs text-gray-600 mt-2 bg-gray-50/60 p-2 rounded-xl inline-block border border-gray-100 w-full whitespace-pre-wrap font-body">
-                           {{ item.desc }}
-                        </p>
-
-                        <a v-if="!item.isFlight" :href="getNaverMapLink(item.location)" target="_blank" 
-                           class="mt-3 inline-flex items-center text-[10px] font-bold text-gray-700 bg-macaron-mint px-3 py-1.5 rounded-full shadow-sm hover:bg-green-300 transition-colors btn-press font-body">
-                            <i class="ph ph-navigation-arrow"></i> Naver Map
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-            <button @click="openModal(null)" class="fixed bottom-24 right-5 bg-gray-800 text-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center text-2xl z-20 hover:scale-105 transition-transform btn-press border-4 border-white">
-                <i class="ph ph-plus"></i>
-            </button>
-        </div>
-
-        <div v-if="currentTab === 'money'" class="space-y-6">
-            <div>
-                <div class="flex justify-between items-end mb-2 px-1">
-                    <h3 class="font-bold text-gray-700"><i class="ph ph-calculator text-macaron-purple"></i> 匯率計算機</h3>
-                    <div class="flex items-center gap-2 bg-white px-3 py-1 rounded-xl border border-gray-200 shadow-sm">
-                        <span class="text-[10px] text-gray-400 font-body">目前匯率</span>
-                        <input v-model.number="exchangeRate" type="number" class="w-12 text-right font-bold text-sm outline-none text-blue-500 font-body" min="0.01" step="0.01">
-                    </div>
-                </div>
-                
-                <div class="cute-card p-5 bg-gradient-to-r from-gray-50 to-white space-y-3">
-                    <div class="flex items-center border-b border-gray-200 pb-2">
-                        <span class="text-gray-400 font-bold w-16 text-sm font-body">KRW (₩)</span>
-                        <input v-model.number="calcKRW" type="number" placeholder="0" class="calc-input text-gray-800 font-body">
-                    </div>
-                    <div class="flex items-center pt-2">
-                        <span class="text-gray-400 font-bold w-16 text-sm font-body">TWD (NT$)</span>
-                        <div class="w-full text-right text-3xl font-black text-macaron-purple font-body">
-                            {{ formatNumber(calculatedTWD) }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="space-y-3">
-                <div class="flex justify-between items-end px-1 border-t border-gray-200 pt-6">
-                    <h3 class="font-bold text-gray-700"><i class="ph ph-receipt text-macaron-purple"></i> 支出記帳</h3>
-                    <div class="text-right">
-                        <p class="text-[10px] text-gray-400 font-body">總支出</p>
-                        <p class="font-bold text-xl text-blue-500 font-body">NT$ {{ formatNumber(totalExpenseTWD) }}</p>
-                    </div>
-                </div>
-
-                <div class="cute-card p-3 flex flex-col gap-2 bg-gray-50 border-dashed border-gray-200">
-                    <div class="flex gap-2">
-                        <input type="date" v-model="newExpense.date" class="bg-white p-2 rounded-xl text-xs outline-none border w-1/3 text-center font-body shadow-sm">
-                        <input v-model="newExpense.item" placeholder="品項名稱" class="bg-white p-2 rounded-xl text-xs outline-none border flex-1 font-body shadow-sm">
-                    </div>
-                    <div class="flex gap-2">
-                        <div class="relative flex-1">
-                            <input v-model.number="newExpense.amount" type="number" placeholder="韓幣金額" class="w-full bg-white p-2 pl-6 rounded-xl text-sm outline-none border font-body shadow-sm">
-                            <span class="absolute left-2 top-2.5 text-xs text-gray-400">₩</span>
-                        </div>
-                        <button @click="addExpense" class="bg-macaron-purple text-white px-4 rounded-xl font-bold text-xs shadow-md btn-press whitespace-nowrap font-body">新增</button>
-                    </div>
-                </div>
-
-                <div class="space-y-2 pb-8">
-                    <div v-for="(exp, index) in expenses" :key="index" class="bg-white p-3 rounded-xl shadow-md border border-gray-100 flex justify-between items-center">
-                        <div class="flex flex-col">
-                            <span class="text-sm font-bold text-gray-800">{{ exp.item }}</span>
-                            <span class="text-[10px] text-gray-400 font-body">{{ exp.date.slice(5) }}</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div class="text-right font-body">
-                                <p class="font-bold text-gray-400 text-xs">₩{{ formatNumber(exp.amount) }}</p>
-                                <p class="text-sm font-bold text-blue-500">NT$ {{ formatNumber(exchangeRate > 0 ? Math.round(exp.amount / exchangeRate) : 0) }}</p>
+                        <div class="flex-1 pb-1 min-w-0">
+                            <div class="flex justify-between items-start">
+                                <h3 class="font-bold text-base text-text leading-tight pr-6">{{ item.title }}</h3>
+                                <span v-if="item.category && item.category !== 'flight'" 
+                                    :class="getCategoryColor(item.category)"
+                                    class="text-xs font-bold px-2 py-0.5 rounded-full bg-opacity-10 whitespace-nowrap">
+                                    {{ getCategoryName(item.category) }}
+                                </span>
                             </div>
-                            <button @click="removeExpense(index)" class="text-gray-300 hover:text-red-400 p-1 btn-press"><i class="ph ph-x-circle"></i></button>
+                            
+                            <div class="mt-1 flex items-center text-xs text-text/60 font-medium">
+                                <i :class="item.isFlight ? 'ph ph-airplane-tilt text-primary' : 'ph ph-map-pin text-text/40'" class="mr-1"></i>
+                                <span class="truncate">{{ item.location }}</span>
+                            </div>
+
+                            <p v-if="item.desc" class="text-sm text-text/80 mt-2 p-3 bg-primary/5 rounded-lg border-l-2 border-primary/20 w-full whitespace-pre-wrap shadow-inner">
+                               {{ item.desc }}
+                            </p>
+
+                            <a v-if="!item.isFlight" :href="getNaverMapLink(item.location)" target="_blank" 
+                               class="mt-3 inline-flex items-center text-xs font-bold text-white bg-primary px-4 py-2 rounded-full shadow-custom-md hover:bg-primary-dark transition-colors btn-press">
+                                <i class="ph ph-navigation-arrow text-sm"></i> Naver Map 導航
+                            </a>
                         </div>
                     </div>
-                    <div v-if="expenses.length === 0" class="text-center text-xs text-gray-300 py-4 font-body">
-                        還沒有記帳紀錄喔
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div v-if="currentTab === 'info'" class="space-y-6">
-            <h3 class="font-bold text-gray-700 px-1"><i class="ph ph-airplane-takeoff text-macaron-blue"></i> 航班資訊 (登機證)</h3>
-
-            <div class="cute-card p-5 boarding-pass relative">
-                <div class="absolute top-0 right-10 text-6xl opacity-10 rotate-12 text-blue-400"><i class="ph ph-airplane-tilt"></i></div>
-                <div class="flex justify-between items-center mb-4 border-b border-dashed border-blue-200 pb-3">
-                    <h2 class="text-xl font-black text-gray-800 font-body">去程 Boarding Pass</h2>
-                    <span class="text-2xl font-black text-blue-500 font-mono">{{ flightInfo.departure.flightNo }}</span>
-                </div>
-
-                <div class="grid grid-cols-2 gap-x-4 gap-y-3 font-body text-sm">
-                    <div class="flex flex-col">
-                        <span class="text-[10px] text-gray-400 uppercase">Departure</span>
-                        <span class="font-bold text-gray-800">{{ flightInfo.departure.depAirport }} (TPE)</span>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="text-[10px] text-gray-400 uppercase">Arrival</span>
-                        <span class="font-bold text-gray-800">{{ flightInfo.departure.arrAirport }} (PUS)</span>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="text-[10px] text-gray-400 uppercase">Terminal / Gate</span>
-                        <span class="font-bold text-gray-800">{{ flightInfo.departure.terminal }} / {{ flightInfo.departure.gate }}</span>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="text-[10px] text-gray-400 uppercase">Boarding Time</span>
-                        <span class="font-bold text-gray-800">{{ flightInfo.departure.boardingTime }}</span>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="text-[10px] text-gray-400 uppercase">Flight Time</span>
-                        <span class="font-bold text-gray-800">{{ flightInfo.departure.depTime }}</span>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="text-[10px] text-gray-400 uppercase">Date</span>
-                        <span class="font-bold text-gray-800">Jan 21, 2025</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="cute-card p-5 boarding-pass relative">
-                <div class="absolute top-0 right-10 text-6xl opacity-10 -rotate-12 text-pink-400"><i class="ph ph-airplane-tilt"></i></div>
-                <div class="flex justify-between items-center mb-4 border-b border-dashed border-pink-200 pb-3">
-                    <h2 class="text-xl font-black text-gray-800 font-body">回程 Boarding Pass</h2>
-                    <span class="text-2xl font-black text-pink-500 font-mono">{{ flightInfo.return.flightNo }}</span>
-                </div>
-
-                <div class="grid grid-cols-2 gap-x-4 gap-y-3 font-body text-sm">
-                    <div class="flex flex-col">
-                        <span class="text-[10px] text-gray-400 uppercase">Departure</span>
-                        <span class="font-bold text-gray-800">{{ flightInfo.return.depAirport }} (PUS)</span>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="text-[10px] text-gray-400 uppercase">Arrival</span>
-                        <span class="font-bold text-gray-800">{{ flightInfo.return.arrAirport }} (TPE)</span>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="text-[10px] text-gray-400 uppercase">Terminal / Gate</span>
-                        <span class="font-bold text-gray-800">{{ flightInfo.return.terminal }} / {{ flightInfo.return.gate }}</span>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="text-[10px] text-gray-400 uppercase">Boarding Time</span>
-                        <span class="font-bold text-gray-800">{{ flightInfo.return.boardingTime }}</span>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="text-[10px] text-gray-400 uppercase">Flight Time</span>
-                        <span class="font-bold text-gray-800">{{ flightInfo.return.depTime }}</span>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="text-[10px] text-gray-400 uppercase">Date</span>
-                        <span class="font-bold text-gray-800">Jan 25, 2025</span>
-                    </div>
-                </div>
-            </div>
-
-
-            <h3 class="font-bold text-gray-700 pt-4 px-1"><i class="ph ph-buildings text-macaron-purple"></i> 住宿資訊</h3>
-            <div class="cute-card p-5 bg-white shadow-md relative overflow-hidden">
-                <div class="flex items-center mb-3">
-                    <i class="ph ph-bed text-xl text-macaron-purple mr-2"></i>
-                    <h2 class="text-lg font-bold text-gray-800 leading-tight">{{ hotelInfo.name }}</h2>
-                </div>
-                <div class="bg-gray-50 p-3 rounded-xl border border-gray-200 font-body">
-                    <label class="text-[10px] text-gray-400 font-bold uppercase block mb-1">飯店地址 (Address)</label>
-                    <p class="font-bold text-sm text-gray-700 select-all">{{ hotelInfo.address }}</p>
                 </div>
                 
-                <a :href="getNaverMapLink(hotelInfo.name)" target="_blank" class="w-full mt-4 py-3 bg-macaron-mint text-gray-800 font-bold rounded-xl shadow-md btn-press flex items-center justify-center gap-2 border border-green-100 text-sm font-body">
-                    <i class="ph ph-navigation-arrow"></i> Naver Map 導航
-                </a>
+                <button @click="openModal(null)" class="fixed bottom-24 right-5 bg-primary text-white w-14 h-14 rounded-full shadow-custom-lg flex items-center justify-center text-2xl z-20 hover:scale-105 transition-transform btn-press lg:hidden">
+                    <i class="ph ph-plus" weight="bold"></i>
+                </button>
             </div>
-        </div>
 
-        <div v-if="currentTab === 'guide'" class="space-y-6">
-
-            <div class="cute-card p-5 space-y-5">
+            <div v-if="currentTab === 'money'" class="space-y-8">
                 <div class="space-y-3">
-                    <h3 class="font-bold text-gray-700 text-lg flex items-center gap-2">
-                        <i class="ph ph-suitcase-rolling text-macaron-purple"></i> 行李清單
-                        <span class="text-xs text-gray-400 font-body">({{ luggageList.filter(i => i.checked).length }} / {{ luggageList.length }})</span>
-                    </h3>
-                    
-                    <div class="flex gap-2">
-                         <input v-model="newLuggageItem" @keyup.enter="addLuggage" type="text" placeholder="新增物品..." class="flex-1 bg-gray-50 p-2.5 rounded-xl text-sm outline-none border focus:border-macaron-purple font-body shadow-sm">
-                         <button @click="addLuggage" class="bg-macaron-purple text-white w-10 h-10 rounded-full flex items-center justify-center btn-press shadow-md"><i class="ph ph-plus-bold"></i></button>
+                    <div class="flex justify-between items-center px-1">
+                        <h3 class="font-bold text-xl text-text flex items-center gap-2"><i class="ph ph-calculator text-primary text-2xl" weight="fill"></i> 匯率計算機</h3>
+                        <div class="flex items-center gap-2 app-card px-3 py-1 rounded-full shadow-custom-sm border-2 border-primary/20">
+                            <span class="text-xs text-text/60">KRW/TWD 匯率</span>
+                            <input v-model.number="exchangeRate" type="number" class="w-14 text-right font-black text-sm outline-none text-primary bg-transparent" min="0.01" step="0.01">
+                        </div>
                     </div>
-
-                    <div class="space-y-2">
-                        <div v-for="(item, index) in luggageList" :key="`l-${index}`" class="flex items-center bg-white p-3 rounded-xl border border-gray-100 shadow-sm transition" :class="{'opacity-70': item.checked}">
-                            <input type="checkbox" v-model="item.checked" class="custom-checkbox flex-shrink-0 cursor-pointer">
-                            <span class="ml-3 flex-1 text-sm font-bold text-gray-700 font-body" :class="{'line-through text-gray-300': item.checked}">{{ item.text }}</span>
-                            <button @click="removeLuggage(index)" class="text-gray-200 hover:text-red-400 px-2 btn-press"><i class="ph ph-trash"></i></button>
+                    
+                    <div class="app-card p-5 bg-primary/5 border-l-4 border-primary/30">
+                        <div class="flex items-center border-b border-gray-300 pb-3">
+                            <span class="font-bold w-16 text-sm text-text/80">KRW (₩)</span>
+                            <input v-model.number="calcKRW" type="number" placeholder="0" class="w-full text-right text-3xl font-black outline-none bg-transparent text-text">
+                        </div>
+                        <div class="flex items-center pt-3">
+                            <span class="font-bold w-16 text-sm text-text/80">TWD (NT$)</span>
+                            <div class="w-full text-right text-3xl font-black text-primary">
+                                {{ formatNumber(calculatedTWD) }}
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="space-y-3 pt-4 border-t border-gray-100">
-                    <h3 class="font-bold text-gray-700 text-lg flex items-center gap-2">
-                        <i class="ph ph-bag-simple text-macaron-pink"></i> 必買清單
-                        <span class="text-xs text-gray-400 font-body">({{ mustBuyList.filter(i => i.checked).length }} / {{ mustBuyList.length }})</span>
-                    </h3>
-                    
-                    <div class="flex gap-2">
-                         <input v-model="newMustBuyItem" @keyup.enter="addMustBuy" type="text" placeholder="新增品項..." class="flex-1 bg-gray-50 p-2.5 rounded-xl text-sm outline-none border focus:border-macaron-pink font-body shadow-sm">
-                         <button @click="addMustBuy" class="bg-macaron-pink text-white w-10 h-10 rounded-full flex items-center justify-center btn-press shadow-md"><i class="ph ph-plus-bold"></i></button>
+                <div class="space-y-6">
+                    <div class="flex justify-between items-end px-1 border-t border-gray-200 pt-6">
+                        <h3 class="font-bold text-xl text-text flex items-center gap-2"><i class="ph ph-receipt text-primary text-2xl" weight="fill"></i> 支出記帳</h3>
+                        <div class="text-right app-card px-3 py-1.5 rounded-lg shadow-custom-sm">
+                            <p class="text-xs text-text/60">總支出 (TWD)</p>
+                            <p class="font-black text-xl text-primary">NT$ {{ formatNumber(totalExpenseTWD) }}</p>
+                        </div>
                     </div>
 
-                    <div class="space-y-2">
-                        <div v-for="(item, index) in mustBuyList" :key="`m-${index}`" class="flex items-center bg-white p-3 rounded-xl border border-gray-100 shadow-sm transition" :class="{'opacity-70': item.checked}">
-                            <input type="checkbox" v-model="item.checked" class="custom-checkbox flex-shrink-0 cursor-pointer">
-                            <span class="ml-3 flex-1 text-sm font-bold text-gray-700 font-body" :class="{'line-through text-gray-300': item.checked}">{{ item.text }}</span>
-                            <button @click="removeMustBuy(index)" class="text-gray-200 hover:text-red-400 px-2 btn-press"><i class="ph ph-trash"></i></button>
+                    <div class="app-card p-5">
+                        <h4 class="font-bold text-sm text-text/80 mb-4 border-b border-dashed pb-2">支出類別分佈 (TWD)</h4>
+                        <div class="flex justify-around items-end h-32 space-x-2">
+                            <div v-for="(item, key) in expenseBreakdownTWD" :key="key" 
+                                class="flex flex-col items-center relative chart-bar h-full group"
+                                :style="{ width: `${item.percentage}%` }">
+                                
+                                <div class="chart-tooltip">
+                                    <p class="font-bold text-sm">{{ getCategoryName(key) }}</p>
+                                    <p class="text-xs">NT${{ formatNumber(item.amount) }} ({{ item.percentage }}%)</p>
+                                </div>
+                                
+                                <div :style="{ height: `${item.height}%`, backgroundColor: getCategoryColorCode(key) }" 
+                                     class="w-8 rounded-t-md shadow-md transition-all duration-500 hover:scale-y-105">
+                                </div>
+                                <span v-if="item.amount > 0" class="mt-1 text-[10px] font-bold text-text/70">{{ item.name }}</span>
+                            </div>
+                        </div>
+                        <div v-if="totalExpenseTWD === 0" class="text-center text-sm text-text/40 pt-4">尚無支出紀錄可繪製圖表</div>
+                    </div>
+
+                    <div class="app-card p-4 border-l-4 border-primary/30 space-y-3">
+                        <div class="flex gap-2">
+                            <input type="date" v-model="newExpense.date" class="bg-gray-50 p-2 rounded-lg text-xs outline-none border w-1/3 text-center shadow-custom-sm">
+                            <select v-model="newExpense.category" class="bg-gray-50 p-2 rounded-lg text-xs outline-none border flex-1 shadow-custom-sm">
+                                <option value="" disabled>選擇類別</option>
+                                <option v-for="cat in filterCategories.filter(c => c.key !== 'all' && c.key !== 'flight')" :key="cat.key" :value="cat.key">
+                                    {{ cat.name }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="flex gap-2">
+                            <input v-model="newExpense.item" placeholder="品項名稱" class="bg-white p-2.5 rounded-lg text-sm outline-none border flex-1 shadow-custom-sm focus:border-primary">
+                            <div class="relative w-1/3">
+                                <input v-model.number="newExpense.amount" type="number" placeholder="韓幣金額" class="w-full bg-white p-2.5 pl-6 rounded-lg text-sm outline-none border shadow-custom-sm focus:border-primary">
+                                <span class="absolute left-2 top-3 text-xs text-text/40">₩</span>
+                            </div>
+                            <button @click="addExpense" :disabled="!newExpense.item || !newExpense.amount || !newExpense.category" class="bg-primary text-white px-4 rounded-lg font-bold text-sm shadow-custom-md transform hover:scale-[1.02] transition btn-press disabled:opacity-50 whitespace-nowrap">新增</button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 pb-8">
+                        <div v-for="(exp, index) in expenses" :key="index" class="app-card p-3 flex justify-between items-center border-l-4" :class="`border-${exp.category}-300`">
+                            <div class="flex flex-col">
+                                <span class="text-sm font-bold text-text">{{ exp.item }}</span>
+                                <span class="text-[10px] text-text/60">{{ exp.date.slice(5) }} · {{ getCategoryName(exp.category) }}</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="text-right">
+                                    <p class="font-bold text-text/60 text-xs">₩{{ formatNumber(exp.amount) }}</p>
+                                    <p class="text-sm font-black text-primary">NT$ {{ formatNumber(exchangeRate > 0 ? Math.round(exp.amount / exchangeRate) : 0) }}</p>
+                                </div>
+                                <button @click="removeExpense(index)" class="text-text/30 hover:text-red-500 p-1 btn-press"><i class="ph ph-x-circle text-lg"></i></button>
+                            </div>
+                        </div>
+                        <div v-if="expenses.length === 0" class="text-center text-sm text-text/30 py-4">
+                            還沒有記帳紀錄喔
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="cute-card p-5">
-                <h3 class="font-bold text-gray-700 text-lg flex items-center gap-2 mb-4">
-                    <i class="ph ph-phone-call text-red-500"></i> 韓國緊急聯絡電話
-                </h3>
-                <div class="space-y-3 font-body">
-                    <div v-for="contact in emergencyContacts" :key="contact.number" class="flex justify-between items-center bg-red-50 p-3 rounded-xl border border-red-100 shadow-sm">
+            <div v-if="currentTab === 'info'" class="space-y-6">
+                <h3 class="font-bold text-xl text-text px-1 flex items-center gap-2 border-b border-gray-200 pb-3"><i class="ph ph-airplane-takeoff text-primary text-2xl" weight="fill"></i> 航班資訊</h3>
+
+                <div class="app-card p-5 relative overflow-hidden bg-primary/5 border-l-4 border-primary">
+                    <div class="flex justify-between items-center mb-4 border-b border-dashed border-primary/30 pb-3">
+                        <h2 class="text-lg font-bold text-text">去程 TPE → PUS</h2>
+                        <span class="text-2xl font-black text-primary font-mono">{{ flightInfo.departure.flightNo }}</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
                         <div class="flex flex-col">
-                            <span class="font-bold text-red-600 text-sm">{{ contact.name }}</span>
-                            <span class="text-xs text-gray-500">{{ contact.desc }}</span>
+                            <span class="text-xs text-text/60 uppercase">Departure Time</span>
+                            <span class="font-bold text-text">{{ flightInfo.departure.depTime }} (Jan 21, 2026)</span>
                         </div>
-                        <a :href="`tel:${contact.number}`" class="bg-red-500 text-white px-4 py-2 rounded-full font-bold text-sm btn-press shadow-md">
-                            撥打 {{ contact.number }}
-                        </a>
+                        <div class="flex flex-col">
+                            <span class="text-xs text-text/60 uppercase">Boarding Time</span>
+                            <span class="font-bold text-red-500">{{ flightInfo.departure.boardingTime }}</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-xs text-text/60 uppercase">Terminal / Gate</span>
+                            <span class="font-bold text-text">{{ flightInfo.departure.terminal }} / {{ flightInfo.departure.gate }}</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-xs text-text/60 uppercase">Arrival Time (PUS)</span>
+                            <span class="font-bold text-text">17:40</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="app-card p-5 relative overflow-hidden bg-red-500/5 border-l-4 border-red-500">
+                    <div class="flex justify-between items-center mb-4 border-b border-dashed border-red-500/30 pb-3">
+                        <h2 class="text-lg font-bold text-text">回程 PUS → TPE</h2>
+                        <span class="text-2xl font-black text-red-500 font-mono">{{ flightInfo.return.flightNo }}</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+                        <div class="flex flex-col">
+                            <span class="text-xs text-text/60 uppercase">Departure Time</span>
+                            <span class="font-bold text-text">{{ flightInfo.return.depTime }} (Jan 25, 2026)</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-xs text-text/60 uppercase">Boarding Time</span>
+                            <span class="font-bold text-red-500">{{ flightInfo.return.boardingTime }}</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-xs text-text/60 uppercase">Terminal / Gate</span>
+                            <span class="font-bold text-text">{{ flightInfo.return.terminal }} / {{ flightInfo.return.gate }}</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-xs text-text/60 uppercase">Arrival Time (TPE)</span>
+                            <span class="font-bold text-text">20:25</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <h3 class="font-bold text-xl text-text pt-4 px-1 flex items-center gap-2 border-b border-gray-200 pb-3"><i class="ph ph-buildings text-primary text-2xl" weight="fill"></i> 住宿資訊</h3>
+                <div class="app-card p-5 border-2 border-primary/20">
+                    <div class="flex items-center mb-3">
+                        <i class="ph ph-bed text-2xl text-primary mr-2"></i>
+                        <h2 class="text-lg font-bold text-text leading-tight">{{ hotelInfo.name }}</h2>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                        <label class="text-xs text-text/60 font-bold uppercase block mb-1">地址 (Address)</label>
+                        <p class="font-bold text-sm text-text select-all">{{ hotelInfo.address }}</p>
+                    </div>
+                    
+                    <a :href="getNaverMapLink(hotelInfo.name)" target="_blank" class="w-full mt-4 py-3 bg-primary text-white font-bold rounded-lg shadow-custom-md hover:bg-primary-dark transition btn-press flex items-center justify-center gap-2 text-sm">
+                        <i class="ph ph-navigation-arrow"></i> Naver Map 導航
+                    </a>
+                </div>
+            </div>
+
+            <div v-if="currentTab === 'guide'" class="space-y-6">
+
+                <div class="app-card p-5 space-y-5">
+                    <div class="space-y-3">
+                        <h3 class="font-bold text-xl text-text flex items-center gap-2 border-b border-gray-200 pb-2">
+                            <i class="ph ph-suitcase-rolling text-primary text-2xl" weight="fill"></i> 行李清單
+                            <span class="text-xs text-text/60">({{ luggageList.filter(i => i.checked).length }} / {{ luggageList.length }})</span>
+                        </h3>
+                        
+                        <div class="flex gap-2 p-1 rounded-md bg-gray-50">
+                            <input v-model="newLuggageItem" @keyup.enter="addLuggage" type="text" placeholder="新增物品..." class="flex-1 bg-white p-2.5 rounded-lg text-sm outline-none border focus:border-primary shadow-custom-sm">
+                            <button @click="addLuggage" class="bg-primary text-white w-10 h-10 rounded-lg flex items-center justify-center btn-press shadow-custom-md"><i class="ph ph-plus-bold"></i></button>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div v-for="(item, index) in luggageList" :key="`l-${index}`" class="flex items-center bg-white p-3 rounded-lg border border-gray-200 shadow-custom-sm transition" :class="{'opacity-70 bg-gray-50': item.checked}">
+                                <input type="checkbox" v-model="item.checked" class="form-checkbox h-5 w-5 text-primary rounded border-gray-300 focus:ring-primary cursor-pointer">
+                                <span class="ml-3 flex-1 text-sm font-medium text-text" :class="{'line-through text-text/40': item.checked}">{{ item.text }}</span>
+                                <button @click="removeLuggage(index)" class="text-text/20 hover:text-red-500 px-2 btn-press"><i class="ph ph-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 pt-4 border-t border-gray-200">
+                        <h3 class="font-bold text-xl text-text flex items-center gap-2 border-b border-gray-200 pb-2">
+                            <i class="ph ph-bag-simple text-red-500 text-2xl" weight="fill"></i> 必買清單
+                            <span class="text-xs text-text/60">({{ mustBuyList.filter(i => i.checked).length }} / {{ mustBuyList.length }})</span>
+                        </h3>
+                        
+                        <div class="flex gap-2 p-1 rounded-md bg-gray-50">
+                            <input v-model="newMustBuyItem" @keyup.enter="addMustBuy" type="text" placeholder="新增品項..." class="flex-1 bg-white p-2.5 rounded-lg text-sm outline-none border focus:border-red-500 shadow-custom-sm">
+                            <button @click="addMustBuy" class="bg-red-500 text-white w-10 h-10 rounded-lg flex items-center justify-center btn-press shadow-custom-md"><i class="ph ph-plus-bold"></i></button>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div v-for="(item, index) in mustBuyList" :key="`m-${index}`" class="flex items-center bg-white p-3 rounded-lg border border-gray-200 shadow-custom-sm transition" :class="{'opacity-70 bg-gray-50': item.checked}">
+                                <input type="checkbox" v-model="item.checked" class="form-checkbox h-5 w-5 text-red-500 rounded border-gray-300 focus:ring-red-500 cursor-pointer">
+                                <span class="ml-3 flex-1 text-sm font-medium text-text" :class="{'line-through text-text/40': item.checked}">{{ item.text }}</span>
+                                <button @click="removeMustBuy(index)" class="text-text/20 hover:text-red-500 px-2 btn-press"><i class="ph ph-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="app-card p-5 border-l-4 border-red-500/50 bg-red-500/5">
+                    <h3 class="font-bold text-xl text-text flex items-center gap-2 mb-4 border-b border-red-500/20 pb-2">
+                        <i class="ph ph-phone-call text-red-500 text-2xl" weight="fill"></i> 緊急聯絡電話
+                    </h3>
+                    <div class="space-y-3">
+                        <div v-for="contact in emergencyContacts" :key="contact.number" class="flex justify-between items-center bg-white p-3 rounded-lg border border-red-500/30 shadow-custom-sm">
+                            <div class="flex flex-col">
+                                <span class="font-bold text-text text-sm">{{ contact.name }}</span>
+                                <span class="text-xs text-text/60">{{ contact.desc }}</span>
+                            </div>
+                            <a :href="`tel:${contact.number}`" class="bg-red-500 text-white px-4 py-2 rounded-full font-bold text-sm btn-press shadow-custom-md hover:bg-red-600">
+                                撥打 {{ contact.number }}
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div v-if="currentTab === 'map'" class="h-full flex flex-col">
-            <div class="bg-white p-4 rounded-3xl shadow-lg mb-4 border border-green-50">
-                <input v-model="mapQuery" @keyup.enter="searchNaverMap" type="text" placeholder="輸入地點搜尋 (例如：海雲台)" class="w-full bg-gray-50 px-4 py-3 rounded-2xl text-sm outline-none font-bold mb-3 focus:bg-white focus:ring-2 focus:ring-green-100 transition font-body">
+            <div v-if="currentTab === 'map'" class="h-[70vh] flex flex-col space-y-4">
+                <div class="app-card p-4 shadow-custom-sm">
+                    <input v-model="mapQuery" @keyup.enter="searchNaverMap" type="text" placeholder="輸入地點搜尋 (例如：海雲台)" class="w-full bg-gray-50 px-4 py-3 rounded-lg text-sm outline-none font-medium mb-3 focus:bg-white focus:ring-2 focus:ring-primary/50 transition border border-gray-200">
+                    
+                    <div class="flex gap-3">
+                        <button @click="searchNaverMap" class="flex-1 bg-primary text-white py-3 rounded-lg font-bold text-sm shadow-custom-md btn-press flex items-center justify-center gap-2 hover:bg-primary-dark">
+                            <i class="ph ph-navigation-arrow"></i> Naver Map
+                        </button>
+                        <button @click="searchGoogleMap" class="flex-1 bg-white text-text border border-gray-300 py-3 rounded-lg font-bold text-sm shadow-custom-sm btn-press flex items-center justify-center gap-2 hover:bg-gray-100">
+                            <i class="ph ph-map-pin"></i> Google Map
+                        </button>
+                    </div>
+                </div>
                 
-                <div class="flex gap-3">
-                    <button @click="searchNaverMap" class="flex-1 bg-macaron-mint text-gray-800 py-3 rounded-2xl font-bold text-sm shadow-md btn-press flex items-center justify-center gap-2 border border-green-100 font-body">
-                        <i class="ph ph-navigation-arrow"></i> Naver Map
-                    </button>
-                    <button @click="searchGoogleMap" class="flex-1 bg-blue-50 text-blue-500 border border-blue-100 py-3 rounded-2xl font-bold text-sm shadow-sm btn-press flex items-center justify-center gap-2 font-body">
-                        <i class="ph ph-map-pin"></i> Google Map
-                    </button>
+                <div class="flex-1 rounded-lg overflow-hidden shadow-custom-lg relative bg-gray-100 border border-gray-200">
+                    <iframe width="100%" height="100%" style="border:0" loading="lazy" 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d102716.27850871927!2d129.0838128!3d35.1584949!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568e89f81216d8f%3A0x6a0c5c36af1c944d!2sBusan%2C%20South%20Korea!5e0!3m2!1sen!2stw!4v1703649600000!5m2!1sen!2stw" 
+                        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                    <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg text-xs font-bold text-text/80 shadow-md border border-gray-200">
+                        僅供概覽，導航請使用上方按鈕
+                    </div>
                 </div>
             </div>
-            
-            <div class="flex-1 rounded-3xl overflow-hidden shadow-2xl border-4 border-white relative bg-gray-100">
-                <iframe width="100%" height="100%" style="border:0" loading="lazy" 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d102716.27850871927!2d129.0838128!3d35.1584949!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568e89f81216d8f%3A0x6a0c5c36af1c944d!2sBusan%2C%20South%20Korea!5e0!3m2!1sen!2stw!4v1703649600000!5m2!1sen!2stw" 
-                    allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-                </iframe>
-                <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-xl text-xs font-bold text-gray-500 shadow-md font-body">
-                    僅供概覽，導航請使用上方按鈕
-                </div>
-            </div>
-        </div>
-    </main>
+        </main>
+    </div>
 
-    <nav class="fixed bottom-0 w-full pb-safe pt-2 px-2 flex justify-between items-center bg-white/95 backdrop-blur-md rounded-t-[30px] shadow-[0_-5px_20px_rgba(0,0,0,0.05)] z-30 border-t border-gray-100 font-body">
-        <button @click="currentTab = 'itinerary'" :class="currentTab === 'itinerary' ? 'text-macaron-pink tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
-            <i class="ph ph-notebook text-2xl" :weight="currentTab === 'itinerary' ? 'fill' : 'regular'"></i>
-            <span class="text-[10px] font-bold mt-1">行程</span>
-        </button>
-        <button @click="currentTab = 'money'" :class="currentTab === 'money' ? 'text-macaron-blue tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
-            <i class="ph ph-currency-krw text-2xl" :weight="currentTab === 'money' ? 'fill' : 'regular'"></i>
-            <span class="text-[10px] font-bold mt-1">匯率/記帳</span>
-        </button>
-        <button @click="currentTab = 'info'" :class="currentTab === 'info' ? 'text-macaron-purple tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
-            <i class="ph ph-ticket text-2xl" :weight="currentTab === 'info' ? 'fill' : 'regular'"></i>
-            <span class="text-[10px] font-bold mt-1">機票/住宿</span>
-        </button>
-        <button @click="currentTab = 'guide'" :class="currentTab === 'guide' ? 'text-macaron-pink tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
-            <i class="ph ph-list-checks text-2xl" :weight="currentTab === 'guide' ? 'fill' : 'regular'"></i>
-            <span class="text-[10px] font-bold mt-1">清單</span>
-        </button>
-        <button @click="currentTab = 'map'" :class="currentTab === 'map' ? 'text-macaron-mint tab-active' : 'text-gray-400'" class="flex flex-col items-center p-2 flex-1 transition-all">
-            <i class="ph ph-map-trifold text-2xl" :weight="currentTab === 'map' ? 'fill' : 'regular'"></i>
-            <span class="text-[10px] font-bold mt-1">地圖</span>
+    <nav class="fixed bottom-0 w-full pb-safe pt-2 px-2 flex justify-between items-center mobile-nav-bar rounded-t-xl z-30 lg:hidden">
+        <button v-for="tab in mobileTabs" :key="tab.id"
+            @click="currentTab = tab.id"
+            :class="currentTab === tab.id ? 'text-primary' : 'text-text/50'" 
+            class="flex flex-col items-center p-2 flex-1 transition-all">
+            <i :class="tab.icon" class="text-2xl" :weight="currentTab === tab.id ? 'fill' : 'regular'"></i>
+            <span class="text-[10px] font-bold mt-1">{{ tab.name }}</span>
         </button>
     </nav>
 
-    <div v-if="showModal" class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl scale-100 transition-transform cute-card border-2 border-macaron-purple/50">
+    <div v-if="showModal" class="fixed inset-0 bg-text/30 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="app-card w-full max-w-sm rounded-xl p-6 shadow-custom-lg scale-100 transition-transform border-l-4 border-primary">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold text-gray-700 font-body">
-                    {{ isEditMode ? '編輯行程 ✏️' : '新增行程 ✨' }}
+                <h3 class="text-xl font-bold text-text">
+                    {{ isEditMode ? '編輯行程 ✏️' : '新增筆記 ✨' }}
                 </h3>
-                <button @click="showModal = false" class="bg-gray-100 w-8 h-8 rounded-full text-gray-500 hover:bg-gray-200 btn-press"><i class="ph ph-x"></i></button>
+                <button @click="showModal = false" class="bg-gray-100 w-8 h-8 rounded-full text-text/70 hover:bg-gray-200 btn-press"><i class="ph ph-x"></i></button>
             </div>
-            <div class="space-y-3 font-body">
+            <div class="space-y-3">
                 <div>
-                    <label class="text-xs text-macaron-purple font-bold ml-1">時間</label>
-                    <input v-model="modalForm.time" type="time" class="w-full bg-gray-50 p-3 rounded-xl mt-1 outline-none border focus:border-macaron-purple">
+                    <label class="text-xs text-primary font-bold ml-1">時間</label>
+                    <input v-model="modalForm.time" type="time" class="w-full bg-gray-50 p-3 rounded-lg mt-1 outline-none border focus:border-primary">
                 </div>
                 <div>
-                    <label class="text-xs text-macaron-purple font-bold ml-1">標題</label>
-                    <input v-model="modalForm.title" type="text" placeholder="行程名稱" class="w-full bg-gray-50 p-3 rounded-xl mt-1 outline-none border focus:border-macaron-purple">
+                    <label class="text-xs text-primary font-bold ml-1">類別</label>
+                    <select v-model="modalForm.category" class="w-full bg-gray-50 p-3 rounded-lg mt-1 outline-none border focus:border-primary">
+                        <option value="" disabled>選擇行程類別</option>
+                        <option v-for="cat in filterCategories.filter(c => c.key !== 'all' && c.key !== 'flight')" :key="cat.key" :value="cat.key">{{ cat.name }}</option>
+                    </select>
                 </div>
                 <div>
-                    <label class="text-xs text-macaron-purple font-bold ml-1">地點 (地圖搜尋用)</label>
-                    <input v-model="modalForm.location" type="text" placeholder="輸入關鍵字" class="w-full bg-gray-50 p-3 rounded-xl mt-1 outline-none border focus:border-macaron-purple">
+                    <label class="text-xs text-primary font-bold ml-1">標題</label>
+                    <input v-model="modalForm.title" type="text" placeholder="行程名稱" class="w-full bg-gray-50 p-3 rounded-lg mt-1 outline-none border focus:border-primary">
                 </div>
                 <div>
-                    <label class="text-xs text-macaron-purple font-bold ml-1">備註 (營業時間/資訊)</label>
-                    <textarea v-model="modalForm.desc" rows="3" placeholder="例如：營業時間 10:00-22:00" class="w-full bg-gray-50 p-3 rounded-xl mt-1 outline-none border focus:border-macaron-purple resize-none"></textarea>
+                    <label class="text-xs text-primary font-bold ml-1">地點 (地圖搜尋用)</label>
+                    <input v-model="modalForm.location" type="text" placeholder="輸入關鍵字" class="w-full bg-gray-50 p-3 rounded-lg mt-1 outline-none border focus:border-primary">
+                </div>
+                <div>
+                    <label class="text-xs text-primary font-bold ml-1">備註/交通資訊</label>
+                    <textarea v-model="modalForm.desc" rows="3" placeholder="例如：交通方式、營業時間..." class="w-full bg-gray-50 p-3 rounded-lg mt-1 outline-none border focus:border-primary resize-none"></textarea>
                 </div>
             </div>
-            <button @click="saveItem" class="w-full mt-6 py-3.5 bg-gray-800 text-white font-bold rounded-xl shadow-lg btn-press font-body">
-                儲存
+            <button @click="saveItem" :disabled="!modalForm.title || !modalForm.category" class="w-full mt-6 py-3.5 bg-primary text-white font-bold rounded-lg shadow-custom-md btn-press disabled:opacity-50">
+                儲存筆記
             </button>
         </div>
     </div>
@@ -517,6 +568,7 @@
             // --- State ---
             const currentTab = ref('itinerary');
             const activeDay = ref(1);
+            const activeCategory = ref('all'); // New state for filtering
             const showModal = ref(false);
             const isEditMode = ref(false);
             const mapQuery = ref('');
@@ -533,39 +585,67 @@
             
             // Expenses
             const expenses = ref([]);
-            const newExpense = ref({ date: '', item: '', amount: '' });
+            const newExpense = ref({ date: '', item: '', amount: '', category: '' });
 
             // Modal Form
-            const modalForm = ref({ id: null, time: '', title: '', location: '', desc: '' });
+            const modalForm = ref({ id: null, time: '', title: '', location: '', desc: '', category: '' });
 
             // --- Fixed Data ---
+
+            const desktopTabs = [
+                { id: 'itinerary', name: '行程規劃', icon: 'ph-notebook' },
+                { id: 'money', name: '匯率與記帳', icon: 'ph-currency-krw' },
+                { id: 'info', name: '機票與住宿', icon: 'ph-ticket' },
+                { id: 'guide', name: '準備清單', icon: 'ph-list-checks' },
+                { id: 'map', name: '地圖搜尋', icon: 'ph-map-trifold' },
+            ];
             
-            // Trip Date Mapping (Jan 21 - Jan 25, 2025)
+            const mobileTabs = [
+                { id: 'itinerary', name: '行程', icon: 'ph-notebook' },
+                { id: 'money', name: '記帳', icon: 'ph-currency-krw' },
+                { id: 'info', name: '資訊', icon: 'ph-ticket' },
+                { id: 'guide', name: '清單', icon: 'ph-list-checks' },
+                { id: 'map', name: '地圖', icon: 'ph-map-trifold' },
+            ];
+
+            const currentTabName = computed(() => {
+                const tab = desktopTabs.find(t => t.id === currentTab.value);
+                return tab ? tab.name : '規劃總覽';
+            });
+            
+            // Trip Date Mapping (Jan 21 - Jan 25, 2026)
             const tripDates = {
-                1: { date: '01/21', day: '週二', fullDay: '1月21日 (週二)' },
-                2: { date: '01/22', day: '週三', fullDay: '1月22日 (週三)' },
-                3: { date: '01/23', day: '週四', fullDay: '1月23日 (週四)' },
-                4: { date: '01/24', day: '週五', fullDay: '1月24日 (週五)' },
-                5: { date: '01/25', day: '週六', fullDay: '1月25日 (週六)' },
+                1: { date: '01/21', day: '週三', fullDay: '1月21日 (週三)' },
+                2: { date: '01/22', day: '週四', fullDay: '1月22日 (週四)' },
+                3: { date: '01/23', day: '週五', fullDay: '1月23日 (週五)' },
+                4: { date: '01/24', day: '週六', fullDay: '1月24日 (週六)' },
+                5: { date: '01/25', day: '週日', fullDay: '1月25日 (週日)' },
             };
 
             // Simulated Daily Weather
             const simulatedWeather = ref({
-                1: { code: 2, temp: 8, rain: 20 }, // Cloudy
-                2: { code: 0, temp: 12, rain: 0 }, // Sunny
-                3: { code: 51, temp: 6, rain: 70 }, // Rain
-                4: { code: 1, temp: 10, rain: 10 }, // Mostly clear
-                5: { code: 0, temp: 11, rain: 0 }, // Sunny
+                1: { code: 2, temp: 8, rain: 20 }, 
+                2: { code: 0, temp: 12, rain: 0 }, 
+                3: { code: 51, temp: 6, rain: 70 }, 
+                4: { code: 1, temp: 10, rain: 10 }, 
+                5: { code: 0, temp: 11, rain: 0 }, 
             });
 
-            // Default Checklists
+            const filterCategories = [
+                { key: 'all', name: '所有項目', icon: 'ph-list-checks', color: 'text-text' },
+                { key: 'food', name: '美食餐飲', icon: 'ph-fork-knife', color: 'text-accent-food', colorCode: '#EF4444' },
+                { key: 'shopping', name: '購物消費', icon: 'ph-shopping-bag', color: 'text-accent-shopping', colorCode: '#3B82F6' },
+                { key: 'sightseeing', name: '景點活動', icon: 'ph-mountain', color: 'text-accent-sightseeing', colorCode: '#10B981' },
+                { key: 'travel', name: '交通票券', icon: 'ph-train-simple', color: 'text-accent-travel', colorCode: '#F59E0B' },
+                { key: 'flight', name: '機票/住宿', icon: 'ph-airplane-takeoff', color: 'text-indigo-600', colorCode: '#4F46E5' }
+            ];
+
             const defaultLuggage = [
                 { text: '護照 / 簽證', checked: false },
                 { text: '韓幣現金 / 信用卡', checked: false },
                 { text: '轉接頭 (韓國圓孔)', checked: false },
                 { text: '行動電源 / 充電線', checked: false },
                 { text: '牙刷牙膏 (韓國環保不提供)', checked: false },
-                { text: '個人常備藥品', checked: false },
                 { text: '保暖衣物 / 圍巾', checked: false },
                 { text: '網卡 / eSim', checked: false }
             ];
@@ -584,81 +664,66 @@
                 { name: '旅遊諮詢熱線', number: '1330', desc: 'Korea Travel Hotline' }
             ];
 
-            // Itinerary Default Data (UPDATED based on user's detailed schedule)
+            // Itinerary Default Data (Updated with category)
             const defaultItinerary = [
                 // --- Day 1 (Jan 21) ---
-                { id: 100, day: 1, time: '09:00', title: '從家裡出發', location: '桃園', desc: '前往桃園機場 T2', isFlight: false },
-                { id: 101, day: 1, time: '11:00', title: '抵達桃園機場 T2', location: '桃園國際機場 T2', desc: '辦理報到、托運、出境流程。', isFlight: false },
-                // Flight Departure (BR180)
-                { 
-                    id: 102, day: 1, time: '14:25', title: '長榮航空 BR180 (桃園→釜山) 啟程', 
-                    location: '桃園國際機場 T2', 
-                    desc: '預計 17:40 抵達釜山金海機場 (PUS)。', 
-                    isFlight: true, flightNo: 'BR180',
-                    depAirport: 'TPE', arrAirport: 'PUS', depTime: '14:25', 
-                    terminal: 'T2', gate: 'TBD', boardingTime: '13:55', type: 'departure' 
-                },
-                { id: 103, day: 1, time: '17:40', title: '抵達釜山金海機場 (PUS)', location: 'Gimhae International Airport', desc: '入境與領取行李 (約 20-30 分鐘)。', isFlight: false },
-                { id: 104, day: 1, time: '18:20', title: '機場 $\rightarrow$ 飯店 (交通轉乘)', location: '釜山金海機場', desc: '輕軌：金海機場站 $\rightarrow$ 沙上站 / 地鐵：沙上 $\rightarrow$ 西面 $\rightarrow$ 南浦站。總交通時間約 60 分鐘。', isFlight: false },
-                { id: 105, day: 1, time: '19:00', title: '釜山亞雲樹飯店 Check-in', location: 'Hotel Aventree Busan', desc: '辦理入住手續。', isFlight: false },
-                { id: 106, day: 1, time: '20:00', title: '晚餐與夜間自由活動', location: '南浦洞 (扎嘎其市場/BIFF/富平)', desc: '晚餐建議：南浦蔘雞湯 / 元祖釜山豬腳。\n活動：扎嘎其市場、BIFF 廣場（小吃）、國際市場、富平市場（罐頭市場）。', isFlight: false },
+                { id: 100, day: 1, time: '09:00', title: '從家裡出發', location: '桃園', desc: '前往桃園機場 T2', isFlight: false, category: 'travel' },
+                { id: 101, day: 1, time: '11:00', title: '抵達桃園機場 T2', location: '桃園國際機場 T2', desc: '辦理報到、托運、出境流程。', isFlight: false, category: 'travel' },
+                { id: 102, day: 1, time: '14:25', title: '長榮航空 BR180 (桃園→釜山) 啟程', location: '桃園國際機場 T2', desc: '預計 17:40 抵達釜山金海機場 (PUS)。', isFlight: true, category: 'flight', flightNo: 'BR180', depAirport: 'TPE', arrAirport: 'PUS', depTime: '14:25', terminal: 'T2', gate: 'TBD', boardingTime: '13:55', type: 'departure' },
+                { id: 103, day: 1, time: '17:40', title: '抵達釜山金海機場 (PUS)', location: 'Gimhae International Airport', desc: '入境與領取行李 (約 20-30 分鐘)。', isFlight: false, category: 'travel' },
+                { id: 104, day: 1, time: '18:20', title: '機場 $\rightarrow$ 飯店 (交通轉乘)', location: '釜山金海機場', desc: '輕軌：金海機場站 $\rightarrow$ 沙上站 / 地鐵：沙上 $\rightarrow$ 西面 $\rightarrow$ 南浦站。總交通時間約 60 分鐘。', isFlight: false, category: 'travel' },
+                { id: 105, day: 1, time: '19:00', title: '釜山亞雲樹飯店 Check-in', location: 'Hotel Aventree Busan', desc: '辦理入住手續。', isFlight: false, category: 'flight' },
+                { id: 106, day: 1, time: '20:00', title: '晚餐與夜間自由活動', location: '南浦洞 (扎嘎其市場/BIFF/富平)', desc: '晚餐建議：南浦蔘雞湯 / 元祖釜山豬腳。', isFlight: false, category: 'food' },
                 
                 // --- Day 2 (Jan 22) ---
-                { id: 201, day: 2, time: '08:00', title: '從南浦洞出發 $\rightarrow$ 海雲台站', location: '海雲台站', desc: '地鐵約 50 分鐘，計程車約 25-30 分鐘（推薦計程車）。', isFlight: false },
-                { id: 202, day: 2, time: '09:00', title: '海雲台傳統市場 (早餐)', location: '해운대 전통시장', desc: '推薦：手工飯捲、海鮮煎餅等在地美食。停留約 40 分鐘。', isFlight: false },
-                { id: 203, day: 2, time: '09:45', title: '海雲台海邊散步', location: '海雲台海邊', desc: '簡單散步、拍照。', isFlight: false },
-                { id: 204, day: 2, time: '10:00', title: '前往海東龍宮寺', location: '海東龍宮寺', desc: '交通：計程車車程約 15-18 分鐘（最省時）。', isFlight: false },
-                { id: 205, day: 2, time: '10:20', title: '海東龍宮寺 參觀', location: '해동용궁사', desc: '參觀：龍門石橋、觀音像、海岸步道。停留約 1.2 小時。', isFlight: false },
-                { id: 206, day: 2, time: '11:40', title: '樂天 Outlet (東釜山店)', location: '롯데프리미엄아울렛 동부산점', desc: '可在此用餐及購物 (彈性行程)。', isFlight: false },
-                { id: 207, day: 2, time: '14:10', title: '新世界百貨 (Centum City)', location: '신세계백화점 센텀시티', desc: '逛街、小點心。', isFlight: false },
-                { id: 208, day: 2, time: '15:00', title: 'SPA LAND 汗蒸幕', location: 'SPA LAND (新世界百貨 B1)', desc: '休息放鬆，體驗設施。停留約 2 小時。', isFlight: false },
-                { id: 209, day: 2, time: '17:20', title: '返回南浦洞 (地鐵)', location: '南浦站', desc: '地鐵：Centum City $\rightarrow$ 西面 $\rightarrow$ 南浦洞 (約 45 分鐘)。', isFlight: false },
-                { id: 210, day: 2, time: '18:10', title: '南浦洞晚餐與夜間逛街', location: '南浦洞 / 西面地下街', desc: '晚餐建議：伍班長燒肉 (海雲台) / 南浦洞周邊餐廳。活動：(A) 西面地下街文創店 (B) 南浦洞 KPOP 唱片行。', isFlight: false },
+                { id: 201, day: 2, time: '08:00', title: '從南浦洞出發 $\rightarrow$ 海雲台站', location: '海雲台站', desc: '地鐵約 50 分鐘，計程車約 25-30 分鐘（若想省時間，推薦計程車）。', isFlight: false, category: 'travel' },
+                { id: 202, day: 2, time: '09:00', title: '海雲台傳統市場 (早餐)', location: '해운대 전통시장', desc: '推薦：手工飯捲、海鮮煎餅等在地美食。停留約 40 分鐘。', isFlight: false, category: 'food' },
+                { id: 203, day: 2, time: '09:45', title: '海雲台海邊散步', location: '海雲台海邊', desc: '簡單散步、拍照。', isFlight: false, category: 'sightseeing' },
+                { id: 204, day: 2, time: '10:00', title: '前往海東龍宮寺', location: '海東龍宮寺', desc: '交通：計程車車程約 15-18 分鐘（最省時）。', isFlight: false, category: 'travel' },
+                { id: 205, day: 2, time: '10:20', title: '海東龍宮寺 參觀', location: '해동용궁사', desc: '參觀：龍門石橋、觀音像、海岸步道。停留約 1.2 小時。', isFlight: false, category: 'sightseeing' },
+                { id: 206, day: 2, time: '11:40', title: '樂天 Outlet (東釜山店)', location: '롯데프리미엄아울렛 동부산점', desc: '可在此用餐及購物 (彈性行程)。', isFlight: false, category: 'shopping' },
+                { id: 207, day: 2, time: '14:10', title: '新世界百貨 (Centum City)', location: '신세계백화점 센텀시티', desc: '逛街、小點心。', isFlight: false, category: 'shopping' },
+                { id: 208, day: 2, time: '15:00', title: 'SPA LAND 汗蒸幕', location: 'SPA LAND (新世界百貨 B1)', desc: '休息放鬆，體驗設施。停留約 2 小時。', isFlight: false, category: 'sightseeing' },
+                { id: 209, day: 2, time: '17:20', title: '返回南浦洞 (地鐵)', location: '南浦站', desc: '地鐵：Centum City $\rightarrow$ 西面 $\rightarrow$ 南浦洞 (約 45 分鐘)。', isFlight: false, category: 'travel' },
+                { id: 210, day: 2, time: '18:10', title: '南浦洞晚餐與夜間逛街', location: '南浦洞 / 西面地下街', desc: '晚餐建議：伍班長燒肉 (海雲台) / 南浦洞周邊餐廳。', isFlight: false, category: 'food' },
 
                 // --- Day 3 (Jan 23) ---
-                { id: 301, day: 3, time: '09:00', title: 'KKday 釜山一日遊 集合出發', location: '釜山站 1 號出口', desc: '交通方式：一日遊巴士。', isFlight: false },
-                { id: 302, day: 3, time: '10:30', title: '天空膠囊 (藍線公園)', location: '海邊列車 (청사포)', desc: '體驗海岸膠囊列車。', isFlight: false },
-                { id: 303, day: 3, time: '13:10', title: '海東龍宮寺 (本日第二次造訪)', location: '해동용궁사', desc: 'KKday 行程安排。午餐建議：道熙家海鮮 (近青沙浦)。', isFlight: false },
-                { id: 304, day: 3, time: '15:00', title: '佛國寺 (慶州世界遺產)', location: '佛國寺', desc: '慶州世界遺產。', isFlight: false },
-                { id: 305, day: 3, time: '16:40', title: '大陵院 + 皇理團路', location: '慶州大陵院 / 皇理團路', desc: '慶州歷史文化區散策。', isFlight: false },
-                { id: 306, day: 3, time: '19:00', title: '東宮與月池 (雁鴨池) 夜景', location: '東宮與月池', desc: '欣賞慶州著名夜景。', isFlight: false },
-                { id: 307, day: 3, time: '21:50', title: '一日遊返回釜山站', location: '釜山站', desc: '可選擇在西面站提前下車，逛西面大創 2 號店。', isFlight: false },
+                { id: 301, day: 3, time: '09:00', title: 'KKday 釜山一日遊 集合出發', location: '釜山站 1 號出口', desc: '交通方式：一日遊巴士。', isFlight: false, category: 'travel' },
+                { id: 302, day: 3, time: '10:30', title: '天空膠囊 (藍線公園)', location: '海邊列車 (청사포)', desc: '體驗海岸膠囊列車。', isFlight: false, category: 'sightseeing' },
+                { id: 303, day: 3, time: '13:10', title: '海東龍宮寺 (本日第二次造訪)', location: '해동용궁사', desc: 'KKday 行程安排。午餐建議：道熙家海鮮 (近青沙浦)。', isFlight: false, category: 'sightseeing' },
+                { id: 304, day: 3, time: '15:00', title: '佛國寺 (慶州世界遺產)', location: '佛國寺', desc: '慶州世界遺產。', isFlight: false, category: 'sightseeing' },
+                { id: 305, day: 3, time: '16:40', title: '大陵院 + 皇理團路', location: '慶州大陵院 / 皇理團路', desc: '慶州歷史文化區散策。', isFlight: false, category: 'sightseeing' },
+                { id: 306, day: 3, time: '19:00', title: '東宮與月池 (雁鴨池) 夜景', location: '東宮與月池', desc: '欣賞慶州著名夜景。', isFlight: false, category: 'sightseeing' },
+                { id: 307, day: 3, time: '21:50', title: '一日遊返回釜山站', location: '釜山站', desc: '可選擇在西面站提前下車，逛西面大創 2 號店。', isFlight: false, category: 'travel' },
 
                 // --- Day 4 (Jan 24) ---
-                { id: 401, day: 4, time: '08:00', title: '飯店出發 / 早餐', location: '南浦洞', desc: '從飯店出發，準備前往松島。', isFlight: false },
-                { id: 402, day: 4, time: '09:30', title: '松島天空步道', location: '송도스카이워크', desc: '交通：從札嘎其站叫車約 5 分鐘抵達。停留約 20-30 分鐘。', isFlight: false },
-                { id: 403, day: 4, time: '10:20', title: '松島海上纜車 (Air Cruise)', location: '송도해상케이블카', desc: '建議搭乘來回，觀賞海景。約 1 小時。', isFlight: false },
-                { id: 404, day: 4, time: '11:30', title: '午餐 (樂天百貨光復店)', location: '롯데백화점 광복점', desc: '在百貨內用餐。', isFlight: false },
-                { id: 405, day: 4, time: '13:20', title: '樂天百貨頂樓 (星光花園)', location: '樂天百貨光復店頂樓', desc: '提早抵達觀景位，準備觀賞開橋儀式。', isFlight: false },
-                { id: 406, day: 4, time: '14:00', title: '觀賞影島大橋開橋儀式', location: '影島大橋 (觀賞點)', desc: '準時開始，約 5-7 分鐘。為最佳俯瞰角度。', isFlight: false },
-                { id: 407, day: 4, time: '15:00', title: '白淺灘文化村', location: '흰여울문화마을', desc: '交通：計程車從樂天百貨搭車約 10-12 分鐘。停留約 40-60 分鐘。', isFlight: false },
-                { id: 408, day: 4, time: '16:00', title: '太宗台遊園地', location: '태종대유원지', desc: '需搭乘「丹青列車」遊覽燈塔、觀景台。停留約 1.5 小時。', isFlight: false },
-                { id: 409, day: 4, time: '18:30', title: '返回南浦洞晚餐', location: '南浦洞', desc: '車程約 20 分鐘。', isFlight: false },
-                { id: 410, day: 4, time: '20:00', title: '釜山塔夜景', location: '부산타워/용두산공원', desc: '步行/手扶梯至龍頭山公園，俯瞰南浦夜景。停留約 40-60 分鐘。', isFlight: false },
-                { id: 411, day: 4, time: '21:00', title: '南浦洞自由逛街 / BIFF 廣場', location: '南浦洞 / BIFF 광장', desc: '夜間自由活動。', isFlight: false },
+                { id: 401, day: 4, time: '08:00', title: '飯店出發 / 早餐', location: '南浦洞', desc: '從飯店出發，準備前往松島。', isFlight: false, category: 'food' },
+                { id: 402, day: 4, time: '09:30', title: '松島天空步道', location: '송도스카이워크', desc: '交通：從札嘎其站叫車約 5 分鐘抵達。停留約 20-30 分鐘。', isFlight: false, category: 'sightseeing' },
+                { id: 403, day: 4, time: '10:20', title: '松島海上纜車 (Air Cruise)', location: '송도해상케이블카', desc: '建議搭乘來回，觀賞海景。約 1 小時。', isFlight: false, category: 'sightseeing' },
+                { id: 404, day: 4, time: '11:30', title: '午餐 (樂天百貨光復店)', location: '롯데백화점 광복점', desc: '在百貨內用餐。', isFlight: false, category: 'food' },
+                { id: 405, day: 4, time: '13:20', title: '樂天百貨頂樓 (星光花園)', location: '樂天百貨光復店頂樓', desc: '提早抵達觀景位，準備觀賞開橋儀式。', isFlight: false, category: 'sightseeing' },
+                { id: 406, day: 4, time: '14:00', title: '觀賞影島大橋開橋儀式', location: '影島大橋 (觀賞點)', desc: '準時開始，約 5-7 分鐘。為最佳俯瞰角度。', isFlight: false, category: 'sightseeing' },
+                { id: 407, day: 4, time: '15:00', title: '白淺灘文化村', location: '흰여울문화마을', desc: '交通：計程車從樂天百貨搭車約 10-12 分鐘。停留約 40-60 分鐘。', isFlight: false, category: 'sightseeing' },
+                { id: 408, day: 4, time: '16:00', title: '太宗台遊園地', location: '태종대유원지', desc: '需搭乘「丹青列車」遊覽燈塔、觀景台。停留約 1.5 小時。', isFlight: false, category: 'sightseeing' },
+                { id: 409, day: 4, time: '18:30', title: '返回南浦洞晚餐', location: '南浦洞', desc: '車程約 20 分鐘。', isFlight: false, category: 'food' },
+                { id: 410, day: 4, time: '20:00', title: '釜山塔夜景', location: '부산타워/용두산공원', desc: '步行/手扶梯至龍頭山公園，俯瞰南浦夜景。停留約 40-60 分鐘。', isFlight: false, category: 'sightseeing' },
+                { id: 411, day: 4, time: '21:00', title: '南浦洞自由逛街 / BIFF 廣場', location: '南浦洞 / BIFF 광장', desc: '夜間自由活動。', isFlight: false, category: 'shopping' },
 
                 // --- Day 5 (Jan 25) ---
-                { id: 501, day: 5, time: '08:00', title: '早餐 + 整理行李', location: '釜山亞雲樹飯店', desc: 'Check Out Time：11:00 AM，行李寄放櫃檯。', isFlight: false },
-                { id: 502, day: 5, time: '09:00', title: '飯店 $\rightarrow$ 甘川洞文化村', location: '甘川洞文化村', desc: '交通：計程車從南浦洞搭車約 10-15 分鐘。', isFlight: false },
-                { id: 503, day: 5, time: '09:15', title: '甘川洞文化村散策', location: '감천문화마을', desc: '建議參觀：小王子拍照點、觀景平台。停留約 2 小時。', isFlight: false },
-                { id: 504, day: 5, time: '11:30', title: '返回南浦洞', location: '南浦洞', desc: '交通：計程車車程約 10-15 分鐘。', isFlight: false },
-                { id: 505, day: 5, time: '11:45', title: '午餐 (南浦洞)', location: '南浦洞', desc: '可選擇元祖蔘雞湯、富平市場小吃等。', isFlight: false },
-                { id: 506, day: 5, time: '13:00', title: '南浦洞自由活動/購物', location: '光復路購物街', desc: '進行最後的購物補貨。', isFlight: false },
-                { id: 507, day: 5, time: '14:30', title: '回飯店領行李', location: '釜山亞雲樹飯店', desc: '檢查護照、退稅單等重要物品。', isFlight: false },
-                { id: 508, day: 5, time: '15:00', title: '南浦洞 $\rightarrow$ 金海機場', location: 'Gimhae International Airport', desc: '交通：地鐵 $\rightarrow$ 輕軌。需預留足夠時間 (全程約 60 分鐘)。', isFlight: false },
-                { id: 509, day: 5, time: '16:00', title: '抵達金海機場', location: 'Gimhae International Airport', desc: '辦理報到、托運、KIOSK 掃描退稅條碼。', isFlight: false },
-                { id: 510, day: 5, time: '17:20', title: '候機/免稅店購物/領退稅金', location: 'Gimhae International Airport', desc: '出境後到 4 號區域的退稅櫃檯領取現金。', isFlight: false },
-                // Flight Return (BR163)
-                { 
-                    id: 511, day: 5, time: '18:55', title: '回程: 長榮航空 BR163 (釜山→桃園) 啟程', 
-                    location: 'Gimhae International Airport', 
-                    desc: '預計 20:25 抵達桃園機場 T2。', 
-                    isFlight: true, flightNo: 'BR163',
-                    depAirport: 'PUS', arrAirport: 'TPE', depTime: '18:55', 
-                    terminal: 'Intl', gate: 'TBD', boardingTime: '18:25', type: 'return' 
-                },
-                { id: 512, day: 5, time: '20:25', title: '抵達桃園機場', location: '桃園國際機場 T2', desc: '旅行結束', isFlight: false },
+                { id: 501, day: 5, time: '08:00', title: '早餐 + 整理行李', location: '釜山亞雲樹飯店', desc: 'Check Out Time：11:00 AM，行李寄放櫃檯。', isFlight: false, category: 'food' },
+                { id: 502, day: 5, time: '09:00', title: '飯店 $\rightarrow$ 甘川洞文化村', location: '甘川洞文化村', desc: '交通：計程車從南浦洞搭車約 10-15 分鐘。', isFlight: false, category: 'travel' },
+                { id: 503, day: 5, time: '09:15', title: '甘川洞文化村散策', location: '감천문화마을', desc: '建議參觀：小王子拍照點、觀景平台。停留約 2 小時。', isFlight: false, category: 'sightseeing' },
+                { id: 504, day: 5, time: '11:30', title: '返回南浦洞', location: '南浦洞', desc: '交通：計程車車程約 10-15 分鐘。', isFlight: false, category: 'travel' },
+                { id: 505, day: 5, time: '11:45', title: '午餐 (南浦洞)', location: '南浦洞', desc: '可選擇元祖蔘雞湯、富平市場小吃等。', isFlight: false, category: 'food' },
+                { id: 506, day: 5, time: '13:00', title: '南浦洞自由活動/購物', location: '光復路購物街', desc: '進行最後的購物補貨。', isFlight: false, category: 'shopping' },
+                { id: 507, day: 5, time: '14:30', title: '回飯店領行李', location: '釜山亞雲樹飯店', desc: '檢查護照、退稅單等重要物品。', isFlight: false, category: 'travel' },
+                { id: 508, day: 5, time: '15:00', title: '南浦洞 $\rightarrow$ 金海機場', location: 'Gimhae International Airport', desc: '交通：地鐵 $\rightarrow$ 輕軌。需預留足夠時間 (全程約 60 分鐘)。', isFlight: false, category: 'travel' },
+                { id: 509, day: 5, time: '16:00', title: '抵達金海機場', location: 'Gimhae International Airport', desc: '辦理報到、托運、KIOSK 掃描退稅條碼。', isFlight: false, category: 'travel' },
+                { id: 510, day: 5, time: '17:20', title: '候機/免稅店購物/領退稅金', location: 'Gimhae International Airport', desc: '出境後到 4 號區域的退稅櫃檯領取現金。', isFlight: false, category: 'shopping' },
+                { id: 511, day: 5, time: '18:55', title: '回程: 長榮航空 BR163 (釜山→桃園) 啟程', location: 'Gimhae International Airport', desc: '預計 20:25 抵達桃園機場 T2。', isFlight: true, category: 'flight', flightNo: 'BR163', depAirport: 'PUS', arrAirport: 'TPE', depTime: '18:55', terminal: 'Intl', gate: 'TBD', boardingTime: '18:25', type: 'return' },
+                { id: 512, day: 5, time: '20:25', title: '抵達桃園機場', location: '桃園國際機場 T2', desc: '旅行結束', isFlight: false, category: 'travel' },
             ];
+
 
             const itinerary = ref([]);
             
@@ -666,13 +731,12 @@
             onMounted(() => {
                 newExpense.value.date = new Date().toISOString().split('T')[0];
 
-                // Load from LocalStorage
-                // NOTE: Changed storage key to v6 to force new default data load
-                const savedItinerary = localStorage.getItem('busan_2026_v6_itinerary'); 
-                const savedExpenses = localStorage.getItem('busan_2026_v5_expenses');
-                const savedRate = localStorage.getItem('busan_2026_rate');
-                const savedLuggage = localStorage.getItem('busan_2026_luggage_v5');
-                const savedMustBuy = localStorage.getItem('busan_2026_mustbuy_v5');
+                // Load from LocalStorage (Changed key to v8 for new clean design/data structure)
+                const savedItinerary = localStorage.getItem('busan_2026_v8_itinerary'); 
+                const savedExpenses = localStorage.getItem('busan_2026_v8_expenses');
+                const savedRate = localStorage.getItem('busan_2026_rate_v8');
+                const savedLuggage = localStorage.getItem('busan_2026_luggage_v8');
+                const savedMustBuy = localStorage.getItem('busan_2026_mustbuy_v8');
                 
                 // If saved itinerary is missing, use the new default data
                 itinerary.value = savedItinerary ? JSON.parse(savedItinerary) : defaultItinerary;
@@ -680,7 +744,7 @@
                 if (savedRate && parseFloat(savedRate) > 0) {
                      exchangeRate.value = parseFloat(savedRate);
                 } else {
-                     exchangeRate.value = 41.5; // Default if saved is 0 or invalid
+                     exchangeRate.value = 41.5; // Default 
                 }
                 luggageList.value = savedLuggage ? JSON.parse(savedLuggage) : defaultLuggage;
                 mustBuyList.value = savedMustBuy ? JSON.parse(savedMustBuy) : defaultMustBuy;
@@ -688,18 +752,30 @@
 
             // --- Watchers for Auto-Save ---
             watch([itinerary, expenses, exchangeRate, luggageList, mustBuyList], () => {
-                localStorage.setItem('busan_2026_v6_itinerary', JSON.stringify(itinerary.value));
-                localStorage.setItem('busan_2026_v5_expenses', JSON.stringify(expenses.value));
-                localStorage.setItem('busan_2026_rate', exchangeRate.value);
-                localStorage.setItem('busan_2026_luggage_v5', JSON.stringify(luggageList.value));
-                localStorage.setItem('busan_2026_mustbuy_v5', JSON.stringify(mustBuyList.value));
+                localStorage.setItem('busan_2026_v8_itinerary', JSON.stringify(itinerary.value));
+                localStorage.setItem('busan_2026_v8_expenses', JSON.stringify(expenses.value));
+                localStorage.setItem('busan_2026_rate_v8', exchangeRate.value);
+                localStorage.setItem('busan_2026_luggage_v8', JSON.stringify(luggageList.value));
+                localStorage.setItem('busan_2026_mustbuy_v8', JSON.stringify(mustBuyList.value));
             }, { deep: true });
 
             // --- Computed ---
+
+            // Step 1: Filter by Day
             const filteredItinerary = computed(() => {
                 return itinerary.value
                     .filter(item => item.day === activeDay.value)
                     .sort((a, b) => a.time.localeCompare(b.time));
+            });
+
+            // Step 2: Filter by Category (if activeCategory is not 'all')
+            const filteredItineraryByCat = computed(() => {
+                if (activeCategory.value === 'all') {
+                    return filteredItinerary.value;
+                }
+                // Also show flight items if a specific category is selected, unless the category is 'flight' itself, as they are non-editable.
+                // We'll exclude flight category for general filtering to focus on actionable items.
+                return filteredItinerary.value.filter(item => item.category === activeCategory.value);
             });
 
             const totalExpenseTWD = computed(() => {
@@ -714,18 +790,59 @@
                 const rate = Number(exchangeRate.value); 
                 
                 if (rate <= 0 || isNaN(rate)) {
-                    return 0; // Return 0 if rate is unusable
+                    return 0; 
                 }
                 
                 return Math.round(krw / rate);
             });
 
-            // Flight Info Extraction (Now includes terminal and boarding time)
+            // Expense Breakdown for Chart (New Feature)
+            const expenseBreakdownTWD = computed(() => {
+                const breakdown = {};
+                let maxAmount = 0;
+
+                // 1. Calculate TWD per category
+                expenses.value.forEach(exp => {
+                    const twdAmount = Math.round(exp.amount / Number(exchangeRate.value));
+                    if (breakdown[exp.category]) {
+                        breakdown[exp.category].amount += twdAmount;
+                    } else {
+                        breakdown[exp.category] = { amount: twdAmount };
+                    }
+                });
+                
+                // 2. Add Name, Color, and Calculate Percentage/Height for Chart
+                const sortedCategories = filterCategories.filter(c => breakdown[c.key]);
+
+                // Calculate max amount for height scaling
+                sortedCategories.forEach(c => {
+                    maxAmount = Math.max(maxAmount, breakdown[c.key].amount);
+                });
+
+                // Calculate percentage of total and chart height
+                sortedCategories.forEach(c => {
+                    const name = getCategoryName(c.key);
+                    const percentage = totalExpenseTWD.value > 0 ? Math.round((breakdown[c.key].amount / totalExpenseTWD.value) * 100) : 0;
+                    
+                    breakdown[c.key] = {
+                        name: name,
+                        amount: breakdown[c.key].amount,
+                        percentage: percentage,
+                        // Scale height relative to the max amount (Max height 100)
+                        height: maxAmount > 0 ? Math.max(10, Math.round((breakdown[c.key].amount / maxAmount) * 100)) : 0, 
+                        color: c.colorCode
+                    };
+                });
+                
+                return breakdown;
+            });
+
+
+            // Flight Info Extraction
             const flightInfo = computed(() => {
                 const dep = itinerary.value.find(i => i.isFlight && i.type === 'departure');
                 const ret = itinerary.value.find(i => i.isFlight && i.type === 'return');
                 
-                // Default placeholders (UPDATED with BR180/BR163)
                 const defaultDep = { flightNo: 'BR180', depAirport: 'TPE', arrAirport: 'PUS', depTime: '14:25', terminal: 'T2', gate: 'TBD', boardingTime: '13:55' };
                 const defaultRet = { flightNo: 'BR163', depAirport: 'PUS', arrAirport: 'TPE', depTime: '18:55', terminal: 'Intl', gate: 'TBD', boardingTime: '18:25' };
 
@@ -735,11 +852,11 @@
                 };
             });
 
-            // Hotel Info Extraction (UPDATED)
+            // Hotel Info Extraction
             const hotelInfo = computed(() => {
                 return {
                     name: '釜山亞雲樹飯店 (Hotel Aventree Busan)',
-                    address: '釜山廣域市中區南浦街 25 / 부산 중구 남포길 25', // Updated Address
+                    address: '釜山廣域市中區南浦街 25 / 부산 중구 남포길 25', 
                 };
             });
 
@@ -749,27 +866,38 @@
             // Utility Methods
             const getDayInfo = (dayIndex) => tripDates[dayIndex] || { date: `Day ${dayIndex}`, day: '', fullDay: `Day ${dayIndex}` };
             
+            const getCategoryName = (key) => filterCategories.find(c => c.key === key)?.name || '未知';
+            const getCategoryColor = (key) => filterCategories.find(c => c.key === key)?.color || 'text-text/50';
+            const getCategoryColorCode = (key) => filterCategories.find(c => c.key === key)?.colorCode || '#E2E8F0';
+
             const openModal = (item) => {
                 if (item) {
                     isEditMode.value = true;
-                    // Prevent editing flight items via this modal
+                    // Prevent editing flight items 
                     if (item.isFlight) return alert('航班資訊請直接在「機票/住宿」頁面中檢視。'); 
 
                     modalForm.value = { ...item };
                 } else {
                     isEditMode.value = false;
-                    modalForm.value = { id: Date.now(), time: '12:00', title: '', location: '', desc: '' };
+                    modalForm.value = { id: Date.now(), time: '12:00', title: '', location: '', desc: '', category: 'sightseeing' };
                 }
                 showModal.value = true;
             };
 
             const saveItem = () => {
-                if (!modalForm.value.title) return;
+                if (!modalForm.value.title || !modalForm.value.category) return;
+                const newItem = { 
+                    ...modalForm.value, 
+                    day: activeDay.value, 
+                    location: modalForm.value.location || modalForm.value.title, 
+                    isFlight: false 
+                };
+
                 if (isEditMode.value) {
                     const index = itinerary.value.findIndex(i => i.id === modalForm.value.id);
-                    if (index !== -1) itinerary.value[index] = { ...modalForm.value };
+                    if (index !== -1) itinerary.value[index] = newItem;
                 } else {
-                    itinerary.value.push({ ...modalForm.value, day: activeDay.value, location: modalForm.value.location || modalForm.value.title, isFlight: false });
+                    itinerary.value.push(newItem);
                 }
                 showModal.value = false;
             };
@@ -780,21 +908,23 @@
 
             // Expense Methods
             const addExpense = () => {
-                if (!newExpense.value.item || !newExpense.value.amount) return;
+                if (!newExpense.value.item || !newExpense.value.amount || !newExpense.value.category) return;
                 expenses.value.unshift({
                     date: newExpense.value.date || new Date().toISOString().split('T')[0],
                     item: newExpense.value.item,
-                    amount: Number(newExpense.value.amount) // Ensure number type
+                    amount: Number(newExpense.value.amount), 
+                    category: newExpense.value.category
                 });
                 newExpense.value.item = '';
                 newExpense.value.amount = '';
+                // Keep the date and category selected for quick entry
             };
 
             const removeExpense = (index) => {
                 if(confirm('刪除這筆帳目？')) expenses.value.splice(index, 1);
             };
 
-            // Luggage Methods
+            // Checklist Methods (Luggage & Must-Buy)
             const addLuggage = () => {
                 if(!newLuggageItem.value) return;
                 luggageList.value.push({ text: newLuggageItem.value, checked: false });
@@ -803,8 +933,6 @@
             const removeLuggage = (index) => {
                 luggageList.value.splice(index, 1);
             };
-
-            // Must-Buy Methods
             const addMustBuy = () => {
                 if(!newMustBuyItem.value) return;
                 mustBuyList.value.push({ text: newMustBuyItem.value, checked: false });
@@ -814,14 +942,14 @@
                 mustBuyList.value.splice(index, 1);
             };
 
-            // Utility Methods
+            // Map Methods
             const searchNaverMap = () => {
                 const q = mapQuery.value || 'Busan';
                 window.open(`https://map.naver.com/p/search/${encodeURIComponent(q)}`, '_blank');
             };
-            // FIX: Use a proper Google Maps search URL
             const searchGoogleMap = () => {
                 const q = mapQuery.value || 'Busan';
+                // Using a safe, general search URL for Google Maps
                 window.open(`https://www.google.com/maps/search/${encodeURIComponent(q)}`, '_blank');
             };
             const getNaverMapLink = (query) => `https://map.naver.com/p/search/${encodeURIComponent(query)}`;
@@ -830,23 +958,26 @@
 
             // Weather Icon Mapping (Simple)
             const getWeatherIcon = (code) => {
-                if (code === 0) return '☀️'; // Sunny
-                if (code === 1) return '🌥️'; // Mostly Clear
-                if (code <= 3) return '☁️'; // Cloudy
-                if (code <= 67) return '🌧️'; // Rain
-                return '🌥️'; // Default
+                if (code === 0) return '☀️'; 
+                if (code === 1) return '🌥️'; 
+                if (code <= 3) return '☁️'; 
+                if (code <= 67) return '🌧️'; 
+                return '🌥️'; 
             };
 
             return {
-                currentTab, activeDay, showModal, isEditMode, modalForm,
-                itinerary, expenses, exchangeRate, filteredItinerary,
+                currentTab, activeDay, currentTabName, activeCategory,
+                showModal, isEditMode, modalForm,
+                itinerary, expenses, exchangeRate, filteredItineraryByCat,
                 totalExpenseTWD, newExpense, mapQuery,
                 luggageList, newLuggageItem, mustBuyList, newMustBuyItem,
-                flightInfo, hotelInfo, emergencyContacts, simulatedWeather, tripDates,
-                calculatedTWD, calcKRW,
+                flightInfo, hotelInfo, emergencyContacts, simulatedWeather, 
+                calculatedTWD, calcKRW, expenseBreakdownTWD,
+                desktopTabs, mobileTabs, filterCategories,
                 openModal, saveItem, deleteItem, addExpense, removeExpense,
                 addLuggage, removeLuggage, addMustBuy, removeMustBuy,
-                formatNumber, searchNaverMap, searchGoogleMap, getNaverMapLink, getWeatherIcon, getDayInfo
+                formatNumber, searchNaverMap, searchGoogleMap, getNaverMapLink, getWeatherIcon, getDayInfo,
+                getCategoryName, getCategoryColor, getCategoryColorCode
             };
         }
     }).mount('#app');
