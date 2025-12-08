@@ -3,39 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 釜山五日遊</title>
+    <title>🌹 2026 釜山冷吱吱 🌹</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     
     <script>
+        // --- Custom Tailwind Configuration for Rose Gold Theme ---
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         primary: {
-                            light: '#E6F8F6', 
-                            DEFAULT: '#00A389', 
-                            dark: '#007A66',
+                            light: '#F7DBE0', // Light Dusty Rose
+                            DEFAULT: '#D8A7A7', // Dusty Rose Gold
+                            dark: '#A67979', // Darker Rose
                         },
-                        text: '#2D3748', 
-                        background: '#F8F9FA', 
+                        text: '#4A5568', // Dark Grey for contrast
+                        background: '#FFF9F9', // Near-white, light pink tint
                         card: '#FFFFFF', 
                         accent: {
-                            food: '#EF4444',     
-                            shopping: '#3B82F6', 
-                            sightseeing: '#10B981', 
-                            travel: '#F59E0B',   
-                        }
+                            food: '#E97451',     // Salmon Red
+                            shopping: '#639AA6', // Soft Teal
+                            sightseeing: '#C6B060', // Muted Gold
+                            travel: '#D88A6F',   // Light Copper
+                        },
                     },
                     fontFamily: {
                         sans: ['"Noto Sans TC"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'], // Used for titles
                     },
                     boxShadow: {
-                        'custom-sm': '0 1px 3px 0 rgba(0, 0, 0, 0.05)',
-                        'custom-md': '0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04)',
-                        'custom-lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05)',
+                        // Refined, softer shadows
+                        'custom-sm': '0 2px 4px 0 rgba(0, 0, 0, 0.04)',
+                        'custom-md': '0 6px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 8px -4px rgba(0, 0, 0, 0.04)',
+                        'custom-lg': '0 12px 25px -5px rgba(0, 0, 0, 0.1), 0 6px 12px -6px rgba(0, 0, 0, 0.05)',
+                        'custom-xl': '0 20px 30px -10px rgba(0, 0, 0, 0.15)',
                     }
                 }
             }
@@ -43,48 +47,63 @@
     </script>
 
     <style>
+        /* Base Styles for Refined Look */
         body {
-            background-color: #F8F9FA;
-            color: #2D3748;
+            background-color: #FFF9F9; /* background */
+            color: #4A5568; /* text */
             font-family: 'Noto Sans TC', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
         .app-card {
             background-color: #FFFFFF; 
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); 
-            border: 1px solid #E2E8F0;
+            border-radius: 16px; /* Extra rounded corners for cute/chic look */
+            box-shadow: 0 10px 20px rgba(216, 167, 167, 0.15); /* Rose Gold tinted shadow */
+            border: 1px solid #F0F0F0;
+            transition: all 0.3s ease;
+        }
+
+        .app-card:hover {
+            box-shadow: 0 15px 30px rgba(216, 167, 167, 0.25);
         }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
         .btn-press:active {
-            transform: scale(0.98);
+            transform: scale(0.97);
             box-shadow: none !important;
+        }
+        
+        /* Large Heading Style */
+        .chic-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #D8A7A7;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         @media (max-width: 1023px) {
             .mobile-nav-bar {
                 background-color: #FFFFFF;
-                box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.03);
+                box-shadow: 0 -8px 20px rgba(0, 0, 0, 0.05);
             }
         }
 
         @media (min-width: 1024px) {
             #app-container {
                 display: grid;
-                grid-template-columns: 280px 1fr; 
+                grid-template-columns: 320px 1fr; /* Wider sidebar */
                 min-height: 100vh;
             }
             .main-content {
-                padding: 32px 40px;
+                padding: 40px 50px;
             }
             .sidebar {
-                border-right: 1px solid #E2E8F0;
+                border-right: 1px solid #F0F0F0;
                 background-color: #FFFFFF;
-                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.02);
+                box-shadow: 4px 0 10px rgba(0, 0, 0, 0.05);
             }
         }
     </style>
@@ -94,185 +113,191 @@
 <div id="app" class="min-h-screen">
     <div id="app-container" class="lg:grid">
 
-        <aside class="sidebar fixed top-0 left-0 h-full w-72 p-6 lg:block hidden">
-            <header class="mb-8">
-                <h1 class="text-2xl font-black text-primary flex items-center gap-2">
-                    <i class="ph ph-calendar-check text-3xl" weight="fill"></i>
-                    BUSAN 2026
+        <aside class="sidebar fixed top-0 left-0 h-full w-80 p-8 lg:block hidden">
+            <header class="mb-10">
+                <h1 class="text-4xl font-black flex items-center gap-2 chic-title">
+                    <i class="ph ph-sparkle text-5xl" weight="fill"></i>
+                    2026 BUSAN 
                 </h1>
-                <p class="text-sm text-text/60 font-medium mt-1">2026釜山行</p>
+                <p class="text-sm text-text/70 font-medium mt-2 tracking-wider"> 2026 BUSAN</p>
             </header>
             
-            <nav class="space-y-1">
+            <nav class="space-y-2">
                 <button v-for="tab in desktopTabs" :key="tab.id"
                     @click="currentTab = tab.id"
-                    :class="currentTab === tab.id ? 'bg-primary/10 text-primary font-bold' : 'text-text/80 hover:bg-background'"
-                    class="w-full text-left p-3 rounded-lg flex items-center gap-3 transition-colors text-base btn-press">
-                    <i :class="tab.icon" class="text-xl" :weight="currentTab === tab.id ? 'fill' : 'regular'"></i>
+                    :class="currentTab === tab.id ? 'bg-primary/20 text-primary font-black shadow-custom-md' : 'text-text/80 hover:bg-primary/5'"
+                    class="w-full text-left p-4 rounded-xl flex items-center gap-4 transition-colors text-lg btn-press">
+                    <i :class="tab.icon" class="text-2xl" :weight="currentTab === tab.id ? 'fill' : 'bold'"></i>
                     {{ tab.name }}
                 </button>
             </nav>
 
-            <div class="absolute bottom-6 left-6 right-6 pt-4 border-t border-gray-100">
+            <div class="absolute bottom-8 left-8 right-8 pt-6 border-t border-primary/20">
                  <div class="text-xs text-text/50">
-                    <i class="ph ph-info-circle mr-1"></i>
+                    <i class="ph ph-calendar-check mr-1"></i>
                     行程日期：2026.01.21 - 01.25
                  </div>
             </div>
         </aside>
 
-        <main class="main-content lg:col-start-2 lg:pb-8 pb-28 p-5">
+        <main class="main-content lg:col-start-2 lg:pb-10 pb-32 p-5">
 
-            <header class="lg:hidden pb-4 pt-2 flex justify-between items-center">
-                 <h1 class="text-2xl font-black text-primary flex items-center gap-2">
-                    <i :class="currentTabIcon" class="text-2xl" weight="fill"></i>
+            <header class="lg:hidden pb-6 pt-2 flex justify-between items-center border-b border-primary/20">
+                 <h1 class="text-3xl font-black flex items-center gap-3 chic-title">
+                    <i :class="currentTabIcon" class="text-3xl" weight="fill"></i>
                     {{ currentTabName }}
                 </h1>
-                <p class="text-sm text-text/60 font-medium mt-1">Busan Trip 2026</p>
             </header>
             
-            <div v-if="currentTab === 'itinerary'" class="space-y-6">
-                <div class="app-card p-3 overflow-x-auto no-scrollbar shadow-custom-sm">
-                    <div class="flex space-x-3">
+            <div v-if="currentTab === 'itinerary'" class="space-y-8 pt-4">
+                
+                <div class="app-card p-4 overflow-x-auto no-scrollbar shadow-custom-md">
+                    <div class="flex space-x-4">
                         <button v-for="i in 5" :key="i" 
                             @click="activeDay = i"
-                            :class="activeDay === i ? 'bg-primary text-white shadow-custom-md' : 'bg-background text-text/80 border border-gray-200 hover:bg-gray-100'"
-                            class="flex-shrink-0 w-16 h-16 rounded-lg flex flex-col items-center justify-center transition-all duration-300 btn-press text-sm font-bold">
-                            <span class="text-[10px] uppercase opacity-80">{{ getDayInfo(i).date.slice(3) }}</span> 
-                            <span class="text-xl font-black leading-none mt-0.5">{{ getDayInfo(i).day.slice(1) }}</span>
+                            :class="activeDay === i ? 'bg-primary text-white shadow-custom-lg' : 'bg-background text-text/80 border border-primary/20 hover:bg-primary/10'"
+                            class="flex-shrink-0 w-20 h-20 rounded-xl flex flex-col items-center justify-center transition-all duration-300 btn-press text-base font-bold">
+                            <span class="text-xs uppercase opacity-80">{{ getDayInfo(i).date.slice(3) }}</span> 
+                            <span class="text-2xl font-black leading-none mt-1">{{ getDayInfo(i).day.slice(1) }}</span>
                         </button>
                     </div>
                 </div>
 
-                <div class="flex justify-between items-center px-1 mb-2 border-b border-gray-200 pb-3">
-                    <h2 class="text-xl font-bold text-text">{{ getDayInfo(activeDay).fullDay }} 日程</h2>
-                    <div class="flex items-center gap-2 text-base font-bold bg-primary/10 px-3 py-1.5 rounded-full text-primary">
-                        <span class="text-xl leading-none">{{ getWeatherIcon(simulatedWeather[activeDay].code) }}</span>
-                        <span class="text-lg font-black">{{ simulatedWeather[activeDay].temp }}°C</span>
+                <div class="flex justify-between items-center px-1 mb-2">
+                    <h2 class="text-2xl font-black text-text">{{ getDayInfo(activeDay).fullDay }} 日程</h2>
+                    <div class="flex items-center gap-3 text-lg font-black bg-primary/20 px-4 py-2 rounded-full text-primary shadow-custom-sm">
+                        <span class="text-2xl leading-none">{{ getWeatherIcon(simulatedWeather[activeDay].code) }}</span>
+                        <span>{{ simulatedWeather[activeDay].temp }}°C</span>
                     </div>
                 </div>
 
-                <div class="flex space-x-3 overflow-x-auto no-scrollbar pb-2">
+                <div class="flex space-x-3 overflow-x-auto no-scrollbar pb-3">
                     <button v-for="cat in filterCategories" :key="cat.key"
                         @click="activeCategory = cat.key"
                         :class="[
-                            activeCategory === cat.key ? 'bg-primary text-white shadow-custom-md' : 'bg-white text-text/80 border border-gray-300 hover:bg-gray-100',
-                            cat.key !== 'all' ? cat.color : ''
+                            activeCategory === cat.key ? 'text-white shadow-custom-md' : 'bg-white text-text/80 border border-gray-300 hover:bg-gray-100',
+                            activeCategory === cat.key ? `bg-accent-${cat.key} border-accent-${cat.key}` : '',
+                            cat.key === 'all' && activeCategory === 'all' ? 'bg-primary' : ''
                         ]"
-                        class="flex-shrink-0 px-4 py-2 rounded-full flex items-center gap-2 text-sm font-medium transition-colors btn-press">
-                        <i :class="cat.icon" :weight="activeCategory === cat.key ? 'fill' : 'regular'"></i>
+                        class="flex-shrink-0 px-6 py-3 rounded-full flex items-center gap-3 text-base font-bold transition-colors btn-press border">
+                        <i :class="cat.icon" :weight="activeCategory === cat.key ? 'fill' : 'bold'" class="text-xl"></i>
                         {{ cat.name }}
                     </button>
                 </div>
 
 
-                <div class="space-y-4 pt-2">
-                    <div v-if="filteredItineraryByCat.length === 0" class="text-center py-10 text-text/40 app-card border-dashed">
-                        <p>本日無符合「{{ filterCategories.find(c => c.key === activeCategory)?.name }}」的行程 📝</p>
+                <div class="space-y-6 pt-4">
+                    <div v-if="filteredItineraryByCat.length === 0" class="text-center py-16 text-text/40 app-card border-dashed border-2">
+                        <i class="ph ph-confetti text-4xl mb-3"></i>
+                        <p class="text-lg">本日無符合「{{ filterCategories.find(c => c.key === activeCategory)?.name }}」的浪漫行程 🥂</p>
                     </div>
 
                     <div v-for="item in filteredItineraryByCat" :key="item.id" 
                         @click="item.isFlight ? null : openModal(item)"
-                        class="app-card p-4 flex gap-4 relative transition-all duration-200 hover:shadow-custom-lg border-l-4"
-                        :class="[item.isFlight ? 'border-primary/50' : 'border-primary/20', {'cursor-pointer': !item.isFlight}]">
+                        class="app-card p-5 flex gap-5 relative transition-all duration-300 border-l-8"
+                        :class="[
+                            item.isFlight ? 'border-primary' : `border-accent-${item.category}`, 
+                            {'cursor-pointer hover:border-l-[12px]': !item.isFlight}
+                        ]">
                         
-                        <div class="flex flex-col items-center min-w-[60px] flex-shrink-0">
-                            <span class="text-sm font-bold text-primary px-1 font-mono leading-tight">
+                        <div class="flex flex-col items-center min-w-[70px] flex-shrink-0">
+                            <span class="text-xl font-black text-primary px-1 font-mono leading-tight">
                                 {{ item.time }}
                             </span>
-                            <div class="h-full w-px bg-gray-300 my-2"></div>
+                            <div class="h-full w-1 bg-primary/10 my-3 rounded-full"></div>
                         </div>
 
                         <div class="flex-1 pb-1 min-w-0">
                             <div class="flex justify-between items-start">
-                                <h3 class="font-bold text-base text-text leading-tight pr-6">{{ item.title }}</h3>
+                                <h3 class="font-black text-lg text-text leading-snug pr-6">{{ item.title }}</h3>
                                 <span v-if="item.category && item.category !== 'flight'" 
-                                    :class="getCategoryColor(item.category)"
-                                    class="text-xs font-bold px-2 py-0.5 rounded-full bg-opacity-10 whitespace-nowrap">
+                                    :class="getCategoryBgColor(item.category)"
+                                    class="text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap shadow-custom-sm">
                                     {{ getCategoryName(item.category) }}
                                 </span>
                             </div>
                             
-                            <div class="mt-1 flex items-center text-xs text-text/60 font-medium">
-                                <i :class="item.isFlight ? 'ph ph-airplane-tilt text-primary' : 'ph ph-map-pin text-text/40'" class="mr-1"></i>
+                            <div class="mt-2 flex items-center text-sm text-text/60 font-medium">
+                                <i :class="item.isFlight ? 'ph ph-airplane-tilt text-primary' : 'ph ph-map-pin text-text/40'" class="mr-2 text-lg"></i>
                                 <span class="truncate">{{ item.location }}</span>
                             </div>
 
-                            <p v-if="item.desc" class="text-sm text-text/80 mt-2 p-3 bg-primary/5 rounded-lg border-l-2 border-primary/20 w-full whitespace-pre-wrap shadow-inner">
+                            <p v-if="item.desc" class="text-base text-text/90 mt-3 p-4 bg-primary/10 rounded-xl border-l-4 border-primary/40 w-full whitespace-pre-wrap shadow-inner">
+                               <i class="ph ph-note-pencil mr-1 text-primary/70" weight="bold"></i>
                                {{ item.desc }}
                             </p>
 
                             <a v-if="!item.isFlight" :href="getNaverMapLink(item.location)" target="_blank" 
-                               class="mt-3 inline-flex items-center text-xs font-bold text-white bg-primary px-4 py-2 rounded-full shadow-custom-md hover:bg-primary-dark transition-colors btn-press">
-                                <i class="ph ph-navigation-arrow text-sm"></i> Naver Map 導航
+                               class="mt-4 inline-flex items-center text-sm font-bold text-white bg-primary px-5 py-2.5 rounded-full shadow-custom-md hover:bg-primary-dark transition-colors btn-press">
+                                <i class="ph ph-navigation-arrow text-base mr-2" weight="bold"></i> Naver Map 導航
                             </a>
                         </div>
                     </div>
                 </div>
                 
-                <button @click="openModal(null)" class="fixed bottom-24 right-5 bg-primary text-white w-14 h-14 rounded-full shadow-custom-lg flex items-center justify-center text-2xl z-20 hover:scale-105 transition-transform btn-press lg:hidden">
+                <button @click="openModal(null)" class="fixed bottom-28 right-5 bg-primary text-white w-16 h-16 rounded-full shadow-custom-xl flex items-center justify-center text-3xl z-20 hover:scale-105 transition-transform btn-press lg:hidden">
                     <i class="ph ph-plus" weight="bold"></i>
                 </button>
             </div>
 
-            <div v-if="currentTab === 'money'" class="space-y-6">
-                <h3 class="font-bold text-xl text-text flex items-center gap-2 border-b border-gray-200 pb-3">
-                    <i class="ph ph-currency-krw text-primary text-2xl" weight="fill"></i> 匯率與記帳中心
+            <div v-if="currentTab === 'money'" class="space-y-8 pt-4">
+                <h3 class="font-black text-3xl chic-title flex items-center gap-3 border-b border-primary/20 pb-4">
+                    <i class="ph ph-currency-krw text-primary text-4xl" weight="fill"></i> 浪漫預算中心
                 </h3>
                 
-                <div class="app-card p-5 bg-primary/5 border-l-4 border-primary/30 space-y-3">
+                <div class="app-card p-6 bg-primary/10 border-l-8 border-primary/50 space-y-4 shadow-custom-lg">
                     <div class="flex justify-between items-center">
-                        <h4 class="font-bold text-base text-text">₩/NT$ 匯率換算</h4>
-                        <div class="flex items-center gap-2 app-card px-3 py-1 rounded-full shadow-custom-sm border-2 border-primary/20 bg-white">
-                            <span class="text-xs text-text/60">當前匯率</span>
-                            <input v-model.number="exchangeRate" type="number" class="w-14 text-right font-black text-sm outline-none text-primary bg-transparent" min="0.01" step="0.01">
+                        <h4 class="font-bold text-lg text-text">₩/NT$ 換算機</h4>
+                        <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-custom-md border-2 border-primary/30">
+                            <span class="text-sm text-text/60 font-medium">當前匯率</span>
+                            <input v-model.number="exchangeRate" type="number" class="w-16 text-right font-black text-base outline-none text-primary bg-transparent" min="0.01" step="0.01">
                         </div>
                     </div>
                     
-                    <div class="flex items-center border-b border-gray-300 pb-3">
-                        <span class="font-bold w-16 text-sm text-text/80">KRW (₩)</span>
-                        <input v-model.number="calcKRW" type="number" placeholder="0" class="w-full text-right text-3xl font-black outline-none bg-transparent text-text">
+                    <div class="flex items-center border-b border-primary/30 pb-4">
+                        <span class="font-black w-20 text-lg text-text">₩ KRW</span>
+                        <input v-model.number="calcKRW" type="number" placeholder="輸入韓元金額" class="w-full text-right text-4xl font-black outline-none bg-transparent text-text placeholder-text/30">
                     </div>
-                    <div class="flex items-center pt-3">
-                        <span class="font-bold w-16 text-sm text-text/80">TWD (NT$)</span>
-                        <div class="w-full text-right text-3xl font-black text-primary">
+                    <div class="flex items-center pt-4">
+                        <span class="font-black w-20 text-lg text-text">NT$ TWD</span>
+                        <div class="w-full text-right text-4xl font-black text-primary">
                             {{ formatNumber(calculatedTWD) }}
                         </div>
                     </div>
                 </div>
 
-                <div class="app-card p-5 space-y-4 border-l-4 border-accent-shopping/30 bg-accent-shopping/5">
-                    <h4 class="font-bold text-base text-text flex items-center gap-2">
-                        <i class="ph ph-wallet-fill text-accent-shopping text-lg"></i>
-                        總支出概覽 (不含機票住宿)
+                <div class="app-card p-6 space-y-5 border-l-8 border-accent-shopping/50 bg-accent-shopping/10 shadow-custom-lg">
+                    <h4 class="font-bold text-xl text-text flex items-center gap-3">
+                        <i class="ph ph-wallet-fill text-accent-shopping text-2xl"></i>
+                        總支出概覽
                     </h4>
                     
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-white p-3 rounded-lg shadow-custom-sm border-2 border-gray-100">
-                            <p class="text-xs text-text/60 font-medium">總支出 (KRW)</p>
-                            <p class="font-black text-xl text-text">₩ {{ formatNumber(totalExpenseKRW) }}</p>
+                        <div class="bg-white p-4 rounded-xl shadow-custom-sm border border-gray-100">
+                            <p class="text-sm text-text/60 font-medium">總支出 (KRW)</p>
+                            <p class="font-black text-2xl text-text">₩ {{ formatNumber(totalExpenseKRW) }}</p>
                         </div>
-                        <div class="bg-white p-3 rounded-lg shadow-custom-sm border-2 border-primary/20">
-                            <p class="text-xs text-text/60 font-medium">總支出 (TWD)</p>
-                            <p class="font-black text-xl text-primary">NT$ {{ formatNumber(totalExpenseTWD) }}</p>
+                        <div class="bg-white p-4 rounded-xl shadow-custom-sm border border-primary/20">
+                            <p class="text-sm text-text/60 font-medium">總支出 (TWD)</p>
+                            <p class="font-black text-2xl text-primary">NT$ {{ formatNumber(totalExpenseTWD) }}</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="app-card p-4 border-l-4 border-accent-food/30 bg-accent-food/5 space-y-4">
-                    <h4 class="font-bold text-base text-text/80 flex items-center gap-2">
-                        <i class="ph ph-receipt-bold text-accent-food text-lg"></i> 新增消費紀錄
+                <div class="app-card p-6 border-l-8 border-accent-food/50 bg-accent-food/10 space-y-4 shadow-custom-lg">
+                    <h4 class="font-bold text-xl text-text/90 flex items-center gap-3 border-b border-accent-food/20 pb-3">
+                        <i class="ph ph-receipt-bold text-accent-food text-2xl"></i> 新增浪漫消費
                     </h4>
                     
-                    <div class="grid grid-cols-2 gap-2">
-                        <div class="flex-1">
-                            <label class="text-xs text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-calendar-blank"></i> 日期</label>
-                            <input type="date" v-model="newExpense.date" class="w-full bg-white p-2 rounded-lg text-xs outline-none border text-center shadow-custom-sm mt-1">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-sm text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-calendar-blank" weight="bold"></i> 日期</label>
+                            <input type="date" v-model="newExpense.date" class="w-full bg-white p-3 rounded-lg text-base outline-none border shadow-custom-sm mt-1 focus:border-primary">
                         </div>
-                        <div class="flex-1">
-                            <label class="text-xs text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-tag"></i> 類別 (必選)</label>
-                            <select v-model="newExpense.category" class="w-full bg-white p-2 rounded-lg text-xs outline-none border shadow-custom-sm mt-1" :class="{'border-red-500': !newExpense.category && newExpense.item}">
-                                <option value="" disabled>選擇類別</option>
+                        <div>
+                            <label class="text-sm text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-tag" weight="bold"></i> 類別</label>
+                            <select v-model="newExpense.category" class="w-full bg-white p-3 rounded-lg text-base outline-none border shadow-custom-sm mt-1 focus:border-primary" :class="{'border-red-500': !newExpense.category && newExpense.item}">
+                                <option value="" disabled>選擇類別 (必選)</option>
                                 <option v-for="cat in filterCategories.filter(c => c.key !== 'all' && c.key !== 'flight')" :key="cat.key" :value="cat.key">
                                     {{ cat.name }}
                                 </option>
@@ -281,261 +306,267 @@
                     </div>
 
                     <div>
-                        <label class="text-xs text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-notepad"></i> 品項名稱 (消費內容)</label>
-                        <input v-model="newExpense.item" placeholder="例如：海東龍宮寺計程車費" class="w-full bg-white p-2.5 rounded-lg text-sm outline-none border shadow-custom-sm focus:border-primary mt-1">
+                        <label class="text-sm text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-notepad" weight="bold"></i> 品項名稱</label>
+                        <input v-model="newExpense.item" placeholder="例如：海雲台咖啡廳甜點" class="w-full bg-white p-3.5 rounded-lg text-base outline-none border shadow-custom-sm focus:border-primary mt-1">
                     </div>
                     
                     <div>
-                        <label class="text-xs text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-currency-krw"></i> 金額 (韓元)</label>
+                        <label class="text-sm text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-currency-krw" weight="bold"></i> 金額 (韓元)</label>
                         <div class="relative w-full">
-                            <input v-model.number="newExpense.amount" type="number" placeholder="0" class="w-full bg-white p-2.5 pl-8 rounded-lg text-sm outline-none border shadow-custom-sm focus:border-primary mt-1">
-                            <span class="absolute left-2 top-[13px] text-sm text-text/40 font-bold">₩</span>
+                            <input v-model.number="newExpense.amount" type="number" placeholder="0" class="w-full bg-white p-3.5 pl-10 rounded-lg text-lg font-black outline-none border shadow-custom-sm focus:border-primary mt-1">
+                            <span class="absolute left-3 top-3.5 text-lg text-text/40 font-bold">₩</span>
                         </div>
-                        <p v-if="newExpenseTWD > 0" class="text-xs text-text/60 mt-1 text-right">
-                            約 NT$ {{ formatNumber(newExpenseTWD) }}
+                        <p v-if="newExpenseTWD > 0" class="text-sm text-text/60 mt-1 text-right">
+                            約 NT$ <span class="font-bold">{{ formatNumber(newExpenseTWD) }}</span>
                         </p>
                     </div>
                     
                     <div>
-                        <button @click="addExpense" :disabled="!newExpense.item || !newExpense.amount || newExpense.amount <= 0 || !newExpense.category" class="w-full bg-primary text-white py-3 rounded-lg font-bold text-base shadow-custom-md transform hover:scale-[1.02] transition btn-press disabled:opacity-50 mt-2">
-                            <i class="ph ph-plus-bold"></i> 新增消費紀錄
+                        <button @click="addExpense" :disabled="!newExpense.item || !newExpense.amount || newExpense.amount <= 0 || !newExpense.category" class="w-full bg-primary text-white py-4 rounded-full font-black text-lg shadow-custom-lg transform hover:scale-[1.01] transition btn-press disabled:opacity-50 mt-4">
+                            <i class="ph ph-sparkle-fill mr-1"></i> 儲存浪漫支出
                         </button>
                     </div>
                 </div>
 
 
-                <div class="space-y-2 pb-8 pt-4">
-                    <h4 class="font-bold text-base text-text border-b border-gray-200 pb-2 flex items-center gap-2">
-                        <i class="ph ph-list-dashes text-primary text-lg"></i> 歷史記帳清單 (共 {{ expenses.length }} 筆)
+                <div class="space-y-3 pb-8 pt-4">
+                    <h4 class="font-bold text-xl text-text border-b border-gray-200 pb-3 flex items-center gap-2">
+                        <i class="ph ph-list-dashes text-primary text-2xl" weight="bold"></i> 歷史記帳清單 (共 {{ expenses.length }} 筆)
                     </h4>
                     
-                    <div v-for="(exp, index) in expenses" :key="index" class="app-card p-3 flex justify-between items-center border-l-4" :class="`border-${exp.category}-300`">
+                    <div v-for="(exp, index) in expenses" :key="index" class="app-card p-4 flex justify-between items-center border-l-4 hover:border-l-8 transition-all duration-200" :class="`border-accent-${exp.category}/50 bg-white`">
                         <div class="flex flex-col flex-1 truncate pr-2">
-                            <span class="text-sm font-bold text-text truncate">{{ exp.item }}</span>
-                            <span class="text-[10px] text-text/60">{{ exp.date.slice(5) }} · {{ getCategoryName(exp.category) }}</span>
+                            <span class="text-base font-black text-text truncate">{{ exp.item }}</span>
+                            <span class="text-xs text-text/60 mt-0.5">{{ exp.date.slice(5) }} · <span :class="getCategoryColor(exp.category)">{{ getCategoryName(exp.category) }}</span></span>
                         </div>
-                        <div class="flex items-center gap-3 flex-shrink-0">
+                        <div class="flex items-center gap-4 flex-shrink-0">
                             <div class="text-right">
-                                <p class="font-bold text-text/60 text-xs">₩{{ formatNumber(exp.amount) }}</p>
-                                <p class="text-sm font-black text-primary">NT$ {{ formatNumber(convertKRWToTWD(exp.amount)) }}</p>
+                                <p class="font-bold text-text/60 text-sm">₩{{ formatNumber(exp.amount) }}</p>
+                                <p class="text-lg font-black text-primary">NT$ {{ formatNumber(convertKRWToTWD(exp.amount)) }}</p>
                             </div>
-                            <button @click="removeExpense(index)" class="text-text/30 hover:text-red-500 p-1 btn-press"><i class="ph ph-x-circle text-lg"></i></button>
+                            <button @click="removeExpense(index)" class="text-text/30 hover:text-red-500 p-2 btn-press"><i class="ph ph-trash-simple text-xl" weight="bold"></i></button>
                         </div>
                     </div>
-                    <div v-if="expenses.length === 0" class="text-center text-sm text-text/30 py-4 app-card">
-                        還沒有記帳紀錄喔
+                    <div v-if="expenses.length === 0" class="text-center text-base text-text/30 py-8 app-card border-dashed">
+                        <i class="ph ph-piggy-bank-light text-3xl mb-1"></i>
+                        <p>還沒有浪漫支出紀錄喔！</p>
                     </div>
                 </div>
 
             </div>
 
-            <div v-if="currentTab === 'info'" class="space-y-6">
-                <h3 class="font-bold text-xl text-text px-1 flex items-center gap-2 border-b border-gray-200 pb-3"><i class="ph ph-airplane-takeoff text-primary text-2xl" weight="fill"></i> 航班資訊</h3>
+            <div v-if="currentTab === 'info'" class="space-y-8 pt-4">
+                <h3 class="font-black text-3xl chic-title flex items-center gap-3 border-b border-primary/20 pb-4">
+                    <i class="ph ph-paper-plane-tilt text-primary text-4xl" weight="fill"></i> 旅程憑證
+                </h3>
 
-                <div class="app-card p-5 relative overflow-hidden bg-primary/5 border-l-4 border-primary">
-                    <div class="flex justify-between items-center mb-4 border-b border-dashed border-primary/30 pb-3">
-                        <h2 class="text-lg font-bold text-text">去程 TPE → PUS</h2>
-                        <span class="text-2xl font-black text-primary font-mono">{{ flightInfo.departure.flightNo }}</span>
+                <div class="app-card p-6 relative overflow-hidden bg-primary/10 border-l-8 border-primary shadow-custom-lg">
+                    <div class="flex justify-between items-center mb-5 border-b border-dashed border-primary/30 pb-4">
+                        <h2 class="text-xl font-bold text-text">✈️ 去程 TPE → PUS</h2>
+                        <span class="text-3xl font-black text-primary font-mono">{{ flightInfo.departure.flightNo }}</span>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+                    <div class="grid grid-cols-2 gap-x-6 gap-y-4 text-base">
                         <div class="flex flex-col">
-                            <span class="text-xs text-text/60 uppercase">Departure Time</span>
-                            <span class="font-bold text-text">{{ flightInfo.departure.depTime }} (Jan 21, 2026)</span>
+                            <span class="text-sm text-text/60 font-medium uppercase">出發時間</span>
+                            <span class="font-bold text-text text-lg">{{ flightInfo.departure.depTime }} (Jan 21, 2026)</span>
                         </div>
                         <div class="flex flex-col">
-                            <span class="text-xs text-text/60 uppercase">Boarding Time</span>
-                            <span class="font-bold text-red-500">{{ flightInfo.departure.boardingTime }}</span>
+                            <span class="text-sm text-text/60 font-medium uppercase">登機時間</span>
+                            <span class="font-bold text-red-500 text-lg">{{ flightInfo.departure.boardingTime }}</span>
                         </div>
                         <div class="flex flex-col">
-                            <span class="text-xs text-text/60 uppercase">Terminal / Gate</span>
-                            <span class="font-bold text-text">{{ flightInfo.departure.terminal }} / {{ flightInfo.departure.gate }}</span>
+                            <span class="text-sm text-text/60 font-medium uppercase">航廈 / 登機門</span>
+                            <span class="font-bold text-text text-lg">{{ flightInfo.departure.terminal }} / {{ flightInfo.departure.gate }}</span>
                         </div>
                         <div class="flex flex-col">
-                            <span class="text-xs text-text/60 uppercase">Arrival Time (PUS)</span>
-                            <span class="font-bold text-text">17:40</span>
+                            <span class="text-sm text-text/60 font-medium uppercase">抵達釜山時間</span>
+                            <span class="font-bold text-text text-lg">17:40</span>
                         </div>
                     </div>
                 </div>
                 
-                <div class="app-card p-5 relative overflow-hidden bg-red-500/5 border-l-4 border-red-500">
-                    <div class="flex justify-between items-center mb-4 border-b border-dashed border-red-500/30 pb-3">
-                        <h2 class="text-lg font-bold text-text">回程 PUS → TPE</h2>
-                        <span class="text-2xl font-black text-red-500 font-mono">{{ flightInfo.return.flightNo }}</span>
+                <div class="app-card p-6 relative overflow-hidden bg-red-500/10 border-l-8 border-red-500 shadow-custom-lg">
+                    <div class="flex justify-between items-center mb-5 border-b border-dashed border-red-500/30 pb-4">
+                        <h2 class="text-xl font-bold text-text">🛫 回程 PUS → TPE</h2>
+                        <span class="text-3xl font-black text-red-500 font-mono">{{ flightInfo.return.flightNo }}</span>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+                    <div class="grid grid-cols-2 gap-x-6 gap-y-4 text-base">
                         <div class="flex flex-col">
-                            <span class="text-xs text-text/60 uppercase">Departure Time</span>
-                            <span class="font-bold text-text">{{ flightInfo.return.depTime }} (Jan 25, 2026)</span>
+                            <span class="text-sm text-text/60 font-medium uppercase">出發時間</span>
+                            <span class="font-bold text-text text-lg">{{ flightInfo.return.depTime }} (Jan 25, 2026)</span>
                         </div>
                         <div class="flex flex-col">
-                            <span class="text-xs text-text/60 uppercase">Boarding Time</span>
-                            <span class="font-bold text-red-500">{{ flightInfo.return.boardingTime }}</span>
+                            <span class="text-sm text-text/60 font-medium uppercase">登機時間</span>
+                            <span class="font-bold text-red-500 text-lg">{{ flightInfo.return.boardingTime }}</span>
                         </div>
                         <div class="flex flex-col">
-                            <span class="text-xs text-text/60 uppercase">Terminal / Gate</span>
-                            <span class="font-bold text-text">{{ flightInfo.return.terminal }} / {{ flightInfo.return.gate }}</span>
+                            <span class="text-sm text-text/60 font-medium uppercase">航廈 / 登機門</span>
+                            <span class="font-bold text-text text-lg">{{ flightInfo.return.terminal }} / {{ flightInfo.return.gate }}</span>
                         </div>
                         <div class="flex flex-col">
-                            <span class="text-xs text-text/60 uppercase">Arrival Time (TPE)</span>
-                            <span class="font-bold text-text">20:25</span>
+                            <span class="text-sm text-text/60 font-medium uppercase">抵達桃園時間</span>
+                            <span class="font-bold text-text text-lg">20:25</span>
                         </div>
                     </div>
                 </div>
 
 
-                <h3 class="font-bold text-xl text-text pt-4 px-1 flex items-center gap-2 border-b border-gray-200 pb-3"><i class="ph ph-buildings text-primary text-2xl" weight="fill"></i> 住宿資訊</h3>
-                <div class="app-card p-5 border-2 border-primary/20">
-                    <div class="flex items-center mb-3">
-                        <i class="ph ph-bed text-2xl text-primary mr-2"></i>
-                        <h2 class="text-lg font-bold text-text leading-tight">{{ hotelInfo.name }}</h2>
+                <h3 class="font-black text-3xl chic-title pt-4 flex items-center gap-3 border-b border-primary/20 pb-4"><i class="ph ph-buildings text-primary text-4xl" weight="fill"></i> 浪漫住宿</h3>
+                <div class="app-card p-6 border-8 border-primary/20 shadow-custom-xl">
+                    <div class="flex items-center mb-4">
+                        <i class="ph ph-bed text-3xl text-primary mr-3" weight="fill"></i>
+                        <h2 class="text-2xl font-black text-text leading-tight">{{ hotelInfo.name }}</h2>
                     </div>
-                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-200">
-                        <label class="text-xs text-text/60 font-bold uppercase block mb-1">地址 (Address)</label>
-                        <p class="font-bold text-sm text-text select-all">{{ hotelInfo.address }}</p>
+                    <div class="bg-primary/5 p-4 rounded-xl border border-primary/20">
+                        <label class="text-sm text-text/60 font-bold uppercase block mb-1">地址 (Address)</label>
+                        <p class="font-bold text-base text-text select-all">{{ hotelInfo.address }}</p>
                     </div>
                     
-                    <a :href="getNaverMapLink(hotelInfo.name)" target="_blank" class="w-full mt-4 py-3 bg-primary text-white font-bold rounded-lg shadow-custom-md hover:bg-primary-dark transition btn-press flex items-center justify-center gap-2 text-sm">
-                        <i class="ph ph-navigation-arrow"></i> Naver Map 導航
+                    <a :href="getNaverMapLink(hotelInfo.name)" target="_blank" class="w-full mt-6 py-3.5 bg-primary text-white font-black rounded-full shadow-custom-lg hover:bg-primary-dark transition btn-press flex items-center justify-center gap-2 text-lg">
+                        <i class="ph ph-navigation-arrow text-xl" weight="bold"></i> Naver Map 導航
                     </a>
                 </div>
             </div>
 
-            <div v-if="currentTab === 'guide'" class="space-y-6">
+            <div v-if="currentTab === 'guide'" class="space-y-8 pt-4">
 
-                <div class="app-card p-5 space-y-5">
-                    <div class="space-y-3">
-                        <h3 class="font-bold text-xl text-text flex items-center gap-2 border-b border-gray-200 pb-2">
-                            <i class="ph ph-suitcase-rolling text-primary text-2xl" weight="fill"></i> 行李清單
-                            <span class="text-xs text-text/60">({{ luggageList.filter(i => i.checked).length }} / {{ luggageList.length }})</span>
+                <div class="app-card p-6 space-y-6 shadow-custom-lg">
+                    <div class="space-y-4">
+                        <h3 class="font-bold text-2xl text-text flex items-center gap-3 border-b border-gray-200 pb-3">
+                            <i class="ph ph-suitcase-rolling text-primary text-3xl" weight="fill"></i> 行李清單
+                            <span class="text-sm text-text/60 font-black">({{ luggageList.filter(i => i.checked).length }} / {{ luggageList.length }})</span>
                         </h3>
                         
-                        <div class="flex gap-2 p-1 rounded-md bg-gray-50">
-                            <input v-model="newLuggageItem" @keyup.enter="addLuggage" type="text" placeholder="新增物品..." class="flex-1 bg-white p-2.5 rounded-lg text-sm outline-none border focus:border-primary shadow-custom-sm">
-                            <button @click="addLuggage" class="bg-primary text-white px-3 h-10 rounded-lg flex items-center justify-center btn-press shadow-custom-md text-sm font-bold whitespace-nowrap"><i class="ph ph-plus-bold mr-1"></i> 新增</button>
+                        <div class="flex gap-3 p-2 rounded-xl bg-primary/10 border border-primary/20">
+                            <input v-model="newLuggageItem" @keyup.enter="addLuggage" type="text" placeholder="新增浪漫必需品..." class="flex-1 bg-white p-3 rounded-lg text-base outline-none border focus:border-primary shadow-custom-sm">
+                            <button @click="addLuggage" class="bg-primary text-white px-5 h-12 rounded-lg flex items-center justify-center btn-press shadow-custom-md text-base font-bold whitespace-nowrap hover:scale-[1.02]"><i class="ph ph-plus-bold mr-1"></i> 新增</button>
                         </div>
 
                         <div class="space-y-2">
-                            <div v-for="(item, index) in luggageList" :key="`l-${index}`" class="flex items-center bg-white p-3 rounded-lg border border-gray-200 shadow-custom-sm transition" :class="{'opacity-70 bg-gray-50': item.checked}">
+                            <div v-for="(item, index) in luggageList" :key="`l-${index}`" class="flex items-center bg-white p-3.5 rounded-xl border border-gray-200 shadow-custom-sm transition hover:bg-gray-50" :class="{'opacity-70 bg-primary/5': item.checked}">
                                 <input type="checkbox" v-model="item.checked" class="form-checkbox h-5 w-5 text-primary rounded border-gray-300 focus:ring-primary cursor-pointer">
-                                <span class="ml-3 flex-1 text-sm font-medium text-text" :class="{'line-through text-text/40': item.checked}">{{ item.text }}</span>
-                                <button @click="removeLuggage(index)" class="text-text/20 hover:text-red-500 px-2 btn-press"><i class="ph ph-trash"></i></button>
+                                <span class="ml-3 flex-1 text-base font-medium text-text" :class="{'line-through text-text/40': item.checked}">{{ item.text }}</span>
+                                <button @click="removeLuggage(index)" class="text-text/20 hover:text-red-500 p-2 btn-press"><i class="ph ph-trash text-xl" weight="bold"></i></button>
                             </div>
                         </div>
                     </div>
 
-                    <div class="space-y-3 pt-4 border-t border-gray-200">
-                        <h3 class="font-bold text-xl text-text flex items-center gap-2 border-b border-gray-200 pb-2">
-                            <i class="ph ph-bag-simple text-red-500 text-2xl" weight="fill"></i> 必買清單
-                            <span class="text-xs text-text/60">({{ mustBuyList.filter(i => i.checked).length }} / {{ mustBuyList.length }})</span>
+                    <div class="space-y-4 pt-6 border-t border-primary/20">
+                        <h3 class="font-bold text-2xl text-text flex items-center gap-3 border-b border-gray-200 pb-3">
+                            <i class="ph ph-bag-simple text-accent-shopping text-3xl" weight="fill"></i> 必買清單
+                            <span class="text-sm text-text/60 font-black">({{ mustBuyList.filter(i => i.checked).length }} / {{ mustBuyList.length }})</span>
                         </h3>
                         
-                        <div class="flex gap-2 p-1 rounded-md bg-gray-50">
-                            <input v-model="newMustBuyItem" @keyup.enter="addMustBuy" type="text" placeholder="新增品項..." class="flex-1 bg-white p-2.5 rounded-lg text-sm outline-none border focus:border-red-500 shadow-custom-sm">
-                            <button @click="addMustBuy" class="bg-red-500 text-white px-3 h-10 rounded-lg flex items-center justify-center btn-press shadow-custom-md text-sm font-bold whitespace-nowrap"><i class="ph ph-plus-bold mr-1"></i> 新增</button>
+                        <div class="flex gap-3 p-2 rounded-xl bg-accent-shopping/10 border border-accent-shopping/20">
+                            <input v-model="newMustBuyItem" @keyup.enter="addMustBuy" type="text" placeholder="新增必買戰利品..." class="flex-1 bg-white p-3 rounded-lg text-base outline-none border focus:border-accent-shopping shadow-custom-sm">
+                            <button @click="addMustBuy" class="bg-accent-shopping text-white px-5 h-12 rounded-lg flex items-center justify-center btn-press shadow-custom-md text-base font-bold whitespace-nowrap hover:scale-[1.02]"><i class="ph ph-plus-bold mr-1"></i> 新增</button>
                         </div>
 
                         <div class="space-y-2">
-                            <div v-for="(item, index) in mustBuyList" :key="`m-${index}`" class="flex items-center bg-white p-3 rounded-lg border border-gray-200 shadow-custom-sm transition" :class="{'opacity-70 bg-gray-50': item.checked}">
-                                <input type="checkbox" v-model="item.checked" class="form-checkbox h-5 w-5 text-red-500 rounded border-gray-300 focus:ring-red-500 cursor-pointer">
-                                <span class="ml-3 flex-1 text-sm font-medium text-text" :class="{'line-through text-text/40': item.checked}">{{ item.text }}</span>
-                                <button @click="removeMustBuy(index)" class="text-text/20 hover:text-red-500 px-2 btn-press"><i class="ph ph-trash"></i></button>
+                            <div v-for="(item, index) in mustBuyList" :key="`m-${index}`" class="flex items-center bg-white p-3.5 rounded-xl border border-gray-200 shadow-custom-sm transition hover:bg-gray-50" :class="{'opacity-70 bg-accent-shopping/5': item.checked}">
+                                <input type="checkbox" v-model="item.checked" class="form-checkbox h-5 w-5 text-accent-shopping rounded border-gray-300 focus:ring-accent-shopping cursor-pointer">
+                                <span class="ml-3 flex-1 text-base font-medium text-text" :class="{'line-through text-text/40': item.checked}">{{ item.text }}</span>
+                                <button @click="removeMustBuy(index)" class="text-text/20 hover:text-red-500 p-2 btn-press"><i class="ph ph-trash text-xl" weight="bold"></i></button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="app-card p-5 border-l-4 border-red-500/50 bg-red-500/5">
-                    <h3 class="font-bold text-xl text-text flex items-center gap-2 mb-4 border-b border-red-500/20 pb-2">
-                        <i class="ph ph-phone-call text-red-500 text-2xl" weight="fill"></i> 緊急聯絡電話
+                <div class="app-card p-6 border-l-8 border-red-500/50 bg-red-500/10 shadow-custom-lg">
+                    <h3 class="font-bold text-2xl text-text flex items-center gap-3 mb-4 border-b border-red-500/20 pb-3">
+                        <i class="ph ph-phone-call text-red-500 text-3xl" weight="fill"></i> 緊急聯絡電話
                     </h3>
-                    <div class="space-y-3">
-                        <div v-for="contact in emergencyContacts" :key="contact.number" class="flex justify-between items-center bg-white p-3 rounded-lg border border-red-500/30 shadow-custom-sm">
+                    <div class="space-y-4">
+                        <div v-for="contact in emergencyContacts" :key="contact.number" class="flex justify-between items-center bg-white p-3.5 rounded-xl border border-red-500/30 shadow-custom-sm">
                             <div class="flex flex-col">
-                                <span class="font-bold text-text text-sm">{{ contact.name }}</span>
-                                <span class="text-xs text-text/60">{{ contact.desc }}</span>
+                                <span class="font-black text-text text-lg">{{ contact.name }}</span>
+                                <span class="text-sm text-text/60">{{ contact.desc }}</span>
                             </div>
-                            <a :href="`tel:${contact.number}`" class="bg-red-500 text-white px-4 py-2 rounded-full font-bold text-sm btn-press shadow-custom-md hover:bg-red-600">
-                                撥打 {{ contact.number }}
+                            <a :href="`tel:${contact.number}`" class="bg-red-500 text-white px-5 py-2.5 rounded-full font-bold text-base btn-press shadow-custom-md hover:bg-red-600">
+                                <i class="ph ph-phone-call-fill mr-1"></i> 撥打 {{ contact.number }}
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div v-if="currentTab === 'map'" class="h-[70vh] flex flex-col space-y-4">
-                <div class="app-card p-4 shadow-custom-sm">
-                    <input v-model="mapQuery" @keyup.enter="searchNaverMap" type="text" placeholder="輸入地點搜尋 (例如：海雲台)" class="w-full bg-gray-50 px-4 py-3 rounded-lg text-sm outline-none font-medium mb-3 focus:bg-white focus:ring-2 focus:ring-primary/50 transition border border-gray-200">
+            <div v-if="currentTab === 'map'" class="h-[75vh] flex flex-col space-y-6 pt-4">
+                <div class="app-card p-5 shadow-custom-lg">
+                    <h3 class="font-bold text-2xl text-text flex items-center gap-3 border-b border-gray-200 pb-3 mb-4">
+                        <i class="ph ph-map-trifold text-primary text-3xl" weight="fill"></i> 地圖探索
+                    </h3>
+                    <input v-model="mapQuery" @keyup.enter="searchNaverMap" type="text" placeholder="輸入地點搜尋 (例如：海雲台)" class="w-full bg-gray-50 px-4 py-3.5 rounded-lg text-base outline-none font-medium mb-4 focus:bg-white focus:ring-2 focus:ring-primary/50 transition border border-gray-200">
                     
-                    <div class="flex gap-3">
-                        <button @click="searchNaverMap" class="flex-1 bg-primary text-white py-3 rounded-lg font-bold text-sm shadow-custom-md btn-press flex items-center justify-center gap-2 hover:bg-primary-dark">
-                            <i class="ph ph-navigation-arrow"></i> Naver Map
+                    <div class="flex gap-4">
+                        <button @click="searchNaverMap" class="flex-1 bg-primary text-white py-4 rounded-full font-black text-lg shadow-custom-lg btn-press flex items-center justify-center gap-2 hover:bg-primary-dark">
+                            <i class="ph ph-navigation-arrow text-xl" weight="bold"></i> Naver Map
                         </button>
-                        <button @click="searchGoogleMap" class="flex-1 bg-white text-text border border-gray-300 py-3 rounded-lg font-bold text-sm shadow-custom-sm btn-press flex items-center justify-center gap-2 hover:bg-gray-100">
-                            <i class="ph ph-map-pin"></i> Google Map
+                        <button @click="searchGoogleMap" class="flex-1 bg-white text-text border-2 border-primary/20 py-4 rounded-full font-black text-lg shadow-custom-md btn-press flex items-center justify-center gap-2 hover:bg-primary/10">
+                            <i class="ph ph-map-pin text-xl" weight="bold"></i> Google Map
                         </button>
                     </div>
                 </div>
                 
-                <div class="flex-1 rounded-lg overflow-hidden shadow-custom-lg relative bg-gray-100 border border-gray-200">
+                <div class="flex-1 rounded-xl overflow-hidden shadow-custom-xl relative bg-gray-100 border-4 border-primary/20">
                     <iframe width="100%" height="100%" style="border:0" loading="lazy" 
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d102716.27850871927!2d129.0838128!3d35.1584949!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568e89f81216d8f%3A0x6a0c5c36af1c944d!2sBusan%2C%20South%20Korea!5e0!3m2!1sen!2stw!4v1703649600000!5m2!1sen!2stw" 
                         allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
                     </iframe>
-                    <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg text-xs font-bold text-text/80 shadow-md border border-gray-200">
-                        僅供概覽，導航請使用上方按鈕
+                    <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur px-4 py-2 rounded-full text-sm font-bold text-text/80 shadow-md border border-gray-200">
+                        <i class="ph ph-info-circle-fill text-primary mr-1"></i> 導航請使用上方按鈕
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <nav class="fixed bottom-0 w-full pb-safe pt-2 px-2 flex justify-between items-center mobile-nav-bar rounded-t-xl z-30 lg:hidden">
+    <nav class="fixed bottom-0 w-full pb-safe pt-3 px-3 flex justify-around items-center mobile-nav-bar rounded-t-2xl z-30 lg:hidden">
         <button v-for="tab in mobileTabs" :key="tab.id"
             @click="currentTab = tab.id"
-            :class="currentTab === tab.id ? 'text-primary' : 'text-text/50'" 
-            class="flex flex-col items-center p-2 flex-1 transition-all">
-            <i :class="tab.icon" class="text-2xl" :weight="currentTab === tab.id ? 'fill' : 'regular'"></i>
-            <span class="text-[10px] font-bold mt-1">{{ tab.name }}</span>
+            :class="currentTab === tab.id ? 'text-primary' : 'text-text/40'" 
+            class="flex flex-col items-center p-2 flex-1 transition-all btn-press">
+            <i :class="tab.icon" class="text-3xl" :weight="currentTab === tab.id ? 'fill' : 'bold'"></i>
+            <span class="text-xs font-black mt-1">{{ tab.name }}</span>
         </button>
     </nav>
 
-    <div v-if="showModal" class="fixed inset-0 bg-text/30 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="app-card w-full max-w-sm rounded-xl p-6 shadow-custom-lg scale-100 transition-transform border-l-4 border-primary">
+    <div v-if="showModal" class="fixed inset-0 bg-text/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="app-card w-full max-w-lg rounded-2xl p-6 shadow-custom-xl scale-100 transition-transform border-l-8 border-primary">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold text-text">
-                    {{ isEditMode ? '編輯行程 ✏️' : '新增筆記 ✨' }}
+                <h3 class="text-2xl font-black text-text">
+                    {{ isEditMode ? '編輯浪漫行程 ✏️' : '新增專屬筆記 ✨' }}
                 </h3>
-                <button @click="showModal = false" class="bg-gray-100 w-8 h-8 rounded-full text-text/70 hover:bg-gray-200 btn-press"><i class="ph ph-x"></i></button>
+                <button @click="showModal = false" class="bg-primary/10 w-10 h-10 rounded-full text-primary hover:bg-primary/20 btn-press text-xl"><i class="ph ph-x" weight="bold"></i></button>
             </div>
-            <div class="space-y-3">
+            <div class="space-y-4">
                 <div>
-                    <label class="text-xs text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-clock"></i> 時間</label>
-                    <input v-model="modalForm.time" type="time" class="w-full bg-gray-50 p-3 rounded-lg mt-1 outline-none border focus:border-primary">
+                    <label class="text-sm text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-clock" weight="bold"></i> 時間</label>
+                    <input v-model="modalForm.time" type="time" class="w-full bg-gray-50 p-3 rounded-lg mt-1 outline-none border focus:border-primary text-base font-bold">
                 </div>
                 <div>
-                    <label class="text-xs text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-tag"></i> 類別</label>
-                    <select v-model="modalForm.category" class="w-full bg-gray-50 p-3 rounded-lg mt-1 outline-none border focus:border-primary">
+                    <label class="text-sm text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-tag" weight="bold"></i> 類別</label>
+                    <select v-model="modalForm.category" class="w-full bg-gray-50 p-3 rounded-lg mt-1 outline-none border focus:border-primary text-base">
                         <option value="" disabled>選擇行程類別</option>
                         <option v-for="cat in filterCategories.filter(c => c.key !== 'all' && c.key !== 'flight')" :key="cat.key" :value="cat.key">{{ cat.name }}</option>
                     </select>
                 </div>
                 <div>
-                    <label class="text-xs text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-text-h"></i> 標題</label>
-                    <input v-model="modalForm.title" type="text" placeholder="行程名稱" class="w-full bg-gray-50 p-3 rounded-lg mt-1 outline-none border focus:border-primary">
+                    <label class="text-sm text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-text-h" weight="bold"></i> 標題 (必填)</label>
+                    <input v-model="modalForm.title" type="text" placeholder="行程名稱" class="w-full bg-gray-50 p-3 rounded-lg mt-1 outline-none border focus:border-primary text-base font-bold">
                 </div>
                 <div>
-                    <label class="text-xs text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-map-pin"></i> 地點 (地圖搜尋用)</label>
-                    <input v-model="modalForm.location" type="text" placeholder="輸入關鍵字" class="w-full bg-gray-50 p-3 rounded-lg mt-1 outline-none border focus:border-primary">
+                    <label class="text-sm text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-map-pin" weight="bold"></i> 地點 (地圖搜尋用)</label>
+                    <input v-model="modalForm.location" type="text" placeholder="輸入關鍵字" class="w-full bg-gray-50 p-3 rounded-lg mt-1 outline-none border focus:border-primary text-base">
                 </div>
                 <div>
-                    <label class="text-xs text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-chats"></i> 備註/交通資訊</label>
-                    <textarea v-model="modalForm.desc" rows="3" placeholder="例如：交通方式、營業時間..." class="w-full bg-gray-50 p-3 rounded-lg mt-1 outline-none border focus:border-primary resize-none"></textarea>
+                    <label class="text-sm text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-chats" weight="bold"></i> 備註/交通資訊</label>
+                    <textarea v-model="modalForm.desc" rows="3" placeholder="例如：交通方式、營業時間..." class="w-full bg-gray-50 p-3 rounded-lg mt-1 outline-none border focus:border-primary resize-none text-base"></textarea>
                 </div>
             </div>
-            <button @click="saveItem" :disabled="!modalForm.title || !modalForm.category" class="w-full mt-6 py-3.5 bg-primary text-white font-bold rounded-lg shadow-custom-md btn-press disabled:opacity-50">
-                儲存筆記
+            <button @click="saveItem" :disabled="!modalForm.title || !modalForm.category" class="w-full mt-6 py-4 bg-primary text-white font-black rounded-full shadow-custom-lg btn-press disabled:opacity-50 text-lg">
+                <i class="ph ph-heart-fill mr-1"></i> 儲存浪漫筆記
             </button>
         </div>
     </div>
@@ -565,7 +596,7 @@
             const calcKRW = ref('');
             const exchangeRate = ref(41.5); 
             
-            // Expenses (REFACTORED)
+            // Expenses 
             const expenses = ref([]);
             const newExpense = ref({ 
                 date: new Date().toISOString().split('T')[0], 
@@ -580,10 +611,10 @@
             // --- Fixed Data ---
             const desktopTabs = [
                 { id: 'itinerary', name: '行程規劃', icon: 'ph-notebook' },
-                { id: 'money', name: '匯率與記帳', icon: 'ph-currency-krw' },
+                { id: 'money', name: '浪漫記帳', icon: 'ph-currency-krw' },
                 { id: 'info', name: '機票與住宿', icon: 'ph-ticket' },
                 { id: 'guide', name: '準備清單', icon: 'ph-list-checks' },
-                { id: 'map', name: '地圖搜尋', icon: 'ph-map-trifold' },
+                { id: 'map', name: '地圖探索', icon: 'ph-map-trifold' },
             ];
             
             const mobileTabs = [
@@ -623,11 +654,11 @@
             });
 
             const filterCategories = [
-                { key: 'all', name: '所有項目', icon: 'ph-list-checks', color: 'text-text' , colorCode: '#E2E8F0'},
-                { key: 'food', name: '美食餐飲', icon: 'ph-fork-knife', color: 'text-accent-food', colorCode: '#EF4444' },
-                { key: 'shopping', name: '購物消費', icon: 'ph-shopping-bag', color: 'text-accent-shopping', colorCode: '#3B82F6' },
-                { key: 'sightseeing', name: '景點活動', icon: 'ph-mountain', color: 'text-accent-sightseeing', colorCode: '#10B981' },
-                { key: 'travel', name: '交通票券', icon: 'ph-train-simple', color: 'text-accent-travel', colorCode: '#F59E0B' },
+                { key: 'all', name: '所有項目', icon: 'ph-heart', color: 'text-primary', colorCode: '#D8A7A7' },
+                { key: 'food', name: '美食饗宴', icon: 'ph-fork-knife', color: 'text-accent-food', colorCode: '#E97451' },
+                { key: 'shopping', name: '血拚購物', icon: 'ph-shopping-bag', color: 'text-accent-shopping', colorCode: '#639AA6' },
+                { key: 'sightseeing', name: '美景探索', icon: 'ph-mountain', color: 'text-accent-sightseeing', colorCode: '#C6B060' },
+                { key: 'travel', name: '交通移動', icon: 'ph-train-simple', color: 'text-accent-travel', colorCode: '#D88A6F' },
                 { key: 'flight', name: '機票/住宿', icon: 'ph-airplane-takeoff', color: 'text-indigo-600', colorCode: '#4F46E5' }
             ];
 
@@ -655,12 +686,12 @@
                 { name: '旅遊諮詢熱線', number: '1330', desc: 'Korea Travel Hotline' }
             ];
 
-            // 根據 BUSAN.xlsx - 工作表1.csv 重新規劃行程
+            // 根據 BUSAN.xlsx - 工作表1.csv 重新規劃行程 (同 V10 確保行程正確)
             const updatedItinerary = [
                 // Day 1: 115/01/21(三)
                 { id: 101, day: 1, time: '12:00', title: '到達桃園國際機場T2', location: 'TPE T2', desc: '辦理報到、托運、入關。', isFlight: false, category: 'travel' },
                 { id: 102, day: 1, time: '13:55', title: '長榮航空 BR180 登機', location: 'TPE T2', desc: '預計 14:25 起飛。', isFlight: true, category: 'flight', flightNo: 'BR180', depTime: '14:25', terminal: 'T2', gate: 'TBD', boardingTime: '13:55', type: 'departure' },
-                { id: 103, day: 1, time: '17:40', title: '抵達釜山金海機場 (PUS)', location: 'PUS', desc: '取得行李前往地鐵站，從GATE3出來。', isFlight: true, category: 'flight', flightNo: 'BR180', depTime: '14:25', terminal: 'T2', gate: 'TBD', boardingTime: '13:55', type: 'departure' }, // 沿用 BR180 ID但時間不同
+                { id: 103, day: 1, time: '17:40', title: '抵達釜山金海機場 (PUS)', location: 'PUS', desc: '取得行李前往地鐵站，從GATE3出來。', isFlight: true, category: 'flight', flightNo: 'BR180', depTime: '14:25', terminal: 'T2', gate: 'TBD', boardingTime: '13:55', type: 'departure' }, 
                 { id: 104, day: 1, time: '18:30', title: '輕軌 → 沙上站 (Sasang)', location: '金海機場站', desc: '從GATE3走到馬路對面右轉，搭乘金海輕軌。', isFlight: false, category: 'travel' },
                 { id: 105, day: 1, time: '18:40', title: '地鐵 2號線 → 1號線(南浦)', location: '沙上站/西面站', desc: '沙上站轉乘綠色2號線，西面站轉乘橘色1號線到札嘎其站。', isFlight: false, category: 'travel' },
                 { id: 106, day: 1, time: '19:05', title: 'NewCZ南浦店 Check In', location: '札嘎其站 7號出口', desc: '5號出口有電梯可搭，出電梯直走過7號出口左轉。', isFlight: false, category: 'travel' },
@@ -708,33 +739,34 @@
             onMounted(() => {
                 newExpense.value.date = new Date().toISOString().split('T')[0];
 
-                // Load from LocalStorage (Using v10 key)
-                const savedItinerary = localStorage.getItem('busan_2026_v10_itinerary'); 
-                const savedExpenses = localStorage.getItem('busan_2026_v10_expenses');
-                const savedRate = localStorage.getItem('busan_2026_rate_v10');
-                const savedLuggage = localStorage.getItem('busan_2026_luggage_v10');
-                const savedMustBuy = localStorage.getItem('busan_2026_mustbuy_v10');
+                // Load from LocalStorage (Using v11 key for the new theme)
+                const storageKey = 'busan_2026_v11';
+                const savedData = localStorage.getItem(storageKey);
                 
-                // Use updated itinerary
-                itinerary.value = savedItinerary ? JSON.parse(savedItinerary) : updatedItinerary;
-                if (savedExpenses) expenses.value = JSON.parse(savedExpenses);
-                if (savedRate && parseFloat(savedRate) > 0) {
-                     exchangeRate.value = parseFloat(savedRate);
+                if (savedData) {
+                    const data = JSON.parse(savedData);
+                    itinerary.value = data.itinerary;
+                    expenses.value = data.expenses;
+                    exchangeRate.value = data.exchangeRate || 41.5;
+                    luggageList.value = data.luggageList;
+                    mustBuyList.value = data.mustBuyList;
                 } else {
-                     exchangeRate.value = 41.5; 
+                    itinerary.value = updatedItinerary;
+                    luggageList.value = defaultLuggage;
+                    mustBuyList.value = defaultMustBuy;
                 }
-                luggageList.value = savedLuggage ? JSON.parse(savedLuggage) : defaultLuggage;
-                mustBuyList.value = savedMustBuy ? JSON.parse(savedMustBuy) : defaultMustBuy;
             });
 
             // --- Watchers for Auto-Save ---
             watch([itinerary, expenses, exchangeRate, luggageList, mustBuyList], () => {
-                // Save with v10 key
-                localStorage.setItem('busan_2026_v10_itinerary', JSON.stringify(itinerary.value));
-                localStorage.setItem('busan_2026_v10_expenses', JSON.stringify(expenses.value));
-                localStorage.setItem('busan_2026_rate_v10', exchangeRate.value);
-                localStorage.setItem('busan_2026_luggage_v10', JSON.stringify(luggageList.value));
-                localStorage.setItem('busan_2026_mustbuy_v10', JSON.stringify(mustBuyList.value));
+                const dataToSave = {
+                    itinerary: itinerary.value,
+                    expenses: expenses.value,
+                    exchangeRate: exchangeRate.value,
+                    luggageList: luggageList.value,
+                    mustBuyList: mustBuyList.value,
+                };
+                localStorage.setItem('busan_2026_v11', JSON.stringify(dataToSave));
             }, { deep: true });
 
             // --- Computed ---
@@ -762,9 +794,8 @@
                 return Math.round(krw / rate);
             };
 
-            // Expense Computed Properties (REFACTORED)
+            // Expense Computed Properties
             const totalExpenseKRW = computed(() => {
-                // Only sum non-flight/non-accommodation expenses
                 return expenses.value
                     .filter(item => item.category !== 'flight')
                     .reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
@@ -799,8 +830,8 @@
             // Hotel Info Extraction (based on the provided file)
             const hotelInfo = computed(() => {
                 return {
-                    name: 'NewCZ南浦店',
-                    address: '釜山廣域市中區光復路8號街 32 / 부산광역시 중구 광복로8번길 32', // Used placeholder address based on description
+                    name: 'NewCZ南浦店 (原釜山亞雲樹飯店)',
+                    address: '釜山廣域市中區光復路8號街 32 / 부산광역시 중구 광복로8번길 32',
                 };
             });
 
@@ -812,6 +843,11 @@
             
             const getCategoryName = (key) => filterCategories.find(c => c.key === key)?.name || '未知';
             const getCategoryColor = (key) => filterCategories.find(c => c.key === key)?.color || 'text-text/50';
+            const getCategoryBgColor = (key) => {
+                const cat = filterCategories.find(c => c.key === key);
+                if (!cat) return 'bg-gray-200 text-text/80';
+                return `bg-accent-${cat.key}/20 text-accent-${cat.key}`; // e.g., bg-accent-food/20 text-accent-food
+            };
 
             const openModal = (item) => {
                 if (item) {
@@ -821,7 +857,6 @@
                     modalForm.value = { ...item };
                 } else {
                     isEditMode.value = false;
-                    // Auto-fill time to current Day's last event + 1 hour, or default
                     const lastEvent = filteredItinerary.value.at(-1);
                     const defaultTime = lastEvent ? incrementTime(lastEvent.time) : '12:00';
 
@@ -848,10 +883,6 @@
                 showModal.value = false;
             };
 
-            const deleteItem = (id) => {
-                if(confirm('確定刪除此行程嗎？')) itinerary.value = itinerary.value.filter(item => item.id !== id);
-            };
-
             // Helper function for time increment
             const incrementTime = (timeStr) => {
                 const [h, m] = timeStr.split(':').map(Number);
@@ -864,14 +895,13 @@
                 return `${newH}:${newM}`;
             };
             
-            // Expense Methods (REFACTORED)
+            // Expense Methods
             const addExpense = () => {
                 const amount = Number(newExpense.value.amount);
                 if (!newExpense.value.item || isNaN(amount) || amount <= 0 || !newExpense.value.category) {
                     return;
                 }
                 
-                // Unshift adds to the beginning (LIFO - Last In, First Out)
                 expenses.value.unshift({
                     date: newExpense.value.date || new Date().toISOString().split('T')[0],
                     item: newExpense.value.item,
@@ -885,10 +915,10 @@
             };
 
             const removeExpense = (index) => {
-                if(confirm('確定刪除這筆記帳紀錄嗎？')) expenses.value.splice(index, 1);
+                if(confirm('確定刪除這筆浪漫支出紀錄嗎？')) expenses.value.splice(index, 1);
             };
 
-            // Checklist Methods (Luggage & Must-Buy)
+            // Checklist Methods
             const addLuggage = () => {
                 if(!newLuggageItem.value) return;
                 luggageList.value.push({ text: newLuggageItem.value, checked: false });
@@ -913,7 +943,6 @@
             };
             const searchGoogleMap = () => {
                 const q = mapQuery.value || 'Busan';
-                // Using a safe, general search URL for Google Maps
                 window.open(`https://www.google.com/maps/search/$${encodeURIComponent(q)}`, '_blank');
             };
             const getNaverMapLink = (query) => `https://map.naver.com/p/search/${encodeURIComponent(query)}`;
@@ -941,10 +970,11 @@
                 luggageList, newLuggageItem, mustBuyList, newMustBuyItem,
                 flightInfo, hotelInfo, emergencyContacts, simulatedWeather, 
                 desktopTabs, mobileTabs, filterCategories,
-                openModal, saveItem, deleteItem, addExpense, removeExpense, convertKRWToTWD,
+                openModal, saveItem, 
+                addExpense, removeExpense, convertKRWToTWD,
                 addLuggage, removeLuggage, addMustBuy, removeMustBuy,
                 formatNumber, searchNaverMap, searchGoogleMap, getNaverMapLink, getWeatherIcon, getDayInfo,
-                getCategoryName, getCategoryColor
+                getCategoryName, getCategoryColor, getCategoryBgColor 
             };
         }
     }).mount('#app');
