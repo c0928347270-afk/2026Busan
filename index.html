@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 釜山五日遊專業規劃</title>
+    <title>2026 釜山五日遊</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -15,18 +15,18 @@
                 extend: {
                     colors: {
                         primary: {
-                            light: '#E6F8F6', // 淺色背景
-                            DEFAULT: '#00A389', // 專業藍綠色
+                            light: '#E6F8F6', 
+                            DEFAULT: '#00A389', 
                             dark: '#007A66',
                         },
-                        text: '#2D3748', // 深灰文字
-                        background: '#F8F9FA', // 淺色背景
-                        card: '#FFFFFF', // 卡片白色
+                        text: '#2D3748', 
+                        background: '#F8F9FA', 
+                        card: '#FFFFFF', 
                         accent: {
-                            food: '#EF4444',     // Red for Food
-                            shopping: '#3B82F6', // Blue for Shopping
-                            sightseeing: '#10B981', // Green for Sightseeing
-                            travel: '#F59E0B',   // Yellow for Travel
+                            food: '#EF4444',     
+                            shopping: '#3B82F6', 
+                            sightseeing: '#10B981', 
+                            travel: '#F59E0B',   
                         }
                     },
                     fontFamily: {
@@ -50,25 +50,21 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Card Style */
         .app-card {
             background-color: #FFFFFF; 
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Soft, professional shadow */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); 
             border: 1px solid #E2E8F0;
         }
 
-        /* Scrollbar Hide for Tabs */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* General Button Press Effect */
         .btn-press:active {
             transform: scale(0.98);
             box-shadow: none !important;
         }
 
-        /* Mobile Bottom Nav Bar */
         @media (max-width: 1023px) {
             .mobile-nav-bar {
                 background-color: #FFFFFF;
@@ -76,11 +72,10 @@
             }
         }
 
-        /* Desktop Layout */
         @media (min-width: 1024px) {
             #app-container {
                 display: grid;
-                grid-template-columns: 280px 1fr; /* Fixed left sidebar, flexible content */
+                grid-template-columns: 280px 1fr; 
                 min-height: 100vh;
             }
             .main-content {
@@ -91,15 +86,6 @@
                 background-color: #FFFFFF;
                 box-shadow: 2px 0 5px rgba(0, 0, 0, 0.02);
             }
-        }
-        
-        /* Pie Chart CSS using conic-gradient for modern look */
-        .pie-chart {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: conic-gradient(v-bind(pieChartBackground));
-            box-shadow: 0 0 0 6px #fff, 0 0 0 7px #E2E8F0;
         }
     </style>
 </head>
@@ -114,7 +100,7 @@
                     <i class="ph ph-calendar-check text-3xl" weight="fill"></i>
                     BUSAN 2026
                 </h1>
-                <p class="text-sm text-text/60 font-medium mt-1">專業行程規劃工具</p>
+                <p class="text-sm text-text/60 font-medium mt-1">2026釜山行</p>
             </header>
             
             <nav class="space-y-1">
@@ -186,8 +172,9 @@
                     </div>
 
                     <div v-for="item in filteredItineraryByCat" :key="item.id" 
+                        @click="item.isFlight ? null : openModal(item)"
                         class="app-card p-4 flex gap-4 relative transition-all duration-200 hover:shadow-custom-lg border-l-4"
-                        :class="{'border-primary/50': item.isFlight, 'border-primary/20': !item.isFlight}">
+                        :class="[item.isFlight ? 'border-primary/50' : 'border-primary/20', {'cursor-pointer': !item.isFlight}]">
                         
                         <div class="flex flex-col items-center min-w-[60px] flex-shrink-0">
                             <span class="text-sm font-bold text-primary px-1 font-mono leading-tight">
@@ -229,123 +216,117 @@
             </div>
 
             <div v-if="currentTab === 'money'" class="space-y-6">
-                <div class="space-y-3">
-                    <div class="flex justify-between items-center px-1">
-                        <h3 class="font-bold text-xl text-text flex items-center gap-2"><i class="ph ph-calculator text-primary text-2xl" weight="fill"></i> 匯率計算機</h3>
-                        <div class="flex items-center gap-2 app-card px-3 py-1 rounded-full shadow-custom-sm border-2 border-primary/20">
-                            <span class="text-xs text-text/60">KRW/TWD 匯率</span>
+                <h3 class="font-bold text-xl text-text flex items-center gap-2 border-b border-gray-200 pb-3">
+                    <i class="ph ph-currency-krw text-primary text-2xl" weight="fill"></i> 匯率與記帳中心
+                </h3>
+                
+                <div class="app-card p-5 bg-primary/5 border-l-4 border-primary/30 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-base text-text">₩/NT$ 匯率換算</h4>
+                        <div class="flex items-center gap-2 app-card px-3 py-1 rounded-full shadow-custom-sm border-2 border-primary/20 bg-white">
+                            <span class="text-xs text-text/60">當前匯率</span>
                             <input v-model.number="exchangeRate" type="number" class="w-14 text-right font-black text-sm outline-none text-primary bg-transparent" min="0.01" step="0.01">
                         </div>
                     </div>
                     
-                    <div class="app-card p-5 bg-primary/5 border-l-4 border-primary/30">
-                        <div class="flex items-center border-b border-gray-300 pb-3">
-                            <span class="font-bold w-16 text-sm text-text/80">KRW (₩)</span>
-                            <input v-model.number="calcKRW" type="number" placeholder="0" class="w-full text-right text-3xl font-black outline-none bg-transparent text-text">
-                        </div>
-                        <div class="flex items-center pt-3">
-                            <span class="font-bold w-16 text-sm text-text/80">TWD (NT$)</span>
-                            <div class="w-full text-right text-3xl font-black text-primary">
-                                {{ formatNumber(calculatedTWD) }}
-                            </div>
+                    <div class="flex items-center border-b border-gray-300 pb-3">
+                        <span class="font-bold w-16 text-sm text-text/80">KRW (₩)</span>
+                        <input v-model.number="calcKRW" type="number" placeholder="0" class="w-full text-right text-3xl font-black outline-none bg-transparent text-text">
+                    </div>
+                    <div class="flex items-center pt-3">
+                        <span class="font-bold w-16 text-sm text-text/80">TWD (NT$)</span>
+                        <div class="w-full text-right text-3xl font-black text-primary">
+                            {{ formatNumber(calculatedTWD) }}
                         </div>
                     </div>
                 </div>
 
-                <div class="space-y-6">
-                    <div class="flex justify-between items-end px-1 border-t border-gray-200 pt-6">
-                        <h3 class="font-bold text-xl text-text flex items-center gap-2"><i class="ph ph-receipt text-primary text-2xl" weight="fill"></i> 支出記帳</h3>
-                        <div class="text-right app-card px-3 py-1.5 rounded-lg shadow-custom-sm">
-                            <p class="text-xs text-text/60">總支出 (TWD)</p>
+                <div class="app-card p-5 space-y-4 border-l-4 border-accent-shopping/30 bg-accent-shopping/5">
+                    <h4 class="font-bold text-base text-text flex items-center gap-2">
+                        <i class="ph ph-wallet-fill text-accent-shopping text-lg"></i>
+                        總支出概覽 (不含機票住宿)
+                    </h4>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white p-3 rounded-lg shadow-custom-sm border-2 border-gray-100">
+                            <p class="text-xs text-text/60 font-medium">總支出 (KRW)</p>
+                            <p class="font-black text-xl text-text">₩ {{ formatNumber(totalExpenseKRW) }}</p>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg shadow-custom-sm border-2 border-primary/20">
+                            <p class="text-xs text-text/60 font-medium">總支出 (TWD)</p>
                             <p class="font-black text-xl text-primary">NT$ {{ formatNumber(totalExpenseTWD) }}</p>
                         </div>
                     </div>
+                </div>
 
-                    <div class="app-card p-4 border-l-4 border-primary/30 space-y-4">
-                        <h4 class="font-bold text-sm text-text/80 flex items-center gap-2">
-                            <i class="ph ph-pencil-simple text-primary text-lg"></i> 新增消費項目
-                        </h4>
-                        
-                        <div class="flex gap-2">
-                            <div class="flex-1">
-                                <label class="text-xs text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-calendar-blank"></i> 日期</label>
-                                <input type="date" v-model="newExpense.date" class="w-full bg-gray-50 p-2 rounded-lg text-xs outline-none border text-center shadow-custom-sm mt-1">
-                            </div>
-                            <div class="flex-1">
-                                <label class="text-xs text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-tag"></i> 類別</label>
-                                <select v-model="newExpense.category" class="w-full bg-gray-50 p-2 rounded-lg text-xs outline-none border shadow-custom-sm mt-1">
-                                    <option value="" disabled>選擇類別</option>
-                                    <option v-for="cat in filterCategories.filter(c => c.key !== 'all' && c.key !== 'flight')" :key="cat.key" :value="cat.key">
-                                        {{ cat.name }}
-                                    </option>
-                                </select>
-                            </div>
+                <div class="app-card p-4 border-l-4 border-accent-food/30 bg-accent-food/5 space-y-4">
+                    <h4 class="font-bold text-base text-text/80 flex items-center gap-2">
+                        <i class="ph ph-receipt-bold text-accent-food text-lg"></i> 新增消費紀錄
+                    </h4>
+                    
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="flex-1">
+                            <label class="text-xs text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-calendar-blank"></i> 日期</label>
+                            <input type="date" v-model="newExpense.date" class="w-full bg-white p-2 rounded-lg text-xs outline-none border text-center shadow-custom-sm mt-1">
                         </div>
+                        <div class="flex-1">
+                            <label class="text-xs text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-tag"></i> 類別 (必選)</label>
+                            <select v-model="newExpense.category" class="w-full bg-white p-2 rounded-lg text-xs outline-none border shadow-custom-sm mt-1" :class="{'border-red-500': !newExpense.category && newExpense.item}">
+                                <option value="" disabled>選擇類別</option>
+                                <option v-for="cat in filterCategories.filter(c => c.key !== 'all' && c.key !== 'flight')" :key="cat.key" :value="cat.key">
+                                    {{ cat.name }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
 
-                        <div>
-                            <label class="text-xs text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-notepad"></i> 品項名稱 (消費內容)</label>
-                            <input v-model="newExpense.item" placeholder="例如：海東龍宮寺計程車費" class="w-full bg-white p-2.5 rounded-lg text-sm outline-none border shadow-custom-sm focus:border-primary mt-1">
-                        </div>
-                        
-                        <div>
-                            <label class="text-xs text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-currency-krw"></i> 金額 (韓元)</label>
-                            <div class="relative w-full">
-                                <input v-model.number="newExpense.amount" type="number" placeholder="0" class="w-full bg-white p-2.5 pl-8 rounded-lg text-sm outline-none border shadow-custom-sm focus:border-primary mt-1">
-                                <span class="absolute left-2 top-[13px] text-sm text-text/40 font-bold">₩</span>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <button @click="addExpense" :disabled="!newExpense.item || !newExpense.amount || newExpense.amount <= 0 || !newExpense.category" class="w-full bg-primary text-white py-3 rounded-lg font-bold text-base shadow-custom-md transform hover:scale-[1.02] transition btn-press disabled:opacity-50 mt-2">
-                                <i class="ph ph-plus-bold"></i> 新增消費紀錄
-                            </button>
-                        </div>
+                    <div>
+                        <label class="text-xs text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-notepad"></i> 品項名稱 (消費內容)</label>
+                        <input v-model="newExpense.item" placeholder="例如：海東龍宮寺計程車費" class="w-full bg-white p-2.5 rounded-lg text-sm outline-none border shadow-custom-sm focus:border-primary mt-1">
                     </div>
                     
-                    <div class="app-card p-5">
-                        <h4 class="font-bold text-sm text-text/80 mb-4 border-b border-dashed pb-2 flex items-center gap-2">
-                            <i class="ph ph-chart-pie text-primary text-lg"></i> 支出類別分佈 (圓餅圖)
-                        </h4>
-                        <div v-if="totalExpenseTWD > 0" class="flex flex-col md:flex-row items-center justify-center gap-6">
-                            <div class="flex-shrink-0">
-                                <div class="pie-chart"></div>
-                            </div>
-                            <div class="space-y-1.5 flex-1 w-full max-w-xs">
-                                <div v-for="(item, key) in expenseBreakdownTWD" :key="key" 
-                                     class="flex justify-between items-center text-sm"
-                                     v-if="item.percentage > 0">
-                                    <div class="flex items-center gap-2">
-                                        <span class="w-3 h-3 rounded-full flex-shrink-0" :style="{ backgroundColor: item.color }"></span>
-                                        <span class="font-medium text-text/80">{{ item.name }}</span>
-                                    </div>
-                                    <span class="font-bold text-primary">{{ item.percentage }}%</span>
-                                    <span class="text-xs text-text/60">NT${{ formatNumber(item.amount) }}</span>
-                                </div>
-                            </div>
+                    <div>
+                        <label class="text-xs text-primary font-bold ml-1 flex items-center gap-1"><i class="ph ph-currency-krw"></i> 金額 (韓元)</label>
+                        <div class="relative w-full">
+                            <input v-model.number="newExpense.amount" type="number" placeholder="0" class="w-full bg-white p-2.5 pl-8 rounded-lg text-sm outline-none border shadow-custom-sm focus:border-primary mt-1">
+                            <span class="absolute left-2 top-[13px] text-sm text-text/40 font-bold">₩</span>
                         </div>
-                        <div v-else class="text-center text-sm text-text/40 py-4">尚無支出紀錄可繪製圖表</div>
+                        <p v-if="newExpenseTWD > 0" class="text-xs text-text/60 mt-1 text-right">
+                            約 NT$ {{ formatNumber(newExpenseTWD) }}
+                        </p>
                     </div>
-
-
-                    <div class="space-y-2 pb-8">
-                        <div v-for="(exp, index) in expenses" :key="index" class="app-card p-3 flex justify-between items-center border-l-4" :class="`border-${exp.category}-300`">
-                            <div class="flex flex-col flex-1 truncate pr-2">
-                                <span class="text-sm font-bold text-text truncate">{{ exp.item }}</span>
-                                <span class="text-[10px] text-text/60">{{ exp.date.slice(5) }} · {{ getCategoryName(exp.category) }}</span>
-                            </div>
-                            <div class="flex items-center gap-3 flex-shrink-0">
-                                <div class="text-right">
-                                    <p class="font-bold text-text/60 text-xs">₩{{ formatNumber(exp.amount) }}</p>
-                                    <p class="text-sm font-black text-primary">NT$ {{ formatNumber(exchangeRate > 0 ? Math.round(exp.amount / exchangeRate) : 0) }}</p>
-                                </div>
-                                <button @click="removeExpense(index)" class="text-text/30 hover:text-red-500 p-1 btn-press"><i class="ph ph-x-circle text-lg"></i></button>
-                            </div>
-                        </div>
-                        <div v-if="expenses.length === 0" class="text-center text-sm text-text/30 py-4">
-                            還沒有記帳紀錄喔
-                        </div>
+                    
+                    <div>
+                        <button @click="addExpense" :disabled="!newExpense.item || !newExpense.amount || newExpense.amount <= 0 || !newExpense.category" class="w-full bg-primary text-white py-3 rounded-lg font-bold text-base shadow-custom-md transform hover:scale-[1.02] transition btn-press disabled:opacity-50 mt-2">
+                            <i class="ph ph-plus-bold"></i> 新增消費紀錄
+                        </button>
                     </div>
                 </div>
+
+
+                <div class="space-y-2 pb-8 pt-4">
+                    <h4 class="font-bold text-base text-text border-b border-gray-200 pb-2 flex items-center gap-2">
+                        <i class="ph ph-list-dashes text-primary text-lg"></i> 歷史記帳清單 (共 {{ expenses.length }} 筆)
+                    </h4>
+                    
+                    <div v-for="(exp, index) in expenses" :key="index" class="app-card p-3 flex justify-between items-center border-l-4" :class="`border-${exp.category}-300`">
+                        <div class="flex flex-col flex-1 truncate pr-2">
+                            <span class="text-sm font-bold text-text truncate">{{ exp.item }}</span>
+                            <span class="text-[10px] text-text/60">{{ exp.date.slice(5) }} · {{ getCategoryName(exp.category) }}</span>
+                        </div>
+                        <div class="flex items-center gap-3 flex-shrink-0">
+                            <div class="text-right">
+                                <p class="font-bold text-text/60 text-xs">₩{{ formatNumber(exp.amount) }}</p>
+                                <p class="text-sm font-black text-primary">NT$ {{ formatNumber(convertKRWToTWD(exp.amount)) }}</p>
+                            </div>
+                            <button @click="removeExpense(index)" class="text-text/30 hover:text-red-500 p-1 btn-press"><i class="ph ph-x-circle text-lg"></i></button>
+                        </div>
+                    </div>
+                    <div v-if="expenses.length === 0" class="text-center text-sm text-text/30 py-4 app-card">
+                        還沒有記帳紀錄喔
+                    </div>
+                </div>
+
             </div>
 
             <div v-if="currentTab === 'info'" class="space-y-6">
@@ -584,9 +565,8 @@
             const calcKRW = ref('');
             const exchangeRate = ref(41.5); 
             
-            // Expenses
+            // Expenses (REFACTORED)
             const expenses = ref([]);
-            
             const newExpense = ref({ 
                 date: new Date().toISOString().split('T')[0], 
                 item: '', 
@@ -598,7 +578,6 @@
             const modalForm = ref({ id: null, time: '', title: '', location: '', desc: '', category: '' });
 
             // --- Fixed Data ---
-
             const desktopTabs = [
                 { id: 'itinerary', name: '行程規劃', icon: 'ph-notebook' },
                 { id: 'money', name: '匯率與記帳', icon: 'ph-currency-krw' },
@@ -620,7 +599,6 @@
                 return tab ? tab.name : '規劃總覽';
             });
             
-            // Icon for Mobile Header
             const currentTabIcon = computed(() => {
                 const tab = desktopTabs.find(t => t.id === currentTab.value);
                 return tab ? tab.icon : 'ph-map-pin-line';
@@ -677,64 +655,50 @@
                 { name: '旅遊諮詢熱線', number: '1330', desc: 'Korea Travel Hotline' }
             ];
 
-            // Itinerary Default Data 
-            const defaultItinerary = [
-                // --- Day 1 (Jan 21) ---
-                { id: 100, day: 1, time: '09:00', title: '從家裡出發', location: '桃園', desc: '前往桃園機場 T2', isFlight: false, category: 'travel' },
-                { id: 101, day: 1, time: '11:00', title: '抵達桃園機場 T2', location: '桃園國際機場 T2', desc: '辦理報到、托運、出境流程。', isFlight: false, category: 'travel' },
-                { id: 102, day: 1, time: '14:25', title: '長榮航空 BR180 (桃園→釜山) 啟程', location: '桃園國際機場 T2', desc: '預計 17:40 抵達釜山金海機場 (PUS)。', isFlight: true, category: 'flight', flightNo: 'BR180', depAirport: 'TPE', arrAirport: 'PUS', depTime: '14:25', terminal: 'T2', gate: 'TBD', boardingTime: '13:55', type: 'departure' },
-                { id: 103, day: 1, time: '17:40', title: '抵達釜山金海機場 (PUS)', location: 'Gimhae International Airport', desc: '入境與領取行李 (約 20-30 分鐘)。', isFlight: false, category: 'travel' },
-                { id: 104, day: 1, time: '18:20', title: '機場 $\rightarrow$ 飯店 (交通轉乘)', location: '釜山金海機場', desc: '輕軌：金海機場站 $\rightarrow$ 沙上站 / 地鐵：沙上 $\rightarrow$ 西面 $\rightarrow$ 南浦站。總交通時間約 60 分鐘。', isFlight: false, category: 'travel' },
-                { id: 105, day: 1, time: '19:00', title: '釜山亞雲樹飯店 Check-in', location: 'Hotel Aventree Busan', desc: '辦理入住手續。', isFlight: false, category: 'flight' },
-                { id: 106, day: 1, time: '20:00', title: '晚餐與夜間自由活動', location: '南浦洞 (扎嘎其市場/BIFF/富平)', desc: '晚餐建議：南浦蔘雞湯 / 元祖釜山豬腳。', isFlight: false, category: 'food' },
-                
-                // --- Day 2 (Jan 22) ---
-                { id: 201, day: 2, time: '08:00', title: '從南浦洞出發 $\rightarrow$ 海雲台站', location: '海雲台站', desc: '地鐵約 50 分鐘，計程車約 25-30 分鐘（若想省時間，推薦計程車）。', isFlight: false, category: 'travel' },
-                { id: 202, day: 2, time: '09:00', title: '海雲台傳統市場 (早餐)', location: '해운대 전통시장', desc: '推薦：手工飯捲、海鮮煎餅等在地美食。停留約 40 分鐘。', isFlight: false, category: 'food' },
-                { id: 203, day: 2, time: '09:45', title: '海雲台海邊散步', location: '海雲台海邊', desc: '簡單散步、拍照。', isFlight: false, category: 'sightseeing' },
-                { id: 204, day: 2, time: '10:00', title: '前往海東龍宮寺', location: '海東龍宮寺', desc: '交通：計程車車程約 15-18 分鐘（最省時）。', isFlight: false, category: 'travel' },
-                { id: 205, day: 2, time: '10:20', title: '海東龍宮寺 參觀', location: '해동용궁사', desc: '參觀：龍門石橋、觀音像、海岸步道。停留約 1.2 小時。', isFlight: false, category: 'sightseeing' },
-                { id: 206, day: 2, time: '11:40', title: '樂天 Outlet (東釜山店)', location: '롯데프리미엄아울렛 동부산점', desc: '可在此用餐及購物 (彈性行程)。', isFlight: false, category: 'shopping' },
-                { id: 207, day: 2, time: '14:10', title: '新世界百貨 (Centum City)', location: '신세계백화점 센텀시티', desc: '逛街、小點心。', isFlight: false, category: 'shopping' },
-                { id: 208, day: 2, time: '15:00', title: 'SPA LAND 汗蒸幕', location: 'SPA LAND (新世界百貨 B1)', desc: '休息放鬆，體驗設施。停留約 2 小時。', isFlight: false, category: 'sightseeing' },
-                { id: 209, day: 2, time: '17:20', title: '返回南浦洞 (地鐵)', location: '南浦站', desc: '地鐵：Centum City $\rightarrow$ 西面 $\rightarrow$ 南浦洞 (約 45 分鐘)。', isFlight: false, category: 'travel' },
-                { id: 210, day: 2, time: '18:10', title: '南浦洞晚餐與夜間逛街', location: '南浦洞 / 西面地下街', desc: '晚餐建議：伍班長燒肉 (海雲台) / 南浦洞周邊餐廳。', isFlight: false, category: 'food' },
+            // 根據 BUSAN.xlsx - 工作表1.csv 重新規劃行程
+            const updatedItinerary = [
+                // Day 1: 115/01/21(三)
+                { id: 101, day: 1, time: '12:00', title: '到達桃園國際機場T2', location: 'TPE T2', desc: '辦理報到、托運、入關。', isFlight: false, category: 'travel' },
+                { id: 102, day: 1, time: '13:55', title: '長榮航空 BR180 登機', location: 'TPE T2', desc: '預計 14:25 起飛。', isFlight: true, category: 'flight', flightNo: 'BR180', depTime: '14:25', terminal: 'T2', gate: 'TBD', boardingTime: '13:55', type: 'departure' },
+                { id: 103, day: 1, time: '17:40', title: '抵達釜山金海機場 (PUS)', location: 'PUS', desc: '取得行李前往地鐵站，從GATE3出來。', isFlight: true, category: 'flight', flightNo: 'BR180', depTime: '14:25', terminal: 'T2', gate: 'TBD', boardingTime: '13:55', type: 'departure' }, // 沿用 BR180 ID但時間不同
+                { id: 104, day: 1, time: '18:30', title: '輕軌 → 沙上站 (Sasang)', location: '金海機場站', desc: '從GATE3走到馬路對面右轉，搭乘金海輕軌。', isFlight: false, category: 'travel' },
+                { id: 105, day: 1, time: '18:40', title: '地鐵 2號線 → 1號線(南浦)', location: '沙上站/西面站', desc: '沙上站轉乘綠色2號線，西面站轉乘橘色1號線到札嘎其站。', isFlight: false, category: 'travel' },
+                { id: 106, day: 1, time: '19:05', title: 'NewCZ南浦店 Check In', location: '札嘎其站 7號出口', desc: '5號出口有電梯可搭，出電梯直走過7號出口左轉。', isFlight: false, category: 'travel' },
+                { id: 107, day: 1, time: '20:00', title: '晚餐與夜間逛街', location: '南浦洞/札嘎其/國際市場', desc: '晚餐建議：南浦蔘雞湯 或 元祖釜山豬腳。', isFlight: false, category: 'food' },
 
-                // --- Day 3 (Jan 23) ---
-                { id: 301, day: 3, time: '09:00', title: 'KKday 釜山一日遊 集合出發', location: '釜山站 1 號出口', desc: '交通方式：一日遊巴士。', isFlight: false, category: 'travel' },
-                { id: 302, day: 3, time: '10:30', title: '天空膠囊 (藍線公園)', location: '海邊列車 (청사포)', desc: '體驗海岸膠囊列車。', isFlight: false, category: 'sightseeing' },
-                { id: 303, day: 3, time: '13:10', title: '海東龍宮寺 (本日第二次造訪)', location: '해동용궁사', desc: 'KKday 行程安排。午餐建議：道熙家海鮮 (近青沙浦)。', isFlight: false, category: 'sightseeing' },
-                { id: 304, day: 3, time: '15:00', title: '佛國寺 (慶州世界遺產)', location: '佛國寺', desc: '慶州世界遺產。', isFlight: false, category: 'sightseeing' },
-                { id: 305, day: 3, time: '16:40', title: '大陵院 + 皇理團路', location: '慶州大陵院 / 皇理團路', desc: '慶州歷史文化區散策。', isFlight: false, category: 'sightseeing' },
-                { id: 306, day: 3, time: '19:00', title: '東宮與月池 (雁鴨池) 夜景', location: '東宮與月池', desc: '欣賞慶州著名夜景。', isFlight: false, category: 'sightseeing' },
-                { id: 307, day: 3, time: '21:50', title: '一日遊返回釜山站', location: '釜山站', desc: '可選擇在西面站提前下車，逛西面大創 2 號店。', isFlight: false, category: 'travel' },
+                // Day 2: 115/01/22(四)
+                { id: 201, day: 2, time: '09:30', title: '飯店出發 → 松島線', location: '札嘎其站', desc: '建議搭計程車，約 5 分鐘抵達松島。', isFlight: false, category: 'travel' },
+                { id: 202, day: 2, time: '09:30', title: '松島天空步道', location: '松島', desc: '早上光線舒服、人比較少。走完約 20-30 分鐘。', isFlight: false, category: 'sightseeing' },
+                { id: 203, day: 2, time: '10:20', title: '松島海上纜車 (Air Cruise)', location: '松島', desc: '建議搭來回纜車，約 1 小時結束。', isFlight: false, category: 'sightseeing' },
+                { id: 204, day: 2, time: '11:30', title: '午餐 (樂天百貨)', location: '樂天百貨光復店', desc: '吃完可至頂樓看影島大橋。', isFlight: false, category: 'food' },
+                { id: 205, day: 2, time: '14:00', title: '觀賞影島大橋開橋', location: '樂天百貨光復店頂樓 (星光花園)', desc: '14:00 準時開橋，提早 10-15 分鐘到卡位。', isFlight: false, category: 'sightseeing' },
+                { id: 206, day: 2, time: '15:00', title: '白淺灘文化村', location: '흰여울문화마을', desc: '看完開橋搭計程車 10-12 分鐘抵達。很好拍照。', isFlight: false, category: 'sightseeing' },
+                { id: 207, day: 2, time: '17:00', title: '晚餐與西面逛街', location: '西面站', desc: '晚餐建議烤肉（西面站烤肉四天王）。逛：西面地下街文創店、大創百貨。', isFlight: false, category: 'food' },
 
-                // --- Day 4 (Jan 24) ---
-                { id: 401, day: 4, time: '08:00', title: '飯店出發 / 早餐', location: '南浦洞', desc: '從飯店出發，準備前往松島。', isFlight: false, category: 'food' },
-                { id: 402, day: 4, time: '09:30', title: '松島天空步道', location: '송도스카이워크', desc: '交通：從札嘎其站叫車約 5 分鐘抵達。停留約 20-30 分鐘。', isFlight: false, category: 'sightseeing' },
-                { id: 403, day: 4, time: '10:20', title: '松島海上纜車 (Air Cruise)', location: '송도해상케이블카', desc: '建議搭乘來回，觀賞海景。約 1 小時。', isFlight: false, category: 'sightseeing' },
-                { id: 404, day: 4, time: '11:30', title: '午餐 (樂天百貨光復店)', location: '롯데백화점 광복점', desc: '在百貨內用餐。', isFlight: false, category: 'food' },
-                { id: 405, day: 4, time: '13:20', title: '樂天百貨頂樓 (星光花園)', location: '樂天百貨光復店頂樓', desc: '提早抵達觀景位，準備觀賞開橋儀式。', isFlight: false, category: 'sightseeing' },
-                { id: 406, day: 4, time: '14:00', title: '觀賞影島大橋開橋儀式', location: '影島大橋 (觀賞點)', desc: '準時開始，約 5-7 分鐘。為最佳俯瞰角度。', isFlight: false, category: 'sightseeing' },
-                { id: 407, day: 4, time: '15:00', title: '白淺灘文化村', location: '흰여울문화마을', desc: '交通：計程車從樂天百貨搭車約 10-12 分鐘。停留約 40-60 分鐘。', isFlight: false, category: 'sightseeing' },
-                { id: 408, day: 4, time: '16:00', title: '太宗台遊園地', location: '태종대유원지', desc: '需搭乘「丹青列車」遊覽燈塔、觀景台。停留約 1.5 小時。', isFlight: false, category: 'sightseeing' },
-                { id: 409, day: 4, time: '18:30', title: '返回南浦洞晚餐', location: '南浦洞', desc: '車程約 20 分鐘。', isFlight: false, category: 'food' },
-                { id: 410, day: 4, time: '20:00', title: '釜山塔夜景', location: '부산타워/용두산공원', desc: '步行/手扶梯至龍頭山公園，俯瞰南浦夜景。停留約 40-60 分鐘。', isFlight: false, category: 'sightseeing' },
-                { id: 411, day: 4, time: '21:00', title: '南浦洞自由逛街 / BIFF 廣場', location: '南浦洞 / BIFF 광장', desc: '夜間自由活動。', isFlight: false, category: 'shopping' },
+                // Day 3: 115/01/23(五) (KKday行程)
+                { id: 301, day: 3, time: '09:00', title: 'KKday行程集合出發', location: '釜山站1號出口', desc: '集合前往慶州 (佛國寺、大陵院+皇理團路、東宮與月池)。', isFlight: false, category: 'travel' },
+                { id: 302, day: 3, time: '10:30', title: '天空膠囊 (藍線公園)', location: '海邊列車', desc: 'KKday行程安排。', isFlight: false, category: 'sightseeing' },
+                { id: 303, day: 3, time: '13:10', title: '海東龍宮寺', location: '해동용궁사', desc: 'KKday行程安排。', isFlight: false, category: 'sightseeing' },
+                { id: 304, day: 3, time: '21:50', title: '返回釜山站', location: '西面站提前下車', desc: '可在西面站提前下車，逛西面的大創2號店。', isFlight: false, category: 'travel' },
+                { id: 305, day: 3, time: '22:30', title: '宵夜/回飯店', location: '西面/南浦洞', desc: '西面大創2號店四層樓可逛。', isFlight: false, category: 'shopping' },
 
-                // --- Day 5 (Jan 25) ---
-                { id: 501, day: 5, time: '08:00', title: '早餐 + 整理行李', location: '釜山亞雲樹飯店', desc: 'Check Out Time：11:00 AM，行李寄放櫃檯。', isFlight: false, category: 'food' },
-                { id: 502, day: 5, time: '09:00', title: '飯店出發 $\rightarrow$ 甘川洞文化村', location: '甘川洞文化村', desc: '交通：計程車從南浦洞搭車約 10-15 分鐘。', isFlight: false, category: 'travel' },
-                { id: 503, day: 5, time: '09:15', title: '甘川洞文化村散策', location: '감천문화마을', desc: '建議參觀：小王子拍照點、觀景平台。停留約 2 小時。', isFlight: false, category: 'sightseeing' },
-                { id: 504, day: 5, time: '11:30', title: '返回南浦洞', location: '南浦洞', desc: '交通：計程車車程約 10-15 分鐘。', isFlight: false, category: 'travel' },
-                { id: 505, day: 5, time: '11:45', title: '午餐 (南浦洞)', location: '南浦洞', desc: '可選擇元祖蔘雞湯、富平市場小吃等。', isFlight: false, category: 'food' },
-                { id: 506, day: 5, time: '13:00', title: '南浦洞自由活動/購物', location: '光復路購物街', desc: '進行最後的購物補貨。', isFlight: false, category: 'shopping' },
-                { id: 507, day: 5, time: '14:30', title: '回飯店領行李', location: '釜山亞雲樹飯店', desc: '檢查護照、退稅單等重要物品。', isFlight: false, category: 'travel' },
-                { id: 508, day: 5, time: '15:00', title: '南浦洞 $\rightarrow$ 金海機場', location: 'Gimhae International Airport', desc: '交通：地鐵 $\rightarrow$ 輕軌。需預留足夠時間 (全程約 60 分鐘)。', isFlight: false, category: 'travel' },
-                { id: 509, day: 5, time: '16:00', title: '抵達金海機場', location: 'Gimhae International Airport', desc: '辦理報到、托運、KIOSK 掃描退稅條碼。', isFlight: false, category: 'travel' },
-                { id: 510, day: 5, time: '17:20', title: '候機/免稅店購物/領退稅金', location: 'Gimhae International Airport', desc: '出境後到 4 號區域的退稅櫃檯領取現金。', isFlight: false, category: 'shopping' },
-                { id: 511, day: 5, time: '18:55', title: '回程: 長榮航空 BR163 (釜山→桃園) 啟程', location: 'Gimhae International Airport', desc: '預計 20:25 抵達桃園機場 T2。', isFlight: true, category: 'flight', flightNo: 'BR163', depAirport: 'PUS', arrAirport: 'TPE', depTime: '18:55', terminal: 'Intl', gate: 'TBD', boardingTime: '18:25', type: 'return' },
-                { id: 512, day: 5, time: '20:25', title: '抵達桃園機場', location: '桃園國際機場 T2', desc: '旅行結束', isFlight: false, category: 'travel' },
+                // Day 4: 115/01/24(六)
+                { id: 401, day: 4, time: '08:00', title: '飯店出發 → 海雲台', location: '南浦洞', desc: '地鐵約 50 分鐘，計程車約 20000 KRW。', isFlight: false, category: 'travel' },
+                { id: 402, day: 4, time: '10:30', title: '東釜山樂天OUTLET', location: '東釜山', desc: '或可玩旁邊的滑車(若不怕冷)。', isFlight: false, category: 'shopping' },
+                { id: 403, day: 4, time: '13:55', title: '海雲台傳統市場', location: '海雲台', desc: '吃古來司魚糕 / 31公分海鮮湯麵 / 逛傳統市場。', isFlight: false, category: 'food' },
+                { id: 404, day: 4, time: '14:25', title: '新世界百貨 (Centum City)', location: 'Centum City', desc: '主要逛街購物。', isFlight: false, category: 'shopping' },
+                { id: 405, day: 4, time: '15:30', title: 'SPA LAND 汗蒸幕', location: '新世界百貨 B1', desc: '預計停留 2-3 小時。', isFlight: false, category: 'sightseeing' },
+                { id: 406, day: 4, time: '18:30', title: '晚餐吃烤肉', location: '西面站', desc: '烤肉的男子、味贊王、釜山宅烤肉等。', isFlight: false, category: 'food' },
+                { id: 407, day: 4, time: '18:40', title: '西面站逛街', location: '西面', desc: '西面地下街文創店 / 大創百貨。', isFlight: false, category: 'shopping' },
+
+                // Day 5: 115/01/25(日)
+                { id: 501, day: 5, time: '08:00', title: '早餐 + 整理行李', location: '飯店/附近', desc: '行李寄放在飯店櫃檯。', isFlight: false, category: 'food' },
+                { id: 502, day: 5, time: '09:15', title: '甘川洞文化村散策', location: '감천문화마을', desc: '建議搭計程車，從小王子拍照點開始。停留約 2 小時。', isFlight: false, category: 'sightseeing' },
+                { id: 503, day: 5, time: '11:30', title: '搭計程車返回南浦洞', location: '南浦洞', desc: '車資約 6,000–8,000 韓幣。', isFlight: false, category: 'travel' },
+                { id: 504, day: 5, time: '12:00', title: '午餐 (南浦洞)', location: '南浦洞', desc: '最後的逛街與用餐時間。', isFlight: false, category: 'food' },
+                { id: 505, day: 5, time: '16:00', title: '飯店取行李', location: 'NewCZ南浦店', desc: '準備前往金海機場。', isFlight: false, category: 'travel' },
+                { id: 506, day: 5, time: '17:00', title: '抵達釜山金海機場', location: 'PUS', desc: '辦理退稅、Check In。', isFlight: false, category: 'travel' },
+                { id: 507, day: 5, time: '18:55', title: '回程: 長榮航空 BR163 (釜山→桃園)', location: 'Gimhae International Airport', desc: '預計 20:25 抵達桃園機場 T2。', isFlight: true, category: 'flight', flightNo: 'BR163', depTime: '18:55', terminal: 'Intl', gate: 'TBD', boardingTime: '18:25', type: 'return' },
             ];
 
 
@@ -744,15 +708,15 @@
             onMounted(() => {
                 newExpense.value.date = new Date().toISOString().split('T')[0];
 
-                // Load from LocalStorage (Using v9.3 key)
-                const savedItinerary = localStorage.getItem('busan_2026_v9_itinerary'); 
-                // 【修復：統一Expense的儲存鍵名以確保載入】
-                const savedExpenses = localStorage.getItem('busan_2026_v9_expenses');
-                const savedRate = localStorage.getItem('busan_2026_rate_v9');
-                const savedLuggage = localStorage.getItem('busan_2026_luggage_v9');
-                const savedMustBuy = localStorage.getItem('busan_2026_mustbuy_v9');
+                // Load from LocalStorage (Using v10 key)
+                const savedItinerary = localStorage.getItem('busan_2026_v10_itinerary'); 
+                const savedExpenses = localStorage.getItem('busan_2026_v10_expenses');
+                const savedRate = localStorage.getItem('busan_2026_rate_v10');
+                const savedLuggage = localStorage.getItem('busan_2026_luggage_v10');
+                const savedMustBuy = localStorage.getItem('busan_2026_mustbuy_v10');
                 
-                itinerary.value = savedItinerary ? JSON.parse(savedItinerary) : defaultItinerary;
+                // Use updated itinerary
+                itinerary.value = savedItinerary ? JSON.parse(savedItinerary) : updatedItinerary;
                 if (savedExpenses) expenses.value = JSON.parse(savedExpenses);
                 if (savedRate && parseFloat(savedRate) > 0) {
                      exchangeRate.value = parseFloat(savedRate);
@@ -765,11 +729,12 @@
 
             // --- Watchers for Auto-Save ---
             watch([itinerary, expenses, exchangeRate, luggageList, mustBuyList], () => {
-                localStorage.setItem('busan_2026_v9_itinerary', JSON.stringify(itinerary.value));
-                localStorage.setItem('busan_2026_v9_expenses', JSON.stringify(expenses.value));
-                localStorage.setItem('busan_2026_rate_v9', exchangeRate.value);
-                localStorage.setItem('busan_2026_luggage_v9', JSON.stringify(luggageList.value));
-                localStorage.setItem('busan_2026_mustbuy_v9', JSON.stringify(mustBuyList.value));
+                // Save with v10 key
+                localStorage.setItem('busan_2026_v10_itinerary', JSON.stringify(itinerary.value));
+                localStorage.setItem('busan_2026_v10_expenses', JSON.stringify(expenses.value));
+                localStorage.setItem('busan_2026_rate_v10', exchangeRate.value);
+                localStorage.setItem('busan_2026_luggage_v10', JSON.stringify(luggageList.value));
+                localStorage.setItem('busan_2026_mustbuy_v10', JSON.stringify(mustBuyList.value));
             }, { deep: true });
 
             // --- Computed ---
@@ -788,120 +753,39 @@
                 }
                 return filteredItinerary.value.filter(item => item.category === activeCategory.value);
             });
-
-            const totalExpenseTWD = computed(() => {
-                const totalKRW = expenses.value.reduce((sum, item) => sum + item.amount, 0);
+            
+            // Utility function to convert KRW to TWD
+            const convertKRWToTWD = (krwAmount) => {
+                const krw = Number(krwAmount) || 0;
                 const rate = Number(exchangeRate.value);
-                // 【修復：檢查匯率是否有效，防止除以零】
                 if (rate <= 0 || isNaN(rate)) return 0;
-                return Math.round(totalKRW / rate);
+                return Math.round(krw / rate);
+            };
+
+            // Expense Computed Properties (REFACTORED)
+            const totalExpenseKRW = computed(() => {
+                // Only sum non-flight/non-accommodation expenses
+                return expenses.value
+                    .filter(item => item.category !== 'flight')
+                    .reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+            });
+            
+            const totalExpenseTWD = computed(() => {
+                return convertKRWToTWD(totalExpenseKRW.value);
             });
             
             const calculatedTWD = computed(() => {
-                const krw = Number(calcKRW.value) || 0;
-                const rate = Number(exchangeRate.value); 
-                
-                // 【修復：檢查匯率是否有效，防止除以零】
-                if (rate <= 0 || isNaN(rate)) {
-                    return 0; 
-                }
-                
-                return Math.round(krw / rate);
-            });
-
-            // Expense Breakdown for Chart
-            const expenseBreakdownTWD = computed(() => {
-                const breakdown = {};
-                const rate = Number(exchangeRate.value); 
-                
-                // 【修復：檢查匯率是否有效，無效則跳過計算】
-                if (rate <= 0 || isNaN(rate)) return {}; 
-                
-                // 1. Calculate TWD per category
-                expenses.value.forEach(exp => {
-                    // Exclude 'flight' category from daily/general expense chart
-                    if (exp.category === 'flight') return; 
-
-                    // 確保金額是有效數字
-                    const expAmount = Number(exp.amount);
-                    if (isNaN(expAmount) || expAmount <= 0) return;
-
-                    const twdAmount = Math.round(expAmount / rate);
-                    if (breakdown[exp.category]) {
-                        breakdown[exp.category].amount += twdAmount;
-                    } else {
-                        breakdown[exp.category] = { amount: twdAmount };
-                    }
-                });
-                
-                // 2. Add Name and Color
-                const nonFlightCategories = filterCategories.filter(c => c.key !== 'all' && c.key !== 'flight');
-                
-                nonFlightCategories.forEach(c => {
-                    if (breakdown[c.key]) {
-                        breakdown[c.key].name = getCategoryName(c.key);
-                        breakdown[c.key].color = getCategoryColorCode(c.key);
-                    }
-                });
-                
-                // 3. Calculate total non-flight TWD and percentage
-                const totalNonFlightTWD = Object.values(breakdown).reduce((sum, item) => sum + item.amount, 0);
-
-                // 4. Calculate percentage
-                nonFlightCategories.forEach(c => {
-                    if (breakdown[c.key]) {
-                        const amount = breakdown[c.key].amount;
-                        breakdown[c.key].percentage = totalNonFlightTWD > 0 ? Math.round((amount / totalNonFlightTWD) * 100) : 0;
-                    } else {
-                        // Ensure all possible categories are represented, even if amount is 0
-                        breakdown[c.key] = {
-                            name: getCategoryName(c.key),
-                            amount: 0,
-                            percentage: 0,
-                            color: getCategoryColorCode(c.key)
-                        };
-                    }
-                });
-                
-                // Sort by amount descending
-                return Object.fromEntries(
-                    Object.entries(breakdown)
-                        .sort(([, a], [, b]) => b.amount - a.amount)
-                );
+                return convertKRWToTWD(calcKRW.value);
             });
             
-            // Computed property for Pie Chart CSS Background
-            const pieChartBackground = computed(() => {
-                const breakdown = expenseBreakdownTWD.value;
-                const entries = Object.values(breakdown).filter(item => item.percentage > 0);
-                
-                // 【修復：無資料時返回安全值】
-                if (entries.length === 0) {
-                    return '#E2E8F0'; // Default background when no data
-                }
-                
-                let currentDegree = 0;
-                const segments = entries.map(item => {
-                    const color = item.color;
-                    const endDegree = currentDegree + (item.percentage / 100) * 360;
-                    const segment = `${color} ${currentDegree}deg ${endDegree}deg`;
-                    currentDegree = endDegree;
-                    return segment;
-                });
-                
-                // Add default grey background if the sum of percentages is less than 100 
-                if (currentDegree < 360) {
-                    segments.push(`#E2E8F0 ${currentDegree}deg 360deg`);
-                }
-
-                return segments.join(', ');
+            const newExpenseTWD = computed(() => {
+                 return convertKRWToTWD(newExpense.value.amount);
             });
-
 
             // Flight Info Extraction
             const flightInfo = computed(() => {
-                const dep = itinerary.value.find(i => i.isFlight && i.type === 'departure');
-                const ret = itinerary.value.find(i => i.isFlight && i.type === 'return');
+                const dep = updatedItinerary.find(i => i.isFlight && i.type === 'departure');
+                const ret = updatedItinerary.find(i => i.isFlight && i.type === 'return');
                 
                 const defaultDep = { flightNo: 'BR180', depAirport: 'TPE', arrAirport: 'PUS', depTime: '14:25', terminal: 'T2', gate: 'TBD', boardingTime: '13:55' };
                 const defaultRet = { flightNo: 'BR163', depAirport: 'PUS', arrAirport: 'TPE', depTime: '18:55', terminal: 'Intl', gate: 'TBD', boardingTime: '18:25' };
@@ -912,11 +796,11 @@
                 };
             });
 
-            // Hotel Info Extraction
+            // Hotel Info Extraction (based on the provided file)
             const hotelInfo = computed(() => {
                 return {
-                    name: '釜山亞雲樹飯店 (Hotel Aventree Busan)',
-                    address: '釜山廣域市中區南浦街 25 / 부산 중구 남포길 25', 
+                    name: 'NewCZ南浦店',
+                    address: '釜山廣域市中區光復路8號街 32 / 부산광역시 중구 광복로8번길 32', // Used placeholder address based on description
                 };
             });
 
@@ -928,18 +812,20 @@
             
             const getCategoryName = (key) => filterCategories.find(c => c.key === key)?.name || '未知';
             const getCategoryColor = (key) => filterCategories.find(c => c.key === key)?.color || 'text-text/50';
-            const getCategoryColorCode = (key) => filterCategories.find(c => c.key === key)?.colorCode || '#E2E8F0';
 
             const openModal = (item) => {
                 if (item) {
                     isEditMode.value = true;
-                    // Prevent editing flight items 
-                    if (item.isFlight) return alert('航班資訊請直接在「機票/住宿」頁面中檢視。'); 
+                    if (item.isFlight) return alert('航班資訊請在「機票/住宿」頁面中檢視，無法修改。'); 
 
                     modalForm.value = { ...item };
                 } else {
                     isEditMode.value = false;
-                    modalForm.value = { id: Date.now(), time: '12:00', title: '', location: '', desc: '', category: 'sightseeing' };
+                    // Auto-fill time to current Day's last event + 1 hour, or default
+                    const lastEvent = filteredItinerary.value.at(-1);
+                    const defaultTime = lastEvent ? incrementTime(lastEvent.time) : '12:00';
+
+                    modalForm.value = { id: Date.now(), time: defaultTime, title: '', location: '', desc: '', category: 'sightseeing' };
                 }
                 showModal.value = true;
             };
@@ -966,24 +852,40 @@
                 if(confirm('確定刪除此行程嗎？')) itinerary.value = itinerary.value.filter(item => item.id !== id);
             };
 
-            // Expense Methods
+            // Helper function for time increment
+            const incrementTime = (timeStr) => {
+                const [h, m] = timeStr.split(':').map(Number);
+                const date = new Date();
+                date.setHours(h);
+                date.setMinutes(m);
+                date.setHours(date.getHours() + 1);
+                const newH = String(date.getHours()).padStart(2, '0');
+                const newM = String(date.getMinutes()).padStart(2, '0');
+                return `${newH}:${newM}`;
+            };
+            
+            // Expense Methods (REFACTORED)
             const addExpense = () => {
                 const amount = Number(newExpense.value.amount);
-                // 【修復：確保金額是有效數字且大於 0】
-                if (!newExpense.value.item || isNaN(amount) || amount <= 0 || !newExpense.value.category) return;
+                if (!newExpense.value.item || isNaN(amount) || amount <= 0 || !newExpense.value.category) {
+                    return;
+                }
                 
+                // Unshift adds to the beginning (LIFO - Last In, First Out)
                 expenses.value.unshift({
                     date: newExpense.value.date || new Date().toISOString().split('T')[0],
                     item: newExpense.value.item,
                     amount: amount, 
                     category: newExpense.value.category
                 });
+                // Reset form fields
                 newExpense.value.item = '';
-                newExpense.value.amount = null; // 保持為 null 讓 disabled 屬性正常運作
+                newExpense.value.amount = null; 
+                newExpense.value.category = ''; 
             };
 
             const removeExpense = (index) => {
-                if(confirm('刪除這筆帳目？')) expenses.value.splice(index, 1);
+                if(confirm('確定刪除這筆記帳紀錄嗎？')) expenses.value.splice(index, 1);
             };
 
             // Checklist Methods (Luggage & Must-Buy)
@@ -1012,7 +914,7 @@
             const searchGoogleMap = () => {
                 const q = mapQuery.value || 'Busan';
                 // Using a safe, general search URL for Google Maps
-                window.open(`https://www.google.com/maps/search/${encodeURIComponent(q)}`, '_blank');
+                window.open(`https://www.google.com/maps/search/$${encodeURIComponent(q)}`, '_blank');
             };
             const getNaverMapLink = (query) => `https://map.naver.com/p/search/${encodeURIComponent(query)}`;
             
@@ -1034,16 +936,15 @@
                 currentTab, activeDay, currentTabName, currentTabIcon, activeCategory,
                 showModal, isEditMode, modalForm,
                 itinerary, expenses, exchangeRate, filteredItineraryByCat,
-                totalExpenseTWD, newExpense, mapQuery,
+                totalExpenseTWD, totalExpenseKRW, newExpense, newExpenseTWD, mapQuery,
+                calcKRW, calculatedTWD,
                 luggageList, newLuggageItem, mustBuyList, newMustBuyItem,
                 flightInfo, hotelInfo, emergencyContacts, simulatedWeather, 
-                calculatedTWD, calcKRW, expenseBreakdownTWD,
                 desktopTabs, mobileTabs, filterCategories,
-                pieChartBackground, // Expose for CSS binding
-                openModal, saveItem, deleteItem, addExpense, removeExpense,
+                openModal, saveItem, deleteItem, addExpense, removeExpense, convertKRWToTWD,
                 addLuggage, removeLuggage, addMustBuy, removeMustBuy,
                 formatNumber, searchNaverMap, searchGoogleMap, getNaverMapLink, getWeatherIcon, getDayInfo,
-                getCategoryName, getCategoryColor, getCategoryColorCode
+                getCategoryName, getCategoryColor
             };
         }
     }).mount('#app');
