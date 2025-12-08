@@ -3,26 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🌹 2026 釜山冷吱吱 🌹</title>
+    <title>🌊 2026 釜山浪漫之旅 🌊</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     
     <script>
-        // --- Custom Tailwind Configuration for Rose Gold Theme ---
+        // --- Custom Tailwind Configuration for Aqua Blue Theme ---
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         primary: {
-                            light: '#F7DBE0', // Light Dusty Rose
-                            DEFAULT: '#D8A7A7', // Dusty Rose Gold
-                            dark: '#A67979', // Darker Rose
+                            light: '#CDE8F6', // Very Light Aqua Blue
+                            DEFAULT: '#68BBE3', // Aqua Blue
+                            dark: '#47A1C7', // Darker Aqua Blue
                         },
-                        text: '#4A5568', // Dark Grey for contrast
-                        background: '#FFF9F9', // Near-white, light pink tint
+                        text: '#2D3748', // Darker Grey for contrast
+                        background: '#FFFBF5', // Light Yellow Tint Background (淺黃)
                         card: '#FFFFFF', 
+                        card_accent: '#FFECB3', // Light Yellow for backgrounds (淺黃)
+                        // Keeping secondary accents for category distinction
                         accent: {
                             food: '#E97451',     // Salmon Red
                             shopping: '#639AA6', // Soft Teal
@@ -32,10 +34,10 @@
                     },
                     fontFamily: {
                         sans: ['"Noto Sans TC"', 'sans-serif'],
-                        serif: ['"Playfair Display"', 'serif'], // Used for titles
+                        serif: ['"Playfair Display"', 'serif'], 
                     },
                     boxShadow: {
-                        // Refined, softer shadows
+                        // Refined, softer shadows with blue tint
                         'custom-sm': '0 2px 4px 0 rgba(0, 0, 0, 0.04)',
                         'custom-md': '0 6px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 8px -4px rgba(0, 0, 0, 0.04)',
                         'custom-lg': '0 12px 25px -5px rgba(0, 0, 0, 0.1), 0 6px 12px -6px rgba(0, 0, 0, 0.05)',
@@ -49,8 +51,8 @@
     <style>
         /* Base Styles for Refined Look */
         body {
-            background-color: #FFF9F9; /* background */
-            color: #4A5568; /* text */
+            background-color: #FFFBF5; /* background (淺黃) */
+            color: #2D3748; /* text */
             font-family: 'Noto Sans TC', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
@@ -58,13 +60,14 @@
         .app-card {
             background-color: #FFFFFF; 
             border-radius: 16px; /* Extra rounded corners for cute/chic look */
-            box-shadow: 0 10px 20px rgba(216, 167, 167, 0.15); /* Rose Gold tinted shadow */
+            /* Aqua Blue tinted shadow */
+            box-shadow: 0 10px 20px rgba(104, 187, 227, 0.15); 
             border: 1px solid #F0F0F0;
             transition: all 0.3s ease;
         }
 
         .app-card:hover {
-            box-shadow: 0 15px 30px rgba(216, 167, 167, 0.25);
+            box-shadow: 0 15px 30px rgba(104, 187, 227, 0.25);
         }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -80,7 +83,7 @@
             font-family: 'Playfair Display', serif;
             font-weight: 700;
             letter-spacing: 0.5px;
-            color: #D8A7A7;
+            color: #68BBE3; /* Aqua Blue */
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.05);
         }
 
@@ -94,7 +97,7 @@
         @media (min-width: 1024px) {
             #app-container {
                 display: grid;
-                grid-template-columns: 320px 1fr; /* Wider sidebar */
+                grid-template-columns: 320px 1fr; 
                 min-height: 100vh;
             }
             .main-content {
@@ -116,10 +119,10 @@
         <aside class="sidebar fixed top-0 left-0 h-full w-80 p-8 lg:block hidden">
             <header class="mb-10">
                 <h1 class="text-4xl font-black flex items-center gap-2 chic-title">
-                    <i class="ph ph-sparkle text-5xl" weight="fill"></i>
-                    2026 BUSAN 
+                    <i class="ph ph-waves text-5xl" weight="fill"></i>
+                    BUSAN CHIC
                 </h1>
-                <p class="text-sm text-text/70 font-medium mt-2 tracking-wider"> 2026 BUSAN</p>
+                <p class="text-sm text-text/70 font-medium mt-2 tracking-wider">五日浪漫之旅規劃</p>
             </header>
             
             <nav class="space-y-2">
@@ -171,59 +174,39 @@
                     </div>
                 </div>
 
-                <div class="flex space-x-3 overflow-x-auto no-scrollbar pb-3">
-                    <button v-for="cat in filterCategories" :key="cat.key"
-                        @click="activeCategory = cat.key"
-                        :class="[
-                            activeCategory === cat.key ? 'text-white shadow-custom-md' : 'bg-white text-text/80 border border-gray-300 hover:bg-gray-100',
-                            activeCategory === cat.key ? `bg-accent-${cat.key} border-accent-${cat.key}` : '',
-                            cat.key === 'all' && activeCategory === 'all' ? 'bg-primary' : ''
-                        ]"
-                        class="flex-shrink-0 px-6 py-3 rounded-full flex items-center gap-3 text-base font-bold transition-colors btn-press border">
-                        <i :class="cat.icon" :weight="activeCategory === cat.key ? 'fill' : 'bold'" class="text-xl"></i>
-                        {{ cat.name }}
-                    </button>
-                </div>
-
-
                 <div class="space-y-6 pt-4">
-                    <div v-if="filteredItineraryByCat.length === 0" class="text-center py-16 text-text/40 app-card border-dashed border-2">
-                        <i class="ph ph-confetti text-4xl mb-3"></i>
-                        <p class="text-lg">本日無符合「{{ filterCategories.find(c => c.key === activeCategory)?.name }}」的浪漫行程 🥂</p>
-                    </div>
-
-                    <div v-for="item in filteredItineraryByCat" :key="item.id" 
+                    
+                    <div v-for="item in filteredItinerary" :key="item.id" 
                         @click="item.isFlight ? null : openModal(item)"
-                        class="app-card p-5 flex gap-5 relative transition-all duration-300 border-l-8"
+                        class="app-card p-5 flex gap-4 relative transition-all duration-300 border-l-8"
                         :class="[
                             item.isFlight ? 'border-primary' : `border-accent-${item.category}`, 
                             {'cursor-pointer hover:border-l-[12px]': !item.isFlight}
                         ]">
                         
-                        <div class="flex flex-col items-center min-w-[70px] flex-shrink-0">
-                            <span class="text-xl font-black text-primary px-1 font-mono leading-tight">
-                                {{ item.time }}
-                            </span>
-                            <div class="h-full w-1 bg-primary/10 my-3 rounded-full"></div>
-                        </div>
-
                         <div class="flex-1 pb-1 min-w-0">
-                            <div class="flex justify-between items-start">
-                                <h3 class="font-black text-lg text-text leading-snug pr-6">{{ item.title }}</h3>
-                                <span v-if="item.category && item.category !== 'flight'" 
-                                    :class="getCategoryBgColor(item.category)"
+                            
+                            <div class="flex items-center mb-2">
+                                <span class="text-xl font-black text-primary font-mono mr-3 leading-none tracking-tight flex-shrink-0">
+                                    {{ item.time }}
+                                </span>
+                                <span v-if="item.category"
+                                    :class="[getCategoryBgColor(item.category), {'bg-primary/20 text-primary': item.isFlight}]"
                                     class="text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap shadow-custom-sm">
+                                    <i :class="getCategoryIcon(item.category)" class="mr-1 text-sm"></i>
                                     {{ getCategoryName(item.category) }}
                                 </span>
                             </div>
+
+                            <h3 class="font-black text-lg text-text leading-snug pr-6">{{ item.title }}</h3>
                             
                             <div class="mt-2 flex items-center text-sm text-text/60 font-medium">
                                 <i :class="item.isFlight ? 'ph ph-airplane-tilt text-primary' : 'ph ph-map-pin text-text/40'" class="mr-2 text-lg"></i>
                                 <span class="truncate">{{ item.location }}</span>
                             </div>
 
-                            <p v-if="item.desc" class="text-base text-text/90 mt-3 p-4 bg-primary/10 rounded-xl border-l-4 border-primary/40 w-full whitespace-pre-wrap shadow-inner">
-                               <i class="ph ph-note-pencil mr-1 text-primary/70" weight="bold"></i>
+                            <p v-if="item.desc" class="text-base text-text/90 mt-3 p-4 bg-card_accent/40 rounded-xl border-l-4 border-card_accent/80 w-full whitespace-pre-wrap shadow-inner">
+                               <i class="ph ph-note-pencil mr-1 text-text/60" weight="bold"></i>
                                {{ item.desc }}
                             </p>
 
@@ -245,7 +228,7 @@
                     <i class="ph ph-currency-krw text-primary text-4xl" weight="fill"></i> 浪漫預算中心
                 </h3>
                 
-                <div class="app-card p-6 bg-primary/10 border-l-8 border-primary/50 space-y-4 shadow-custom-lg">
+                <div class="app-card p-6 bg-card_accent/40 border-l-8 border-primary/50 space-y-4 shadow-custom-lg">
                     <div class="flex justify-between items-center">
                         <h4 class="font-bold text-lg text-text">₩/NT$ 換算機</h4>
                         <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-custom-md border-2 border-primary/30">
@@ -323,7 +306,7 @@
                     
                     <div>
                         <button @click="addExpense" :disabled="!newExpense.item || !newExpense.amount || newExpense.amount <= 0 || !newExpense.category" class="w-full bg-primary text-white py-4 rounded-full font-black text-lg shadow-custom-lg transform hover:scale-[1.01] transition btn-press disabled:opacity-50 mt-4">
-                            <i class="ph ph-sparkle-fill mr-1"></i> 儲存浪漫支出
+                            <i class="ph ph-waves-fill mr-1"></i> 儲存浪漫支出
                         </button>
                     </div>
                 </div>
@@ -414,7 +397,7 @@
 
 
                 <h3 class="font-black text-3xl chic-title pt-4 flex items-center gap-3 border-b border-primary/20 pb-4"><i class="ph ph-buildings text-primary text-4xl" weight="fill"></i> 浪漫住宿</h3>
-                <div class="app-card p-6 border-8 border-primary/20 shadow-custom-xl">
+                <div class="app-card p-6 border-8 border-primary/20 bg-card_accent/40 shadow-custom-xl">
                     <div class="flex items-center mb-4">
                         <i class="ph ph-bed text-3xl text-primary mr-3" weight="fill"></i>
                         <h2 class="text-2xl font-black text-text leading-tight">{{ hotelInfo.name }}</h2>
@@ -439,7 +422,7 @@
                             <span class="text-sm text-text/60 font-black">({{ luggageList.filter(i => i.checked).length }} / {{ luggageList.length }})</span>
                         </h3>
                         
-                        <div class="flex gap-3 p-2 rounded-xl bg-primary/10 border border-primary/20">
+                        <div class="flex gap-3 p-2 rounded-xl bg-card_accent/40 border border-primary/20">
                             <input v-model="newLuggageItem" @keyup.enter="addLuggage" type="text" placeholder="新增浪漫必需品..." class="flex-1 bg-white p-3 rounded-lg text-base outline-none border focus:border-primary shadow-custom-sm">
                             <button @click="addLuggage" class="bg-primary text-white px-5 h-12 rounded-lg flex items-center justify-center btn-press shadow-custom-md text-base font-bold whitespace-nowrap hover:scale-[1.02]"><i class="ph ph-plus-bold mr-1"></i> 新增</button>
                         </div>
@@ -566,7 +549,7 @@
                 </div>
             </div>
             <button @click="saveItem" :disabled="!modalForm.title || !modalForm.category" class="w-full mt-6 py-4 bg-primary text-white font-black rounded-full shadow-custom-lg btn-press disabled:opacity-50 text-lg">
-                <i class="ph ph-heart-fill mr-1"></i> 儲存浪漫筆記
+                <i class="ph ph-seal-check-fill mr-1"></i> 儲存浪漫筆記
             </button>
         </div>
     </div>
@@ -581,7 +564,7 @@
             // --- State ---
             const currentTab = ref('itinerary');
             const activeDay = ref(1);
-            const activeCategory = ref('all'); 
+            // activeCategory removed as per user request, defaulted to show all
             const showModal = ref(false);
             const isEditMode = ref(false);
             const mapQuery = ref('');
@@ -653,8 +636,9 @@
                 5: { code: 0, temp: 11, rain: 0 }, 
             });
 
+            // Added icon to filterCategories for use in the compacted list
             const filterCategories = [
-                { key: 'all', name: '所有項目', icon: 'ph-heart', color: 'text-primary', colorCode: '#D8A7A7' },
+                { key: 'all', name: '所有項目', icon: 'ph-heart', color: 'text-primary', colorCode: '#68BBE3' },
                 { key: 'food', name: '美食饗宴', icon: 'ph-fork-knife', color: 'text-accent-food', colorCode: '#E97451' },
                 { key: 'shopping', name: '血拚購物', icon: 'ph-shopping-bag', color: 'text-accent-shopping', colorCode: '#639AA6' },
                 { key: 'sightseeing', name: '美景探索', icon: 'ph-mountain', color: 'text-accent-sightseeing', colorCode: '#C6B060' },
@@ -686,7 +670,7 @@
                 { name: '旅遊諮詢熱線', number: '1330', desc: 'Korea Travel Hotline' }
             ];
 
-            // 根據 BUSAN.xlsx - 工作表1.csv 重新規劃行程 (同 V10 確保行程正確)
+            // Itinerary data source (kept as is from previous correct iteration)
             const updatedItinerary = [
                 // Day 1: 115/01/21(三)
                 { id: 101, day: 1, time: '12:00', title: '到達桃園國際機場T2', location: 'TPE T2', desc: '辦理報到、托運、入關。', isFlight: false, category: 'travel' },
@@ -739,8 +723,8 @@
             onMounted(() => {
                 newExpense.value.date = new Date().toISOString().split('T')[0];
 
-                // Load from LocalStorage (Using v11 key for the new theme)
-                const storageKey = 'busan_2026_v11';
+                // Load from LocalStorage (Using v12 key for the new theme)
+                const storageKey = 'busan_2026_v12';
                 const savedData = localStorage.getItem(storageKey);
                 
                 if (savedData) {
@@ -766,24 +750,16 @@
                     luggageList: luggageList.value,
                     mustBuyList: mustBuyList.value,
                 };
-                localStorage.setItem('busan_2026_v11', JSON.stringify(dataToSave));
+                localStorage.setItem('busan_2026_v12', JSON.stringify(dataToSave));
             }, { deep: true });
 
             // --- Computed ---
 
-            // Step 1: Filter by Day
+            // Filtered Itinerary (now only filters by day, category filter removed)
             const filteredItinerary = computed(() => {
                 return itinerary.value
                     .filter(item => item.day === activeDay.value)
                     .sort((a, b) => a.time.localeCompare(b.time));
-            });
-
-            // Step 2: Filter by Category (if activeCategory is not 'all')
-            const filteredItineraryByCat = computed(() => {
-                if (activeCategory.value === 'all') {
-                    return filteredItinerary.value;
-                }
-                return filteredItinerary.value.filter(item => item.category === activeCategory.value);
             });
             
             // Utility function to convert KRW to TWD
@@ -842,11 +818,21 @@
             const getDayInfo = (dayIndex) => tripDates[dayIndex] || { date: `Day ${dayIndex}`, day: '', fullDay: `Day ${dayIndex}` };
             
             const getCategoryName = (key) => filterCategories.find(c => c.key === key)?.name || '未知';
+            const getCategoryIcon = (key) => filterCategories.find(c => c.key === key)?.icon || 'ph-question';
             const getCategoryColor = (key) => filterCategories.find(c => c.key === key)?.color || 'text-text/50';
+            
+            // Updated to use the new card_accent for non-flight backgrounds
             const getCategoryBgColor = (key) => {
                 const cat = filterCategories.find(c => c.key === key);
                 if (!cat) return 'bg-gray-200 text-text/80';
-                return `bg-accent-${cat.key}/20 text-accent-${cat.key}`; // e.g., bg-accent-food/20 text-accent-food
+                
+                if (key === 'food') return 'bg-accent-food/20 text-accent-food';
+                if (key === 'shopping') return 'bg-accent-shopping/20 text-accent-shopping';
+                if (key === 'sightseeing') return 'bg-accent-sightseeing/20 text-accent-sightseeing';
+                if (key === 'travel') return 'bg-accent-travel/20 text-accent-travel';
+                
+                // Fallback for custom entries, using light yellow/primary combo
+                return 'bg-card_accent/40 text-primary';
             };
 
             const openModal = (item) => {
@@ -962,9 +948,9 @@
             };
 
             return {
-                currentTab, activeDay, currentTabName, currentTabIcon, activeCategory,
+                currentTab, activeDay, currentTabName, currentTabIcon,
                 showModal, isEditMode, modalForm,
-                itinerary, expenses, exchangeRate, filteredItineraryByCat,
+                itinerary, expenses, exchangeRate, filteredItinerary, // filteredItinerary is now the main source
                 totalExpenseTWD, totalExpenseKRW, newExpense, newExpenseTWD, mapQuery,
                 calcKRW, calculatedTWD,
                 luggageList, newLuggageItem, mustBuyList, newMustBuyItem,
@@ -974,7 +960,7 @@
                 addExpense, removeExpense, convertKRWToTWD,
                 addLuggage, removeLuggage, addMustBuy, removeMustBuy,
                 formatNumber, searchNaverMap, searchGoogleMap, getNaverMapLink, getWeatherIcon, getDayInfo,
-                getCategoryName, getCategoryColor, getCategoryBgColor 
+                getCategoryName, getCategoryColor, getCategoryBgColor, getCategoryIcon // Added getCategoryIcon
             };
         }
     }).mount('#app');
