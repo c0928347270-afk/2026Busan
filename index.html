@@ -6,8 +6,8 @@
     <title>💜 2026 釜山夢幻之旅 💜</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Mali:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Mali:wght=600;700&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -69,14 +69,6 @@
             opacity: 0.8;
         }
         
-        .pie-chart {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            background: conic-gradient(v-bind(pieChartBackground));
-            box-shadow: 0 0 0 6px #fff, 0 0 0 8px #E0E3FF;
-        }
-
         .chic-title {
             font-family: 'Mali', cursive;
             letter-spacing: 1px;
@@ -109,7 +101,7 @@
         <aside class="sidebar fixed top-0 left-0 h-full w-80 p-8 lg:block hidden bg-white z-50">
             <header class="mb-12">
                 <h1 class="text-4xl font-black text-primary flex items-center gap-3 chic-title">
-                    <i class="ph ph-airplane-tilt text-4xl" weight="fill"></i>
+                    <i class="fa-solid fa-plane-up text-4xl"></i>
                     BUSAN 2026
                 </h1>
                 <p class="text-base text-text/70 font-bold mt-2">馬卡龍藍紫夢幻之旅</p>
@@ -120,14 +112,14 @@
                     @click="currentTab = tab.id"
                     :class="currentTab === tab.id ? 'bg-primary text-white shadow-custom-md' : 'text-text/70 hover:bg-primary/10'"
                     class="w-full text-left p-5 rounded-2xl flex items-center gap-4 transition-colors text-lg font-bold btn-press">
-                    <i :class="tab.icon" class="text-2xl" :weight="currentTab === tab.id ? 'fill' : 'bold'"></i>
+                    <i :class="tab.icon" class="text-2xl"></i>
                     {{ tab.name }}
                 </button>
             </nav>
 
             <div class="absolute bottom-10 left-8 right-8 pt-6 border-t border-gray-100">
                  <div class="text-sm text-text/50 font-bold flex items-center gap-2">
-                    <i class="ph ph-calendar-heart text-xl"></i>
+                    <i class="fa-solid fa-calendar-days text-xl"></i>
                     2026.01.21 - 01.25
                  </div>
             </div>
@@ -137,7 +129,7 @@
 
             <header class="lg:hidden pb-6 pt-4 flex justify-between items-center sticky top-0 bg-[#F9FAFF]/95 backdrop-blur-sm z-20">
                  <h1 class="text-3xl font-black text-primary flex items-center gap-2 chic-title">
-                    <i :class="currentTabIcon" class="text-3xl" weight="fill"></i>
+                    <i :class="currentTabIcon" class="text-3xl"></i>
                     {{ currentTabName }}
                 </h1>
                 <p class="text-xs font-black text-white bg-primary px-3 py-1.5 rounded-full shadow-sm">2026</p>
@@ -149,9 +141,14 @@
                         <button v-for="i in 5" :key="i" 
                             @click="activeDay = i"
                             :class="activeDay === i ? 'bg-primary text-white shadow-custom-md scale-105' : 'bg-white text-text/60 border border-primary/20'"
-                            class="flex-shrink-0 w-16 h-20 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 btn-press font-bold">
+                            class="flex-shrink-0 w-24 h-28 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 btn-press font-bold">
                             <span class="text-[10px] uppercase opacity-90 mb-1">{{ getDayInfo(i).day }}</span> 
                             <span class="text-2xl font-black leading-none font-cute">{{ getDayInfo(i).date.slice(3) }}</span>
+                            
+                            <div class="mt-2 text-center" :class="activeDay === i ? 'text-white' : 'text-text'">
+                                <i :class="getDayWeather(i).icon" class="text-xl"></i>
+                                <p class="text-[10px] font-bold mt-1 leading-none">{{ getDayWeather(i).temp }}</p>
+                            </div>
                         </button>
                     </div>
                 </div>
@@ -176,7 +173,7 @@
                             </div>
                             
                             <div class="flex items-center text-sm text-text/60 font-bold mb-3">
-                                <i class="ph ph-map-pin-fill mr-1 text-primary"></i>
+                                <i class="fa-solid fa-location-dot mr-1 text-primary"></i>
                                 <span class="truncate">{{ item.location }}</span>
                             </div>
 
@@ -187,11 +184,11 @@
                             <div class="mt-4 flex gap-3">
                                 <a :href="getNaverMapLink(item.location)" target="_blank" 
                                    class="flex-1 inline-flex justify-center items-center text-sm font-bold text-white bg-[#03C75A] py-3 rounded-xl shadow-custom-sm btn-press">
-                                    <i class="ph ph-navigation-arrow-fill mr-2"></i> Naver
+                                    <i class="fa-solid fa-arrow-up-right-dots mr-2"></i> Naver
                                 </a>
                                 <a :href="getGoogleMapLink(item.location)" target="_blank" 
                                    class="flex-1 inline-flex justify-center items-center text-sm font-bold text-blue-500 bg-blue-50 border border-blue-100 py-3 rounded-xl shadow-custom-sm btn-press">
-                                    <i class="ph ph-map-pin-fill mr-2"></i> Google
+                                    <i class="fa-solid fa-location-dot mr-2"></i> Google
                                 </a>
                             </div>
                         </div>
@@ -203,7 +200,7 @@
                 
                 <div class="app-card p-6 bg-gradient-to-br from-primary/10 to-white border-primary/20">
                     <div class="flex justify-between items-center mb-4">
-                        <h4 class="font-black text-lg text-text/80 flex items-center gap-2"><i class="ph ph-calculator-fill text-primary text-2xl"></i> 匯率換算</h4>
+                        <h4 class="font-black text-lg text-text/80 flex items-center gap-2"><i class="fa-solid fa-calculator text-primary text-2xl"></i> 匯率換算</h4>
                         <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-primary/20">
                             <span class="text-xs font-bold text-text/50">匯率</span>
                             <input v-model.number="exchangeRate" type="number" class="w-14 text-right font-black text-base outline-none text-primary bg-transparent" min="0.01" step="0.01">
@@ -215,13 +212,13 @@
                     </div>
                     <div class="flex items-center">
                         <span class="font-bold text-base text-text/40 w-16">TWD</span>
-                        <div class="w-full text-right text-4xl font-black text-primary font-cute">{{ formatNumber(calculatedTWD) }}</div>
+                        <div class="w-full text-right text-4xl font-black text-primary font-cute">NT$ {{ formatNumber(calculatedTWD) }}</div>
                     </div>
                 </div>
 
                 <div class="app-card p-6 bg-white border-l-8 border-accent-shopping">
                     <h4 class="font-black text-lg text-text/80 mb-5 flex items-center gap-2">
-                        <i class="ph ph-wallet-fill text-accent-shopping text-2xl"></i> 總消費概覽
+                        <i class="fa-solid fa-wallet text-accent-shopping text-2xl"></i> 總消費概覽
                     </h4>
                     <div class="grid grid-cols-2 gap-4">
                         <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
@@ -237,7 +234,7 @@
 
                 <div class="app-card p-6 border-l-8 border-accent-food">
                     <h4 class="font-black text-lg text-text/80 mb-5 flex items-center gap-2">
-                        <i class="ph ph-receipt-fill text-accent-food text-2xl"></i> 新增記帳
+                        <i class="fa-solid fa-receipt text-accent-food text-2xl"></i> 新增記帳
                     </h4>
                     <div class="space-y-4">
                         <div class="flex gap-3">
@@ -253,41 +250,27 @@
                             <span class="absolute left-4 top-4.5 text-sm font-bold text-text/40">₩</span>
                         </div>
                         <button @click="addExpense" :disabled="!newExpense.item || !newExpense.amount || !newExpense.category" class="w-full bg-primary text-white py-4 rounded-2xl font-black shadow-custom-md btn-press disabled:opacity-50 flex items-center justify-center gap-2 text-lg">
-                            <i class="ph ph-plus-circle-fill"></i> 加入清單
+                            <i class="fa-solid fa-circle-plus"></i> 加入清單
                         </button>
                     </div>
                 </div>
                 
-                <div v-if="expenses.length > 0" class="space-y-4">
-                    <div class="app-card p-6 flex items-center justify-center gap-6">
-                        <div class="pie-chart flex-shrink-0"></div>
-                        <div class="text-xs space-y-2 w-full">
-                            <div v-for="(item, key) in expenseBreakdownTWD" :key="key" class="flex justify-between items-center" v-show="item.percentage > 0">
-                                <span class="flex items-center gap-2 font-bold text-text/70">
-                                    <span class="w-3 h-3 rounded-full" :style="{background: item.color}"></span> {{ item.name }}
-                                </span>
-                                <span class="font-black text-primary text-sm">{{ item.percentage }}%</span>
-                            </div>
+                <div v-if="expenses.length > 0" class="space-y-3 pb-10">
+                    <div v-for="(exp, index) in expenses" :key="index" class="bg-white p-4 rounded-2xl border border-gray-100 flex justify-between items-center shadow-sm">
+                        <div class="flex-1 pr-2">
+                            <p class="font-bold text-text/90 text-base mb-1">{{ exp.item }}</p>
+                            <p class="text-xs text-text/50 font-bold flex items-center gap-1">
+                                <i class="fa-solid fa-calendar"></i> {{ exp.date.slice(5) }} 
+                                <span class="mx-1">·</span> 
+                                {{ getCategoryName(exp.category) }}
+                            </p>
                         </div>
-                    </div>
-
-                    <div class="space-y-3 pb-10">
-                        <div v-for="(exp, index) in expenses" :key="index" class="bg-white p-4 rounded-2xl border border-gray-100 flex justify-between items-center shadow-sm">
-                            <div class="flex-1 pr-2">
-                                <p class="font-bold text-text/90 text-base mb-1">{{ exp.item }}</p>
-                                <p class="text-xs text-text/50 font-bold flex items-center gap-1">
-                                    <i class="ph ph-calendar-blank"></i> {{ exp.date.slice(5) }} 
-                                    <span class="mx-1">·</span> 
-                                    {{ getCategoryName(exp.category) }}
-                                </p>
+                        <div class="flex items-center gap-4">
+                            <div class="text-right">
+                                <p class="text-xs font-bold text-text/40 font-cute">₩{{ formatNumber(exp.amount) }}</p>
+                                <p class="text-base font-black text-primary font-cute">NT${{ formatNumber(convertKRWToTWD(exp.amount)) }}</p>
                             </div>
-                            <div class="flex items-center gap-4">
-                                <div class="text-right">
-                                    <p class="text-xs font-bold text-text/40 font-cute">₩{{ formatNumber(exp.amount) }}</p>
-                                    <p class="text-base font-black text-primary font-cute">NT${{ formatNumber(convertKRWToTWD(exp.amount)) }}</p>
-                                </div>
-                                <button @click="removeExpense(index)" class="text-text/20 hover:text-red-400 p-1 btn-press"><i class="ph ph-trash-fill text-xl"></i></button>
-                            </div>
+                            <button @click="removeExpense(index)" class="text-text/20 hover:text-red-400 p-1 btn-press"><i class="fa-solid fa-trash text-xl"></i></button>
                         </div>
                     </div>
                 </div>
@@ -354,18 +337,18 @@
 
                 <div class="app-card p-6 border-4 border-primary/10">
                     <h3 class="font-black text-2xl text-text/80 mb-4 flex items-center gap-3">
-                        <i class="ph ph-house-line-fill text-primary"></i> 住宿資訊
+                        <i class="fa-solid fa-house text-primary"></i> 住宿資訊
                     </h3>
                     <p class="font-black text-xl text-text mb-2">NewCZ南浦店</p>
                     <p class="text-sm text-text/60 font-bold mb-6 bg-gray-50 p-3 rounded-xl select-all border border-gray-100">
-                        <i class="ph ph-map-pin mr-1"></i> 釜山廣域市中區光復路8號街 32
+                        <i class="fa-solid fa-location-dot mr-1"></i> 釜山廣域市中區光復路8號街 32
                     </p>
                     <div class="flex gap-3">
                          <a :href="getNaverMapLink('NewCZ南浦店')" target="_blank" class="flex-1 py-3 bg-[#03C75A] text-white font-black text-center rounded-xl shadow-custom-md btn-press text-base flex items-center justify-center gap-2">
-                            <i class="ph ph-navigation-arrow-fill"></i> Naver
+                            <i class="fa-solid fa-arrow-up-right-dots"></i> Naver
                         </a>
                         <a :href="getGoogleMapLink('NewCZ南浦店')" target="_blank" class="flex-1 py-3 bg-blue-500 text-white font-black text-center rounded-xl shadow-custom-md btn-press text-base flex items-center justify-center gap-2">
-                            <i class="ph ph-map-pin-fill"></i> Google
+                            <i class="fa-solid fa-location-dot"></i> Google
                         </a>
                     </div>
                 </div>
@@ -374,7 +357,7 @@
             <div v-if="currentTab === 'guide'" class="space-y-8">
                 <div class="app-card p-6">
                     <h3 class="font-black text-2xl text-text/80 mb-5 flex items-center gap-3 border-b border-gray-100 pb-3">
-                        <i class="ph ph-suitcase-fill text-primary text-3xl"></i> 行李清單
+                        <i class="fa-solid fa-suitcase text-primary text-3xl"></i> 行李清單
                     </h3>
                     <div class="flex gap-3 mb-5">
                         <input v-model="newLuggageItem" class="bg-gray-50 flex-1 p-3 rounded-xl text-sm font-bold outline-none border focus:border-primary" placeholder="新增物品...">
@@ -384,14 +367,14 @@
                         <div v-for="(item, index) in luggageList" :key="index" class="flex items-center bg-gray-50 p-4 rounded-2xl transition-all" :class="{'opacity-50': item.checked}">
                             <input type="checkbox" v-model="item.checked" class="w-6 h-6 accent-primary rounded-md cursor-pointer">
                             <span class="ml-4 font-bold text-base flex-1" :class="{'line-through': item.checked}">{{ item.text }}</span>
-                            <button @click="removeLuggage(index)" class="text-text/30 hover:text-red-400"><i class="ph ph-x-circle-fill text-xl"></i></button>
+                            <button @click="removeLuggage(index)" class="text-text/30 hover:text-red-400"><i class="fa-solid fa-circle-xmark text-xl"></i></button>
                         </div>
                     </div>
                 </div>
                 
                  <div class="app-card p-6 border-t-8 border-accent-shopping">
                     <h3 class="font-black text-2xl text-text/80 mb-5 flex items-center gap-3 border-b border-gray-100 pb-3">
-                        <i class="ph ph-shopping-bag-fill text-accent-shopping text-3xl"></i> 必買清單
+                        <i class="fa-solid fa-bag-shopping text-accent-shopping text-3xl"></i> 必買清單
                     </h3>
                     <div class="flex gap-3 mb-5">
                         <input v-model="newMustBuyItem" class="bg-gray-50 flex-1 p-3 rounded-xl text-sm font-bold outline-none border focus:border-accent-shopping" placeholder="新增戰利品...">
@@ -401,7 +384,7 @@
                         <div v-for="(item, index) in mustBuyList" :key="index" class="flex items-center bg-gray-50 p-4 rounded-2xl transition-all" :class="{'opacity-50': item.checked}">
                             <input type="checkbox" v-model="item.checked" class="w-6 h-6 accent-accent-shopping rounded-md cursor-pointer">
                             <span class="ml-4 font-bold text-base flex-1" :class="{'line-through': item.checked}">{{ item.text }}</span>
-                            <button @click="removeMustBuy(index)" class="text-text/30 hover:text-red-400"><i class="ph ph-x-circle-fill text-xl"></i></button>
+                            <button @click="removeMustBuy(index)" class="text-text/30 hover:text-red-400"><i class="fa-solid fa-circle-xmark text-xl"></i></button>
                         </div>
                     </div>
                 </div>
@@ -416,7 +399,7 @@
                      </div>
                 </div>
                 <div class="flex-1 rounded-3xl overflow-hidden shadow-custom-lg border-4 border-white">
-                    <iframe width="100%" height="100%" style="border:0" loading="lazy" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d102716.27850871927!2d129.0838128!3d35.1584949!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568e89f81216d8f%3A0x6a0c5c36af1c944d!2sBusan%2C%20South%20Korea!5e0!3m2!1sen!2stw!4v1703649600000!5m2!1sen!2stw"></iframe>
+                    <iframe width="100%" height="100%" style="border:0" loading="lazy" src="https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=Busan,South+Korea"></iframe>
                 </div>
             </div>
 
@@ -428,7 +411,7 @@
             :class="currentTab === tab.id ? 'text-primary -translate-y-2' : 'text-text/30'" 
             class="flex flex-col items-center p-2 flex-1 transition-all duration-300 btn-press group">
             <div :class="currentTab === tab.id ? 'bg-primary/10 p-3 rounded-2xl mb-1' : 'mb-1'">
-                <i :class="tab.icon" class="text-3xl transition-transform" :weight="currentTab === tab.id ? 'fill' : 'bold'"></i>
+                <i :class="tab.icon" class="text-3xl transition-transform"></i>
             </div>
             <span class="text-[11px] font-black tracking-wide group-hover:text-primary transition-colors">{{ tab.name }}</span>
         </button>
@@ -455,14 +438,24 @@
             const expenses = ref([]);
             const newExpense = ref({ date: '', item: '', amount: null, category: '' });
 
+            // Weather Data (模擬釜山 1 月份天氣)
+            const weatherData = {
+                1: { icon: 'fa-solid fa-sun', temp: '5° / -2°', desc: '晴朗' }, // Jan 21
+                2: { icon: 'fa-solid fa-cloud-sun', temp: '6° / -1°', desc: '多雲轉晴' }, // Jan 22
+                3: { icon: 'fa-solid fa-cloud-showers-heavy', temp: '3° / -3°', desc: '小雪/雨' }, // Jan 23
+                4: { icon: 'fa-solid fa-snowflake', temp: '0° / -5°', desc: '冰冷/雪' }, // Jan 24
+                5: { icon: 'fa-solid fa-wind', temp: '2° / -4°', desc: '乾燥多風' }, // Jan 25
+            };
+            const getDayWeather = (day) => weatherData[day];
+
+
             const tabs = [
-                { id: 'itinerary', name: '行程', icon: 'ph-notebook' },
-                { id: 'money', name: '記帳', icon: 'ph-currency-krw' },
-                { id: 'info', name: '機票', icon: 'ph-ticket' },
-                { id: 'guide', name: '清單', icon: 'ph-list-checks' },
-                { id: 'map', name: '地圖', icon: 'ph-map-trifold' },
+                { id: 'itinerary', name: '行程', icon: 'fa-solid fa-route' },
+                { id: 'money', name: '記帳', icon: 'fa-solid fa-sack-dollar' },
+                { id: 'info', name: '機票', icon: 'fa-solid fa-ticket' },
+                { id: 'guide', name: '清單', icon: 'fa-solid fa-list-check' },
+                { id: 'map', name: '地圖', icon: 'fa-solid fa-map' },
             ];
-            const desktopTabs = tabs;
 
             const currentTabName = computed(() => tabs.find(t => t.id === currentTab.value)?.name);
             const currentTabIcon = computed(() => tabs.find(t => t.id === currentTab.value)?.icon);
@@ -484,25 +477,6 @@
                 { key: 'flight', name: '航班', colorCode: '#E0E3FF' }
             ];
 
-            const defaultLuggage = [
-                { text: '護照 / 簽證', checked: false },
-                { text: '韓幣現金 / 信用卡 / WOWPASS', checked: false },
-                { text: '轉接頭 (韓國圓孔)', checked: false },
-                { text: '行動電源 / 充電線', checked: false },
-                { text: '牙刷牙膏 (環保不提供)', checked: false },
-                { text: '保暖衣物 / 圍巾', checked: false },
-                { text: '網卡 / eSim', checked: false }
-            ];
-
-            const defaultMustBuy = [
-                { text: 'Olive Young 護膚品', checked: false },
-                { text: '零食 (烏龜餅乾)', checked: false },
-                { text: 'Kakao Friends', checked: false },
-                { text: 'HBAF 杏仁果', checked: false },
-                { text: '韓國襪子', checked: false }
-            ];
-
-            // Itinerary Data - Updated to v13.0 User Request
             const defaultItinerary = [
                 // Day 1
                 { id: 101, day: 1, time: '08:00', title: '從家裡出發', location: 'Home', desc: '準時出發！', category: 'travel' },
@@ -566,17 +540,26 @@
             
             onMounted(() => {
                 newExpense.value.date = new Date().toISOString().split('T')[0];
-                const savedItinerary = localStorage.getItem('busan_2026_v14_itinerary'); 
-                const savedExpenses = localStorage.getItem('busan_2026_v14_expenses');
+                const savedItinerary = localStorage.getItem('busan_2026_v15_itinerary'); 
+                const savedExpenses = localStorage.getItem('busan_2026_v15_expenses');
                 
-                // Use v14 data or default
+                // Use v15 data or default
                 itinerary.value = savedItinerary ? JSON.parse(savedItinerary) : defaultItinerary;
+
+                // Load existing expense/list data from storage
+                const savedLuggage = localStorage.getItem('busan_2026_luggage');
+                const savedMustBuy = localStorage.getItem('busan_2026_mustBuy');
                 if (savedExpenses) expenses.value = JSON.parse(savedExpenses);
+                if (savedLuggage) luggageList.value = JSON.parse(savedLuggage);
+                if (savedMustBuy) mustBuyList.value = JSON.parse(savedMustBuy);
             });
 
-            watch([itinerary, expenses, exchangeRate, luggageList, mustBuyList], () => {
-                localStorage.setItem('busan_2026_v14_itinerary', JSON.stringify(itinerary.value));
-                localStorage.setItem('busan_2026_v14_expenses', JSON.stringify(expenses.value));
+            // Save data to localStorage whenever it changes
+            watch([itinerary, expenses, luggageList, mustBuyList], () => {
+                localStorage.setItem('busan_2026_v15_itinerary', JSON.stringify(itinerary.value));
+                localStorage.setItem('busan_2026_v15_expenses', JSON.stringify(expenses.value));
+                localStorage.setItem('busan_2026_luggage', JSON.stringify(luggageList.value));
+                localStorage.setItem('busan_2026_mustBuy', JSON.stringify(mustBuyList.value));
             }, { deep: true });
 
             // Computed & Methods
@@ -587,66 +570,39 @@
             const totalExpenseTWD = computed(() => convertKRWToTWD(totalExpenseKRW.value));
             const calculatedTWD = computed(() => convertKRWToTWD(calcKRW.value));
 
-            // Pie Chart Logic
-            const expenseBreakdownTWD = computed(() => {
-                const breakdown = {};
-                const rate = exchangeRate.value;
-                expenses.value.forEach(exp => {
-                    const twd = Math.round(exp.amount / rate);
-                    if(!breakdown[exp.category]) breakdown[exp.category] = { amount: 0, color: filterCategories.find(c=>c.key===exp.category)?.colorCode };
-                    breakdown[exp.category].amount += twd;
-                });
-                const total = Object.values(breakdown).reduce((s, i) => s + i.amount, 0);
-                Object.values(breakdown).forEach(i => { 
-                    i.percentage = total > 0 ? Math.round((i.amount / total) * 100) : 0; 
-                    i.name = filterCategories.find(c => c.colorCode === i.color)?.name;
-                });
-                return breakdown;
-            });
-
-            const pieChartBackground = computed(() => {
-                const entries = Object.values(expenseBreakdownTWD.value).filter(i => i.percentage > 0);
-                if (entries.length === 0) return '#F0F2FF';
-                let current = 0;
-                return entries.map(i => {
-                    const end = current + (i.percentage / 100) * 360;
-                    const val = `${i.color} ${current}deg ${end}deg`;
-                    current = end;
-                    return val;
-                }).join(', ');
-            });
-
             const addExpense = () => {
                 if(!newExpense.value.item || newExpense.value.amount <= 0 || !newExpense.value.category) return;
                 expenses.value.unshift({...newExpense.value});
                 newExpense.value.item = ''; newExpense.value.amount = null;
             };
-            const removeExpense = (i) => confirm('刪除?') && expenses.value.splice(i, 1);
+            const removeExpense = (i) => confirm('確認刪除此筆記帳紀錄嗎？') && expenses.value.splice(i, 1);
 
             const getDayInfo = (d) => tripDates[d];
             const getCategoryName = (k) => filterCategories.find(c => c.key === k)?.name;
             const formatNumber = (n) => n?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            
+            // Map Link Fix
             const getNaverMapLink = (q) => `https://map.naver.com/p/search/${encodeURIComponent(q)}`;
             const getGoogleMapLink = (q) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
 
             // List methods
-            const addLuggage = () => { if(newLuggageItem.value) luggageList.value.push({text: newLuggageItem.value}); newLuggageItem.value = ''; };
+            const addLuggage = () => { if(newLuggageItem.value) luggageList.value.push({text: newLuggageItem.value, checked: false}); newLuggageItem.value = ''; };
             const removeLuggage = (i) => luggageList.value.splice(i,1);
-            const addMustBuy = () => { if(newMustBuyItem.value) mustBuyList.value.push({text: newMustBuyItem.value}); newMustBuyItem.value = ''; };
+            const addMustBuy = () => { if(newMustBuyItem.value) mustBuyList.value.push({text: newMustBuyItem.value, checked: false}); newMustBuyItem.value = ''; };
             const removeMustBuy = (i) => mustBuyList.value.splice(i,1);
             const searchNaverMap = () => window.open(`https://map.naver.com/p/search/${encodeURIComponent(mapQuery.value)}`, '_blank');
             const searchGoogleMap = () => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery.value)}`, '_blank');
 
             return {
                 currentTab, activeDay, currentTabName, currentTabIcon, 
-                itinerary, expenses, exchangeRate, filteredItinerary,
+                expenses, exchangeRate, filteredItinerary,
                 totalExpenseTWD, totalExpenseKRW, newExpense, calcKRW, calculatedTWD,
                 luggageList, newLuggageItem, mustBuyList, newMustBuyItem,
-                tabs, desktopTabs, filterCategories,
-                pieChartBackground, expenseBreakdownTWD,
+                tabs, filterCategories, mapQuery,
+                getDayWeather,
                 addExpense, removeExpense, convertKRWToTWD,
                 addLuggage, removeLuggage, addMustBuy, removeMustBuy,
-                formatNumber, searchNaverMap, searchGoogleMap, getNaverMapLink, getGoogleMapLink, getDayInfo, getCategoryName, currentTabName, currentTabIcon, mapQuery
+                formatNumber, searchNaverMap, searchGoogleMap, getNaverMapLink, getGoogleMapLink, getDayInfo, getCategoryName, 
             };
         }
     }).mount('#app');
