@@ -205,58 +205,33 @@
                 // 行程資料 (依據 2026釜山.txt)
                 const itineraries = ref({
                     1: [
-                        { time: '08:00', activity: '從家裡出發', transport: '開車2~3hr', desc: '斗六/虎尾' },
-                        { time: '11:00', activity: '抵達連統停車場', transport: '開車', desc: '桃園市大園區國際路一段509-1號' },
-                        { time: '12:00', activity: '到達第二航廈', transport: '接駁車', desc: '辦理報到、託運、入關' },
-                        { time: '14:25', activity: '飛機起飛 (BR164)', transport: '飛機', desc: '長榮航空' },
-                        { time: '17:40', activity: '抵達金海機場', transport: '飛機', desc: '辦理入境手續' },
-                        { time: '18:10', activity: '前往地鐵站', transport: '步行', desc: '由GATE3走到馬路對面右轉' },
-                        { time: '18:30', activity: '搭乘地鐵到沙上站', transport: '地鐵', desc: '轉乘綠色2號線往西面/萇山方向' },
-                        { time: '18:40', activity: '由西面站到札嘎其站', transport: '地鐵', desc: '轉乘橘色1號線往多南浦/大浦海水浴場方向' }, 
-                        { time: '19:00', activity: '札嘎其站7號出口出站', transport: '步行', desc: '出站正前方路口左轉第二棟大樓。5號出口有電梯，出電梯直走過7號出口左轉' },
-                        { time: '19:05', activity: 'NewCZ南浦店入住', transport: '步行', desc: '飯店辦理手續' },
-                        { time: '20:00', activity: '周邊覓食', transport: '步行', desc: 'KPOP唱片行(南浦洞)\n晚餐：人蔘雞湯粥/南浦雪濃湯\n消夜：Bhc炸雞或老爺炸雞' }
+                        { time: '11:00', activity: '連統停車場', transport: '停車', desc: '桃園市大園區國際路一段 509-1 號' },
+                        { time: '14:25', activity: '長榮航空 BR164', transport: '飛機', desc: '桃園 ➔ 釜山' },
+                        { time: '19:05', activity: 'NEWCZ NAMPO HOTEL', transport: '入住', desc: '札嘎其站 7 號出口左轉' },
+                        { time: '20:00', activity: '南浦雪濃湯', transport: '美食', desc: '推薦南浦洞必吃雪濃湯' }
                     ],
                     2: [
-                        { time: '08:00', activity: '吃早餐', transport: '步行', desc: '新昌吐司/EggDrop/路邊小吃' },
-                        { time: '09:30', activity: '前往海雲台', transport: '地鐵/計程車', desc: '1.約50分鐘：1號線(札嘎其)>西面轉2號線(海雲台)\n2.約40-60分鐘：計程車約20000韓幣' },
-                        { time: '10:30', activity: '東釜山OUTLET/滑車', transport: '計程車', desc: '10:30開門 (北臉/國家地理便宜)\n斜坡滑車(10:00開門)就在OUTLET旁' },
-                        { time: '13:55', activity: '海雲台傳統市場', transport: '計程車', desc: '午餐：31公分海鮮湯麵/小麥冷麵/元祖糖餅/巨大牛骨湯' },
-                        { time: '14:25', activity: '新世界百貨', transport: '計程車/地鐵', desc: '逛街消化一下接著去汗蒸幕' },
-                        { time: '15:30', activity: 'SPA LAND 汗蒸幕', transport: '新世界百貨B1', desc: '必喝甜米釀/吃烤蛋。\n汗蒸幕步驟:售票處換(買)票→拖鞋寄鞋櫃→櫃台領取手環+衣服+毛巾→脫衣服→清洗→泡湯(熱湯/溫湯/冷湯可選擇)→穿發的衣服→桑拿房/泡腳池/用餐區→換自己的衣服→手環結算費用→穿鞋' },
-                        { time: '18:30', activity: '回西面站吃烤肉', transport: '計程車/地鐵', desc: '烤肉的男子(고기굽는남자서면점)/釜山宅烤肉(부산댁)\n味贊王(맛찬들왕소금구이서면점)/83獬豸(83 해치)' }
-                        { time: '20:00', activity: '新世界百貨', transport: '步行', desc: '景點：西面地下街文創店(地鐵西面站) /大創百貨' },
-                        { time: '23:00', activity: '飯店', transport: '地鐵/計程車', desc: ' ' }
+                        { time: '10:30', activity: '樂天名牌折扣購物中心 東釜山店', transport: '計程車', desc: 'Outlet 購物與斜坡滑車' },
+                        { time: '13:55', activity: '海雲台傳統市場', transport: '美食', desc: '31cm 海鮮麵 / 元祖糖餅' },
+                        { time: '15:30', activity: '新世界 SPA LAND', transport: '汗蒸幕', desc: '必喝甜米釀、吃烤蛋' },
+                        { time: '18:30', activity: '西面站 烤肉的男子', transport: '晚餐', desc: '西面人氣烤肉店' }
                     ],
                     3: [
-                        { time: '08:00', activity: '吃早餐', transport: '步行', desc: '可吃附近小吃或便利商店避免耽誤集合時間' },
-                        { time: '09:00', activity: '釜山站1號出口集合', transport: '地鐵', desc: '搭地鐵往老匍方向，釜山站下車。集合地點： KTX 釜山站 1 號出口' },
-                        { time: '10:30', activity: '天空膠囊 (藍線公園)', transport: '跟團', desc: '午餐建議：清沙浦站(道熙家/秀敏家)或松亭站(31cm海鮮麵)' },
-                        { time: '08:00', activity: '海東龍宮寺', transport: '跟團', desc: ' ' },
-                        { time: '08:00', activity: '佛國寺', transport: '跟團', desc: ' ' },
-                        { time: '16:40', activity: '大陵院+皇理團路', transport: '跟團', desc: '必吃：10元餅、南瓜薯條、皇南夾心餅。晚餐：鄉花亭/百年客人' },
-                        { time: '19:00', activity: '東宮與月池', transport: '跟團', desc: '夜景導覽' }
-                        { time: '21:50', activity: '釜山站', transport: '跟團', desc: '' }
+                        { time: '10:30', activity: '海雲台藍線公園 尾浦站', transport: '團體', desc: '天空膠囊火車 尾浦 ➔ 青沙浦' },
+                        { time: '13:10', activity: '海東龍宮寺', transport: '團體', desc: '臨海美麗佛寺' },
+                        { time: '16:40', activity: '慶州 皇理團路', transport: '團體', desc: '10 元起司餅、文創小物' },
+                        { time: '19:00', activity: '東宮與月池', transport: '夜景', desc: '慶州古都絕美亮燈' }
                     ],
                     4: [
-                        { time: '08:00', activity: '吃早餐', transport: '步行', desc: '古來司魚糕(札嘎其店)/路邊小吃/便利商店' },
-                        { time: '08:30', activity: '松島天空步道', transport: '計程車', desc: '步道散步' },
-                        { time: '09:00', activity: '松島海上纜車', transport: '步行', desc: '09:00營運開始' },
-                        { time: '12:00', activity: '札嘎其市場午餐', transport: '計程車', desc: '帝王蟹必吃 (每公斤6-8萬韓元)' },
-                        { time: '13:50', activity: '樂天百貨看開橋', transport: '步行', desc: '1.行程提早可進樂天百貨逛超市 2.行程較晚吃完午餐直接步行至橋邊觀賞' },
-                        { time: '15:30', activity: '太宗台', transport: '計程車', desc: '遊園車只開到17:30' },
-                        { time: '18:00', activity: '釜山塔', transport: '計程車', desc: '搭計程車至:龍頭山公園手扶梯，營業至22:00 (售票至21:30)' },
-                        { time: '19:30', activity: '富平罐頭市場', transport: '步行', desc: '晚餐/小吃：紅豆奶油艾草麻吉/魚板' }
-                        { time: '23:00', activity: '飯店', transport: '地鐵/計程車', desc: ' ' }
+                        { time: '09:00', activity: '松島海上纜車', transport: '纜車', desc: '水晶車廂體驗' },
+                        { time: '12:00', activity: '札嘎其市場', transport: '海鮮', desc: '帝王蟹大餐' },
+                        { time: '15:30', activity: '白淺灘文化村', transport: '計程車', desc: '海岸咖啡廳拍照' },
+                        { time: '19:30', activity: '富平罐頭市場', transport: '消夜', desc: '釜山魚板、紅豆麻吉' }
                     ],
                     5: [
-                        { time: '08:00', activity: '吃早餐', transport: '步行', desc: '古來司魚糕(札嘎其店)/路邊小吃/便利商店' }
-                        { time: '08:00', activity: '吃早餐+整理行李', transport: '計程車', desc: '隨意吃' },
-                        { time: '09:00', activity: '甘川洞文化村', transport: '計程車', desc: ' ' },
-                        { time: '12:00', activity: '飯店附近活動', transport: '步行', desc: '樂天超市補齊伴手禮' },
-                        { time: '13:00', activity: '午餐', transport: '步行', desc: '李在模披薩或自由發揮' },
-                        { time: '16:00', activity: '抵達金海機場', transport: '地鐵', desc: 'KIOSK 掃描退稅條碼' },
-                        { time: '18:55', activity: '返台起飛 (BR163)', transport: '飛機', desc: '預計 20:25 抵達桃園' }
+                        { time: '09:00', activity: '甘川洞文化村', transport: '計程車', desc: '尋找小王子' },
+                        { time: '11:00', activity: '樂天超市 南浦店', transport: '購物', desc: '最後採買伴手禮' },
+                        { time: '13:00', activity: '李在模披薩 南浦總店', transport: '必吃', desc: '釜山人氣第一披薩' }
                     ]
                 });
 
