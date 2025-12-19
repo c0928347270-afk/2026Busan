@@ -3,145 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 釜山行程 - 專業手機版</title>
+    <title>🌊 2026 釜山萌旅行程</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap');
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #f0f9ff; }
         [v-cloak] { display: none; }
-        .remarks-content { white-space: pre-wrap; word-break: break-all; }
-        /* 避免手機長按文字彈出選單干擾 */
-        .no-select { -webkit-tap-highlight-color: transparent; }
-        /* 自定義彈窗動畫 */
-        .modal-enter-active, .modal-leave-active { transition: opacity 0.3s ease; }
-        .modal-enter-from, .modal-leave-to { opacity: 0; }
+        .remarks-wrap { white-space: pre-wrap; word-break: break-all; }
+        /* 海洋風裝飾 */
+        .wave-bg { background: linear-gradient(180deg, #0284c7 0%, #0ea5e9 100%); }
+        .card-cute { border-radius: 2rem; border: 4px solid #e0f2fe; }
+        .bubble { border-radius: 1.5rem; position: relative; }
+        /* 彈窗過場動畫 */
+        .fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease; }
+        .fade-enter-from, .fade-leave-to { opacity: 0; }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-900 text-lg">
-    <div id="app" v-cloak class="max-w-xl mx-auto min-h-screen flex flex-col bg-white shadow-xl">
+<body class="text-slate-800 text-lg md:text-xl">
+    <div id="app" v-cloak class="max-w-xl mx-auto min-h-screen flex flex-col shadow-2xl bg-white relative overflow-hidden">
         
-        <header class="bg-indigo-950 text-white p-6 sticky top-0 z-40 shadow-lg">
-            <h1 class="text-2xl font-black mb-1">2026 釜山五日遊</h1>
-            <p class="text-indigo-300 text-sm font-bold uppercase tracking-widest mb-4">1/21 (三) - 1/25 (日)</p>
+        <header class="wave-bg text-white p-8 pb-12 relative">
+            <div class="absolute bottom-0 left-0 right-0 h-8 bg-white" style="clip-path: polygon(0 100%, 100% 100%, 100% 0, 85% 60%, 70% 0, 55% 60%, 40% 0, 25% 60%, 10% 0, 0 60%);"></div>
+            <h1 class="text-3xl font-black mb-2 flex items-center">
+                <span>🐳 釜山行 2026</span>
+            </h1>
+            <p class="text-sky-100 text-sm font-bold tracking-widest">1/21 - 1/25 | NEWCZ NAMPO HOTEL</p>
             
-            <nav class="flex bg-indigo-900 rounded-2xl p-1 shadow-inner">
-                <button @click="view = 'itinerary'" :class="view === 'itinerary' ? 'bg-white text-indigo-950 shadow' : 'text-indigo-200'" class="flex-1 py-3 rounded-xl font-black transition-all text-lg no-select">行程</button>
-                <button @click="view = 'accounting'" :class="view === 'accounting' ? 'bg-white text-indigo-950 shadow' : 'text-indigo-200'" class="flex-1 py-3 rounded-xl font-black transition-all text-lg no-select">記帳</button>
-                <button @click="view = 'checklist'" :class="view === 'checklist' ? 'bg-white text-indigo-950 shadow' : 'text-indigo-200'" class="flex-1 py-3 rounded-xl font-black transition-all text-lg no-select">清單</button>
+            <nav class="flex bg-white/20 backdrop-blur-md rounded-full mt-6 p-1 border border-white/30">
+                <button @click="view = 'itinerary'" :class="view === 'itinerary' ? 'bg-white text-sky-600 shadow-lg' : 'text-white'" class="flex-1 py-3 rounded-full font-black transition-all text-lg">🐚 行程</button>
+                <button @click="view = 'accounting'" :class="view === 'accounting' ? 'bg-white text-sky-600 shadow-lg' : 'text-white'" class="flex-1 py-3 rounded-full font-black transition-all text-lg">💰 記帳</button>
+                <button @click="view = 'checklist'" :class="view === 'checklist' ? 'bg-white text-sky-600 shadow-lg' : 'text-white'" class="flex-1 py-3 rounded-full font-black transition-all text-lg">🎒 清單</button>
             </nav>
         </header>
 
-        <main class="flex-grow p-5">
-            <div v-if="view === 'itinerary'">
-                <div class="flex space-x-2 mb-8 overflow-x-auto pb-4 scrollbar-hide">
+        <main class="flex-grow p-6">
+            <div v-if="view === 'itinerary'" class="animate-in fade-in duration-500">
+                <div class="flex space-x-3 mb-10 overflow-x-auto pb-4 no-scrollbar">
                     <button v-for="d in 5" :key="d" @click="activeDay = d" 
-                        :class="activeDay === d ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-500'"
-                        class="px-8 py-3 rounded-2xl font-black flex-shrink-0 transition-all text-xl no-select">
-                        DAY {{ d }}
+                        :class="activeDay === d ? 'bg-sky-500 text-white scale-110 shadow-sky-200 shadow-lg' : 'bg-sky-50 text-sky-400'"
+                        class="px-8 py-4 rounded-3xl font-black flex-shrink-0 transition-all text-xl">
+                        D{{ d }}
                     </button>
                 </div>
 
-                <div class="space-y-10">
-                    <div v-for="(item, idx) in itineraries[activeDay]" :key="idx" class="relative pl-8 border-l-4 border-indigo-100">
-                        <div class="absolute -left-[10px] top-1.5 w-4 h-4 bg-indigo-600 rounded-full ring-4 ring-white"></div>
+                <div class="space-y-12">
+                    <div v-for="(item, idx) in itineraries[activeDay]" :key="idx" class="relative pl-10 border-l-4 border-dashed border-sky-100">
+                        <div class="absolute -left-[14px] top-1 text-2xl">⭐</div>
                         
-                        <div class="flex items-baseline space-x-2 mb-1">
-                            <span class="font-mono font-black text-indigo-600 text-2xl">{{ item.time }}</span>
-                            <span class="text-xs font-bold text-slate-400 border border-slate-200 px-2 py-0.5 rounded uppercase">{{ item.transport }}</span>
+                        <div class="mb-2">
+                            <span class="font-mono font-black text-sky-600 text-2xl">{{ item.time }}</span>
+                            <span class="ml-2 bg-sky-100 text-sky-500 text-xs px-3 py-1 rounded-full font-black uppercase tracking-tighter">{{ item.transport }}</span>
                         </div>
                         
-                        <h3 class="text-2xl font-black text-slate-800 mb-3 leading-tight">{{ item.activity }}</h3>
+                        <h3 class="text-2xl font-black text-slate-800 mb-4">{{ item.activity }}</h3>
                         
-                        <div class="bg-blue-50 p-4 rounded-2xl border border-blue-100 shadow-sm">
-                            <p class="text-slate-700 text-lg leading-relaxed remarks-content font-medium">{{ item.desc }}</p>
+                        <div class="bubble bg-sky-50 p-6 border-2 border-sky-100 shadow-sm">
+                            <p class="text-slate-700 text-lg leading-relaxed remarks-wrap font-medium">{{ item.desc }}</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div v-if="view === 'accounting'" class="space-y-6">
-                <div class="bg-gradient-to-br from-indigo-600 to-blue-700 p-6 rounded-3xl text-white shadow-xl">
-                    <div class="text-xs font-bold text-indigo-200 uppercase mb-4 tracking-widest">匯率換算 (預設 0.024)</div>
-                    <div class="space-y-6">
-                        <div class="relative">
-                            <input type="number" v-model="calcInput" class="w-full bg-indigo-500/30 border-2 border-white/20 rounded-2xl p-5 text-4xl font-black text-white placeholder-white/50 outline-none focus:border-white/50 transition" placeholder="KRW 韓元">
-                            <span class="absolute right-4 top-1/2 -translate-y-1/2 font-bold text-indigo-200 text-sm">KRW</span>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-sm font-bold text-indigo-200 mb-1">折合台幣大約</div>
-                            <div class="text-5xl font-black tracking-tighter">NT$ {{ (calcInput * 0.024).toFixed(0) }}</div>
-                        </div>
-                    </div>
+            <div v-if="view === 'accounting'" class="space-y-8 animate-in zoom-in duration-300">
+                <div class="bg-sky-500 rounded-[3rem] p-8 text-white text-center shadow-xl relative overflow-hidden">
+                    <div class="absolute top-[-10%] right-[-10%] text-9xl opacity-10">🐙</div>
+                    <h2 class="text-sm font-black uppercase tracking-[0.2em] mb-4 opacity-80">KRW ➜ TWD (0.024)</h2>
+                    <input type="number" v-model="calcInput" class="w-full bg-transparent text-center text-5xl font-black placeholder-white/50 outline-none mb-2" placeholder="0">
+                    <div class="text-lg font-bold">折合台幣約</div>
+                    <div class="text-5xl font-black mt-2">NT$ {{ (calcInput * 0.024).toFixed(0) }}</div>
                 </div>
 
-                <div class="bg-white rounded-3xl border border-slate-200 shadow-sm">
-                    <div class="p-6 border-b flex justify-between items-center bg-slate-50/50">
-                        <h2 class="font-black text-xl">支出明細</h2>
-                        <button @click="openExpenseModal" class="bg-indigo-600 text-white px-5 py-2.5 rounded-xl text-base font-black shadow-lg no-select">＋ 新增</button>
+                <div class="card-cute bg-white overflow-hidden shadow-lg">
+                    <div class="p-6 bg-sky-50 border-b-4 border-sky-100 flex justify-between items-center">
+                        <h2 class="font-black text-2xl text-sky-700">支出明細 🦀</h2>
+                        <button @click="openExpenseModal" class="bg-sky-500 text-white px-6 py-3 rounded-full text-lg font-black shadow-md active:scale-95 transition">新增</button>
                     </div>
-                    <div class="divide-y divide-slate-100">
-                        <div v-for="(exp, i) in expenses" :key="i" class="p-5 flex justify-between items-center">
+                    <div class="divide-y-2 divide-sky-50">
+                        <div v-for="(exp, i) in expenses" :key="i" class="p-6 flex justify-between items-center">
                             <div>
-                                <div class="font-black text-slate-800 text-lg">{{ exp.name }}</div>
-                                <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">韓元 {{ exp.amount.toLocaleString() }}</div>
+                                <div class="font-black text-slate-800 text-xl">{{ exp.name }}</div>
+                                <div class="text-sm font-bold text-slate-400">₩ {{ exp.amount.toLocaleString() }}</div>
                             </div>
                             <div class="text-right">
-                                <div class="font-black text-indigo-600 text-2xl">NT$ {{ (exp.amount * 0.024).toFixed(0) }}</div>
+                                <div class="font-black text-sky-600 text-3xl">NT${{ (exp.amount * 0.024).toFixed(0) }}</div>
                             </div>
                         </div>
-                        <div v-if="expenses.length === 0" class="p-10 text-center text-slate-400 font-bold italic text-base">目前尚無支出紀錄</div>
+                        <div v-if="expenses.length === 0" class="p-12 text-center text-sky-300 font-bold italic">目前還沒有花錢錢喔 🏖️</div>
                     </div>
                 </div>
             </div>
 
-            <div v-if="view === 'checklist'" class="space-y-6">
-                <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm">
-                    <h2 class="font-black text-2xl mb-6">備忘/購物</h2>
-                    <div class="flex space-x-2 mb-8">
-                        <input v-model="newItem" @keyup.enter="addItem" type="text" class="flex-grow border-2 border-slate-100 rounded-2xl px-5 py-4 text-lg focus:border-indigo-600 outline-none transition" placeholder="輸入新項目...">
-                        <button @click="addItem" class="bg-indigo-600 text-white px-6 rounded-2xl font-black no-select">加</button>
+            <div v-if="view === 'checklist'" class="animate-in slide-in-from-bottom duration-500">
+                <div class="card-cute bg-white p-8 shadow-xl border-4 border-sky-100">
+                    <h2 class="font-black text-3xl mb-8 text-sky-700">準備清單 🐧</h2>
+                    <div class="flex space-x-3 mb-8">
+                        <input v-model="newItem" @keyup.enter="addItem" type="text" class="flex-grow border-4 border-sky-50 rounded-3xl px-6 py-4 text-xl focus:border-sky-300 outline-none transition" placeholder="想帶什麼呢？">
+                        <button @click="addItem" class="bg-sky-500 text-white px-8 rounded-3xl font-black text-xl">加</button>
                     </div>
                     <ul class="space-y-4">
-                        <li v-for="(task, idx) in listItems" :key="idx" class="flex items-center p-5 bg-slate-50 rounded-2xl border border-slate-100 no-select" @click="task.done = !task.done">
-                            <div class="w-8 h-8 rounded-xl border-2 flex items-center justify-center transition-all" :class="task.done ? 'bg-green-500 border-green-500 shadow-lg shadow-green-200' : 'bg-white border-slate-300'">
-                                <svg v-if="task.done" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"></path></svg>
+                        <li v-for="(task, idx) in listItems" :key="idx" @click="task.done = !task.done" class="flex items-center p-5 bg-sky-50/50 rounded-3xl border-2 border-transparent transition-all" :class="task.done ? 'opacity-50' : 'border-sky-100'">
+                            <div class="w-10 h-10 rounded-full border-4 flex items-center justify-center transition-all" :class="task.done ? 'bg-green-400 border-green-400' : 'bg-white border-sky-200'">
+                                <span v-if="task.done" class="text-white text-xl">✓</span>
                             </div>
-                            <span :class="task.done ? 'line-through text-slate-300' : 'text-slate-700'" class="ml-4 font-black text-xl flex-grow">{{ task.title }}</span>
-                            <button @click.stop="listItems.splice(idx, 1)" class="text-slate-300 font-black p-2 hover:text-red-500 transition">✕</button>
+                            <span :class="task.done ? 'line-through' : ''" class="ml-5 font-black text-2xl flex-grow text-slate-700">{{ task.title }}</span>
+                            <button @click.stop="listItems.splice(idx, 1)" class="text-rose-300 text-2xl px-2 font-black">✕</button>
                         </li>
                     </ul>
                 </div>
             </div>
         </main>
 
-        <transition name="modal">
-            <div v-if="showExpenseModal" class="fixed inset-0 z-50 overflow-y-auto" role="dialog">
-                <div class="flex items-end md:items-center justify-center min-h-screen p-4">
-                    <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" @click="closeExpenseModal"></div>
-                    
-                    <div class="relative bg-white w-full max-w-sm rounded-t-[40px] md:rounded-[40px] p-8 shadow-2xl transition-all">
-                        <h3 class="text-2xl font-black mb-8 text-center text-slate-800">新增支出項目</h3>
-                        <div class="space-y-6">
-                            <div>
-                                <label class="text-xs font-black text-slate-400 block mb-2 uppercase tracking-widest">支出項目名稱</label>
-                                <input v-model="newExpense.name" type="text" class="w-full border-2 border-slate-100 rounded-2xl p-4 text-xl font-bold focus:border-indigo-600 outline-none" placeholder="如：李在模披薩">
-                            </div>
-                            <div>
-                                <label class="text-xs font-black text-slate-400 block mb-2 uppercase tracking-widest">韓元金額 (KRW)</label>
-                                <input v-model.number="newExpense.amount" type="number" class="w-full border-2 border-slate-100 rounded-2xl p-4 text-xl font-mono font-bold focus:border-indigo-600 outline-none" placeholder="0">
-                            </div>
+        <transition name="fade">
+            <div v-if="showExpenseModal" class="fixed inset-0 z-[100] flex items-end md:items-center justify-center p-4">
+                <div class="absolute inset-0 bg-sky-900/60 backdrop-blur-md" @click="closeExpenseModal"></div>
+                
+                <div class="relative bg-white w-full max-w-md rounded-[3rem] p-10 shadow-2xl border-t-8 border-sky-500 animate-in slide-in-from-bottom-full duration-300">
+                    <h3 class="text-3xl font-black mb-8 text-center text-sky-800">新增小支出 🐚</h3>
+                    <div class="space-y-8">
+                        <div>
+                            <label class="text-sm font-black text-sky-400 block mb-3 uppercase tracking-widest">花在哪裡呢？</label>
+                            <input v-model="newExpense.name" type="text" class="w-full border-4 border-sky-50 rounded-3xl p-5 text-2xl font-bold focus:border-sky-300 outline-none" placeholder="例如：李在模披薩">
                         </div>
-                        <div class="flex gap-4 mt-10">
-                            <button @click="closeExpenseModal" class="flex-1 py-4 text-slate-400 font-black text-lg no-select">取消</button>
-                            <button @click="saveExpense" class="flex-1 py-4 bg-indigo-600 text-white rounded-2xl font-black text-lg shadow-xl shadow-indigo-200 no-select">儲存項目</button>
+                        <div>
+                            <label class="text-sm font-black text-sky-400 block mb-3 uppercase tracking-widest">多少韓元 (KRW)</label>
+                            <input v-model.number="newExpense.amount" type="number" class="w-full border-4 border-sky-50 rounded-3xl p-5 text-2xl font-mono font-bold focus:border-sky-300 outline-none" placeholder="0">
                         </div>
+                    </div>
+                    <div class="flex gap-6 mt-12">
+                        <button @click="closeExpenseModal" class="flex-1 py-5 text-sky-300 font-black text-xl">不要了</button>
+                        <button @click="saveExpense" class="flex-1 py-5 bg-sky-500 text-white rounded-[2rem] font-black text-xl shadow-xl shadow-sky-200">存起來！</button>
                     </div>
                 </div>
             </div>
         </transition>
 
-        <footer class="bg-slate-100 p-6 text-center text-slate-400 text-xs font-bold space-y-1">
-            <p>去程：1/21 BR164 (14:25-17:40) | 回程：1/25 BR163 (18:55-20:25)</p>
-            <p>© 2026 BUSAN TRAVEL LOG</p>
+        <footer class="bg-sky-50 p-8 text-center text-sky-300 text-sm font-black">
+            <p>✈️ BR164 & BR163 | 🏠 NEWCZ NAMPO</p>
+            <p class="mt-2">BUSAN ADVENTURE 2026</p>
         </footer>
     </div>
 
@@ -153,22 +152,40 @@
                 const activeDay = ref(1);
                 const calcInput = ref(0);
                 
-                // 記帳狀態：確保初始為 false
+                // 彈窗狀態控制：明確初始化為 false
                 const showExpenseModal = ref(false);
                 const newExpense = ref({ name: '', amount: null });
-                const expenses = ref([
-                    { name: 'WOWPASS 儲值', amount: 50000 }
-                ]);
+                const expenses = ref([]);
 
                 // 清單狀態
                 const newItem = ref('');
                 const listItems = ref([
-                    { title: '換匯韓元', done: true },
-                    { title: 'Visit Busan Pass 購買', done: false },
-                    { title: '檢查護照有效期', done: true }
+                    { title: '換匯韓元 ₩', done: true },
+                    { title: '預訂 Visit Busan Pass', done: false },
+                    { title: '整理護照 & 簽證', done: true }
                 ]);
 
-                // 行程資料 (對齊 活頁簿2.xlsx)
+                // 彈窗操作函式
+                const openExpenseModal = () => { showExpenseModal.value = true; };
+                const closeExpenseModal = () => {
+                    showExpenseModal.value = false;
+                    newExpense.value = { name: '', amount: null };
+                };
+                const saveExpense = () => {
+                    if (newExpense.value.name && newExpense.value.amount) {
+                        expenses.value.push({ ...newExpense.value });
+                        closeExpenseModal();
+                    }
+                };
+
+                const addItem = () => {
+                    if (newItem.value.trim()) {
+                        listItems.value.push({ title: newItem.value, done: false });
+                        newItem.value = '';
+                    }
+                };
+
+                // 行程資料 (根據 CSV 資料庫校對)
                 const itineraries = ref({
                     1: [
                         { time: '08:00', activity: '從家裡出發', transport: '開車2~3hr', desc: '斗六/虎尾' },
@@ -226,25 +243,6 @@
                         { time: '18:55', activity: '返台起飛 (BR163)', transport: '飛機', desc: '預計 20:25 抵達桃園' }
                     ]
                 });
-
-                // 功能邏輯：顯式控制
-                const openExpenseModal = () => { showExpenseModal.value = true; };
-                const closeExpenseModal = () => {
-                    showExpenseModal.value = false;
-                    newExpense.value = { name: '', amount: null };
-                };
-                const saveExpense = () => {
-                    if (newExpense.value.name && newExpense.value.amount) {
-                        expenses.value.push({ ...newExpense.value });
-                        closeExpenseModal();
-                    }
-                };
-                const addItem = () => {
-                    if (newItem.value.trim()) {
-                        listItems.value.push({ title: newItem.value, done: false });
-                        newItem.value = '';
-                    }
-                };
 
                 return {
                     view, activeDay, itineraries, calcInput,
