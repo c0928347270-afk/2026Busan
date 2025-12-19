@@ -2,282 +2,220 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>💜 2026 釜山夢幻之旅 💜</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 釜山行程管理系統 - 最終修正版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Mali:wght=600;700&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: { light: '#E0E3FF', DEFAULT: '#8E97FD', dark: '#6D75C9' },
-                        text: '#4A4A68', 
-                        background: '#F9FAFF', 
-                        card: '#FFFFFF', 
-                        accent: { food: '#FFB7B2', shopping: '#A0E7E5', sightseeing: '#FBE7C6', travel: '#B9CCF2' }
-                    },
-                    fontFamily: { sans: ['"Noto Sans TC"', 'sans-serif'], cute: ['"Mali"', 'cursive'] },
-                    boxShadow: { 'custom-sm': '0 2px 8px 0 rgba(142, 151, 253, 0.15)', 'custom-md': '0 4px 12px -2px rgba(142, 151, 253, 0.2)', 'custom-lg': '0 10px 25px -5px rgba(142, 151, 253, 0.25)' }
-                }
-            }
-        }
-    </script>
-
     <style>
-        body { background-color: #F9FAFF; color: #4A4A68; font-family: 'Noto Sans TC', sans-serif; -webkit-tap-highlight-color: transparent; padding-bottom: 90px; }
-        .app-card { background-color: #FFFFFF; border-radius: 24px; box-shadow: 0 8px 20px rgba(142, 151, 253, 0.12); border: 2px solid #F0F2FF; transition: all 0.3s ease; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .btn-press:active { transform: scale(0.95); opacity: 0.8; }
-        .chic-title { font-family: 'Mali', cursive; letter-spacing: 1px; }
-        .bottom-nav { height: 80px; padding-bottom: env(safe-area-inset-bottom); }
-        @media (min-width: 1024px) {
-            #app-container { display: grid; grid-template-columns: 320px 1fr; min-height: 100vh; }
-            .sidebar { border-right: 2px solid #F0F2FF; }
-            body { padding-bottom: 0; }
-        }
+        [v-cloak] { display: none; }
+        .remarks-content { white-space: pre-wrap; word-break: break-all; }
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     </style>
 </head>
-<body>
-
-<div id="app" class="min-h-screen">
-    <div id="app-container" class="lg:grid">
-
-        <aside class="sidebar fixed top-0 left-0 h-full w-80 p-8 lg:block hidden bg-white z-50">
-            <header class="mb-12">
-                <h1 class="text-4xl font-black text-primary flex items-center gap-3 chic-title">
-                    <i class="fa-solid fa-plane-up text-4xl"></i> BUSAN 2026
-                </h1>
-                <p class="text-base text-text/70 font-bold mt-2">馬卡龍藍紫夢幻之旅</p>
-            </header>
-            <nav class="space-y-4">
-                <button v-for="tab in tabs" :key="tab.id" @click="currentTab = tab.id"
-                    :class="currentTab === tab.id ? 'bg-primary text-white shadow-custom-md' : 'text-text/70 hover:bg-primary/10'"
-                    class="w-full text-left p-5 rounded-2xl flex items-center gap-4 transition-colors text-lg font-bold btn-press">
-                    <i :class="tab.icon" class="text-2xl"></i> {{ tab.name }}
-                </button>
-            </nav>
-        </aside>
-
-        <main class="main-content lg:col-start-2 lg:pb-10 p-5">
-            <header class="lg:hidden pb-6 pt-4 flex justify-between items-center sticky top-0 bg-[#F9FAFF]/95 backdrop-blur-sm z-20">
-                 <h1 class="text-3xl font-black text-primary flex items-center gap-2 chic-title">
-                    <i :class="currentTabIcon" class="text-3xl"></i> {{ currentTabName }}
-                </h1>
-                <p class="text-xs font-black text-white bg-primary px-3 py-1.5 rounded-full shadow-sm">2026</p>
-            </header>
+<body class="bg-gray-100 text-gray-900 font-sans">
+    <div id="app" v-cloak class="max-w-4xl mx-auto min-h-screen flex flex-col">
+        
+        <header class="bg-indigo-900 text-white p-6 shadow-md">
+            <h1 class="text-2xl font-bold mb-2">2026 釜山五日遊 (1/21 - 1/25)</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-indigo-100">
+                <div class="border-l-2 border-indigo-400 pl-3">
+                    <p class="font-bold text-white">✈️ 航班資訊</p>
+                    <p>去程：1/21 BR164 (14:25-17:40) T2</p>
+                    <p>回程：1/25 BR163 (18:55-20:25)</p>
+                </div>
+                <div class="border-l-2 border-indigo-400 pl-3">
+                    <p class="font-bold text-white">🏨 住宿資訊</p>
+                    <p>NEWCZ NAMPO HOTEL</p>
+                    <p class="text-xs">中區, 48981 釜山 (BIFF 廣場路)</p>
+                </div>
+            </div>
             
-            <div v-if="currentTab === 'itinerary'" class="space-y-6">
-                <div class="app-card p-4 overflow-x-auto no-scrollbar">
-                    <div class="flex space-x-3">
-                        <button v-for="i in 5" :key="i" @click="activeDay = i"
-                            :class="activeDay === i ? 'bg-primary text-white shadow-custom-md scale-105' : 'bg-white text-text/60 border border-primary/20'"
-                            class="flex-shrink-0 w-24 h-28 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 btn-press font-bold">
-                            <span class="text-[10px] uppercase opacity-90 mb-1">{{ getDayInfo(i).day }}</span> 
-                            <span class="text-2xl font-black leading-none font-cute">{{ getDayInfo(i).date.slice(3) }}</span>
-                            <div class="mt-2 text-center" :class="activeDay === i ? 'text-white' : 'text-text'">
-                                <i :class="getDayWeather(i).icon" class="text-xl"></i>
-                                <p class="text-[10px] font-bold mt-1 leading-none">{{ getDayWeather(i).temp }}</p>
+            <nav class="flex space-x-4 mt-6">
+                <button @click="view = 'itinerary'" :class="view === 'itinerary' ? 'bg-white text-indigo-900' : 'bg-indigo-800 text-indigo-100'" class="px-4 py-2 rounded-lg font-bold transition">行程表</button>
+                <button @click="view = 'accounting'" :class="view === 'accounting' ? 'bg-white text-indigo-900' : 'bg-indigo-800 text-indigo-100'" class="px-4 py-2 rounded-lg font-bold transition">記帳功能</button>
+                <button @click="view = 'checklist'" :class="view === 'checklist' ? 'bg-white text-indigo-900' : 'bg-indigo-800 text-indigo-100'" class="px-4 py-2 rounded-lg font-bold transition">清單功能</button>
+            </nav>
+        </header>
+
+        <main class="flex-grow p-4 md:p-6">
+            <div v-if="view === 'itinerary'">
+                <div class="flex space-x-2 mb-6 overflow-x-auto pb-2 custom-scroll">
+                    <button v-for="d in 5" :key="d" @click="activeDay = d" 
+                        :class="activeDay === d ? 'bg-indigo-600 text-white shadow-lg' : 'bg-white text-gray-500 border'"
+                        class="px-6 py-2 rounded-full font-bold flex-shrink-0 transition">
+                        DAY {{ d }}
+                    </button>
+                </div>
+
+                <div class="space-y-4">
+                    <div v-for="(item, idx) in itineraries[activeDay]" :key="idx" class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                        <div class="flex items-center px-4 py-3 bg-gray-50 border-b">
+                            <span class="font-mono font-bold text-indigo-600 text-lg w-16">{{ item.time }}</span>
+                            <div class="ml-4">
+                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">{{ item.transport }}</span>
+                                <h3 class="text-base font-bold text-gray-800">{{ item.activity }}</h3>
                             </div>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="flex justify-between items-center px-2 mb-2">
-                    <h2 class="text-2xl font-black text-text/80">{{ getDayInfo(activeDay).fullDay }}</h2>
-                </div>
-
-                <div class="space-y-5">
-                    <div v-for="item in filteredItinerary" :key="item.id" 
-                        class="app-card p-5 flex gap-5 relative border-l-[8px]"
-                        :class="item.isFlight ? 'border-primary' : `border-accent-${item.category}`">
-                        
-                        <div class="flex flex-col items-center min-w-[60px] flex-shrink-0 pt-1">
-                            <span class="text-xl font-black text-primary font-cute leading-none">{{ item.time }}</span>
-                            <div class="h-full w-1 bg-primary/20 my-2 rounded-full"></div>
                         </div>
-
-                        <div class="flex-1 pb-1 min-w-0">
-                            <h3 class="font-black text-lg text-text/90 leading-snug mb-1">{{ item.title }}</h3>
-                            <div class="flex items-center text-sm text-text/60 font-bold mb-3">
-                                <i class="fa-solid fa-location-dot mr-1 text-primary"></i>
-                                <span class="truncate">{{ item.location }}</span>
-                                <span v-if="item.transport" class="ml-2 bg-gray-100 px-2 py-0.5 rounded text-[10px]">🚌 {{ item.transport }}</span>
-                            </div>
-                            <p v-if="item.desc" class="text-base text-text/80 bg-primary/5 p-4 rounded-2xl w-full whitespace-pre-wrap leading-relaxed border border-primary/10 shadow-inner">
-                               {{ item.desc }}
-                            </p>
-                            <div class="mt-4 flex gap-3">
-                                <a :href="getNaverMapLink(item.location)" target="_blank" class="flex-1 inline-flex justify-center items-center text-sm font-bold text-white bg-[#03C75A] py-3 rounded-xl shadow-custom-sm btn-press">Naver</a>
-                                <a :href="getGoogleMapLink(item.location)" target="_blank" class="flex-1 inline-flex justify-center items-center text-sm font-bold text-blue-500 bg-blue-50 border border-blue-100 py-3 rounded-xl shadow-custom-sm btn-press">Google</a>
+                        <div class="p-4 bg-white">
+                            <div class="bg-indigo-50/50 p-3 rounded-lg border border-indigo-100">
+                                <p class="text-gray-700 text-sm leading-relaxed remarks-content">{{ item.desc }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div v-if="currentTab === 'money'" class="space-y-6">
-                <div class="app-card p-6 bg-gradient-to-br from-primary/10 to-white border-primary/20">
-                    <h4 class="font-black text-lg text-text/80 mb-4 flex items-center gap-2"><i class="fa-solid fa-calculator text-primary"></i> 匯率換算</h4>
-                    <div class="flex items-center border-b-2 border-primary/10 pb-3 mb-3">
-                        <span class="font-bold text-base text-text/40 w-16">KRW</span>
-                        <input v-model.number="calcKRW" type="number" class="w-full text-right text-4xl font-black outline-none bg-transparent text-text/80 font-cute">
+            <div v-if="view === 'accounting'" class="space-y-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                    <h2 class="font-bold text-gray-800 mb-4">匯率換算器 (1 KRW = {{ rate }} TWD)</h2>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex-1">
+                            <input type="number" v-model="calcInput" class="w-full border-b-2 border-indigo-200 p-2 text-xl font-bold focus:outline-none focus:border-indigo-600" placeholder="輸入韓元金額">
+                        </div>
+                        <div class="text-indigo-600 font-bold">➔</div>
+                        <div class="flex-1 text-2xl font-black text-indigo-900">NT$ {{ (calcInput * rate).toFixed(0) }}</div>
                     </div>
-                    <div class="text-right text-4xl font-black text-primary font-cute">NT$ {{ formatNumber(calculatedTWD) }}</div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="p-4 border-b bg-gray-50 flex justify-between items-center">
+                        <h2 class="font-bold">支出清單</h2>
+                        <button @click="addExpense" class="text-indigo-600 font-bold text-sm">+ 新增項目</button>
+                    </div>
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-100 text-gray-500 uppercase text-xs">
+                            <tr>
+                                <th class="px-4 py-3 text-left">項目</th>
+                                <th class="px-4 py-3 text-right">金額 (KRW)</th>
+                                <th class="px-4 py-3 text-right">折合台幣</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr v-for="(exp, i) in expenses" :key="i">
+                                <td class="px-4 py-3 font-medium">{{ exp.name }}</td>
+                                <td class="px-4 py-3 text-right font-mono text-gray-500">{{ exp.amount.toLocaleString() }}</td>
+                                <td class="px-4 py-3 text-right font-bold">NT$ {{ (exp.amount * rate).toFixed(0) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <div v-if="currentTab === 'info'" class="space-y-8">
-                <div class="app-card p-6 border-l-8 border-primary bg-primary/5">
-                    <h3 class="font-black text-xl text-text/80 mb-5 border-b border-dashed border-primary/20 pb-2">🛫 去程航班 (1/21)</h3>
-                    <div class="grid grid-cols-2 gap-4 text-sm font-bold">
-                        <div>航空公司: 長榮航空</div><div>航班編號: BR164</div>
-                        <div>起飛時間: 14:25 (TPE)</div><div>抵達時間: 17:40 (PUS)</div>
-                        <div>航站: 第二航廈</div><div>登機時間: 13:55</div>
-                    </div>
+            <div v-if="view === 'checklist'" class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                <div class="p-4 border-b bg-gray-50">
+                    <h2 class="font-bold">自定義清單</h2>
                 </div>
-
-                <div class="app-card p-6 border-l-8 border-accent-food bg-accent-food/5">
-                    <h3 class="font-black text-xl text-text/80 mb-5 border-b border-dashed border-accent-food/20 pb-2">🛬 回程航班 (1/25)</h3>
-                    <div class="grid grid-cols-2 gap-4 text-sm font-bold">
-                        <div>航空公司: 長榮航空</div><div>航班編號: BR163</div>
-                        <div>起飛時間: 18:55 (PUS)</div><div>抵達時間: 20:25 (TPE)</div>
-                        <div>航站: 國際航廈</div><div>登機時間: 18:25</div>
+                <div class="p-6">
+                    <div class="flex mb-6">
+                        <input v-model="newItem" @keyup.enter="addItem" type="text" class="flex-grow border rounded-l-xl px-4 py-2 focus:outline-none focus:ring-1 focus:ring-indigo-500" placeholder="新增待辦或購物項目...">
+                        <button @click="addItem" class="bg-indigo-600 text-white px-6 py-2 rounded-r-xl font-bold">新增</button>
                     </div>
-                </div>
-
-                <div class="app-card p-6 border-4 border-primary/10">
-                    <h3 class="font-black text-2xl text-text/80 mb-4 flex items-center gap-3"><i class="fa-solid fa-house text-primary"></i> 住宿資訊</h3>
-                    <p class="font-black text-xl text-text mb-2">NEWCZ NAMPO HOTEL</p>
-                    <p class="text-sm text-text/60 font-bold mb-6 bg-gray-50 p-3 rounded-xl select-all border border-gray-100">
-                        <i class="fa-solid fa-location-dot mr-1"></i> 20 BIFFGWANGJANGRO, 中區, 48981 釜山
-                    </p>
+                    <ul class="space-y-3">
+                        <li v-for="(task, idx) in listItems" :key="idx" class="flex items-center group">
+                            <input type="checkbox" v-model="task.done" class="w-5 h-5 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500">
+                            <span :class="task.done ? 'line-through text-gray-400' : 'text-gray-700'" class="ml-3 font-medium transition-all">{{ task.title }}</span>
+                            <button @click="listItems.splice(idx, 1)" class="ml-auto text-gray-300 group-hover:text-red-500 opacity-0 group-hover:opacity-100 transition">刪除</button>
+                        </li>
+                    </ul>
                 </div>
             </div>
-
-            <div v-if="currentTab === 'guide'" class="space-y-8">
-                </div>
         </main>
     </div>
 
-    <nav class="fixed bottom-0 w-full pb-safe pt-2 px-2 flex justify-around items-end bg-white/95 backdrop-blur-xl rounded-t-[30px] shadow-[0_-10px_40px_rgba(142,151,253,0.15)] z-50 lg:hidden bottom-nav">
-        <button v-for="tab in tabs" :key="tab.id" @click="currentTab = tab.id"
-            :class="currentTab === tab.id ? 'text-primary -translate-y-2' : 'text-text/30'" 
-            class="flex flex-col items-center p-2 flex-1 transition-all duration-300 btn-press group">
-            <div :class="currentTab === tab.id ? 'bg-primary/10 p-3 rounded-2xl mb-1' : 'mb-1'">
-                <i :class="tab.icon" class="text-3xl"></i>
-            </div>
-            <span class="text-[11px] font-black tracking-wide">{{ tab.name }}</span>
-        </button>
-    </nav>
-</div>
+    <script>
+        const { createApp, ref } = Vue;
+        createApp({
+            setup() {
+                const view = ref('itinerary');
+                const activeDay = ref(1);
+                const rate = ref(0.024);
+                const calcInput = ref(0);
+                const newItem = ref('');
+                const listItems = ref([
+                    { title: '換匯 (韓元)', done: false },
+                    { title: '購買 Visit Busan Pass', done: false }
+                ]);
+                const expenses = ref([
+                    { name: '儲值交通卡', amount: 20000 }
+                ]);
 
-<script>
-    const { createApp, ref, computed, onMounted, watch } = Vue;
+                const itineraries = ref({
+                    1: [
+                        { time: '08:00', activity: '從家裡出發', transport: '開車2~3hr', desc: '斗六/虎尾' },
+                        { time: '11:00', activity: '抵達連統停車場', transport: '開車', desc: '桃園市大園區國際路一段509-1號' },
+                        { time: '12:00', activity: '到達第二航廈', transport: '接駁車', desc: '辦理報到、託運、入關' },
+                        { time: '14:25', activity: '飛機起飛 (BR164)', transport: '飛機', desc: '長榮航空' },
+                        { time: '17:40', activity: '抵達釜山金海機場', transport: '飛機', desc: '辦理入境手續' },
+                        { time: '18:10', activity: '取得行李前往地鐵站', transport: '步行', desc: '由GATE3走到馬路對面右轉' },
+                        { time: '18:30', activity: '搭乘地鐵到沙上站', transport: '地鐵', desc: '轉乘綠色2號線往西面/萇山方向' },
+                        { time: '18:40', activity: '由西面站到札嘎其站', transport: '地鐵', desc: '轉乘橘色1號線往多南浦/大浦海水浴場方向' },
+                        { time: '19:00', activity: '札嘎其站出站', transport: '步行', desc: '7號出口正前方路口左轉第二棟大樓\n5號出口有電梯，出電梯直走過7號出口左轉' },
+                        { time: '19:05', activity: 'NewCZ南浦店辦理入住', transport: '步行', desc: '放置行李' },
+                        { time: '20:00', activity: '周邊覓食', transport: '步行', desc: '景點：KPOP唱片行(南浦洞)\n晚餐：人蔘雞湯粥/南浦雪濃湯\n消夜：Bhc炸雞或老爺炸雞' }
+                    ],
+                    2: [
+                        { time: '08:00', activity: '吃早餐', transport: '步行', desc: '新昌吐司/EggDrop/路邊小吃' },
+                        { time: '09:30', activity: '前往海雲台', transport: '地鐵/計程車', desc: '1.地鐵：約50分鐘，1號線(札嘎其)>西面轉2號線(海雲台)\n2.計程車：約40-60分鐘，約20000韓幣' },
+                        { time: '10:30', activity: '東釜山OUTLET/滑車', transport: '計程車', desc: 'OUTLET 10:30開門 (北臉/國家地理便宜)\n斜坡滑車就在OUTLET旁' },
+                        { time: '13:55', activity: '海雲台傳統市場', transport: '計程車', desc: '午餐：31公分海鮮湯麵/小麥冷麵/元祖糖餅/巨大牛骨湯' },
+                        { time: '14:25', activity: '新世界百貨', transport: '計程車', desc: '逛街、前往汗蒸幕' },
+                        { time: '15:30', activity: 'SPA LAND 汗蒸幕', transport: '步行', desc: '必喝甜米釀/吃烤蛋。步驟：售票換票→寄鞋→領衣服手環→清洗→泡湯→桑拿→結算手環' },
+                        { time: '18:00', activity: '前往西面站', transport: '地鐵', desc: '搭綠線直達西面站' },
+                        { time: '18:30', activity: '晚餐吃烤肉', transport: '步行', desc: '烤肉的男子/釜山宅/味贊王/83獬豸' },
+                        { time: '18:40', activity: '西面站逛街', transport: '步行', desc: '西面地下街文創店/大創百貨' }
+                    ],
+                    3: [
+                        { time: '08:00', activity: '吃早餐', transport: '步行', desc: '附近小吃避免耽誤集合' },
+                        { time: '09:00', activity: '釜山站1號出口集合', transport: '地鐵', desc: '搭地鐵往老匍方向，釜山站下車。' },
+                        { time: '10:30', activity: '天空膠囊 (藍線公園)', transport: '跟團', desc: '午餐建議：清沙浦站(道熙家/秀敏家)或松亭站(31cm海鮮麵)' },
+                        { time: '13:10', activity: '海東龍宮寺', transport: '跟團', desc: '參訪' },
+                        { time: '15:00', activity: '佛國寺', transport: '跟團', desc: '參訪' },
+                        { time: '16:40', activity: '大陵院+皇理團路', transport: '跟團', desc: '必吃：10元餅、南瓜薯條、皇南夾心餅\n晚餐：鄉花亭/百年客人' },
+                        { time: '19:00', activity: '東宮與月池', transport: '跟團', desc: '看夜景' }
+                    ],
+                    4: [
+                        { time: '08:00', activity: '吃早餐出發', transport: '步行', desc: '古來司魚糕(札嘎其店)' },
+                        { time: '08:30', activity: '松島天空步道', transport: '計程車', desc: '散步' },
+                        { time: '09:00', activity: '松島海上纜車', transport: '步行', desc: '09:00開始營運' },
+                        { time: '12:00', activity: '札嘎其市場午餐', transport: '計程車', desc: '帝王蟹必吃 (每公斤6-8萬韓元)' },
+                        { time: '13:50', activity: '看開橋', transport: '步行', desc: '樂天百貨光復店頂樓星光花園看開橋' },
+                        { time: '14:30', activity: '白淺灘文化村', transport: '計程車', desc: '停留約1-2小時' },
+                        { time: '15:30', activity: '太宗台', transport: '計程車', desc: '遊園車只到17:30' },
+                        { time: '18:00', activity: '釜山塔夜景', transport: '計程車', desc: '營業至22:00' },
+                        { time: '19:30', activity: '富平罐頭市場', transport: '步行', desc: '吃晚餐/小吃：紅豆奶油艾草麻吉/魚板' }
+                    ],
+                    5: [
+                        { time: '08:00', activity: '早餐+整理行李', transport: '步行', desc: '準備退房' },
+                        { time: '09:00', activity: '甘川洞文化村', transport: '計程車', desc: '拍照、散步' },
+                        { time: '12:00', activity: '自由活動', transport: '步行', desc: '樂天超市補齊伴手禮' },
+                        { time: '13:00', activity: '午餐', transport: '步行', desc: '李在模披薩或自由發揮' },
+                        { time: '14:30', activity: '回飯店領行李', transport: '步行', desc: '領取寄放行李' },
+                        { time: '15:00', activity: '前往金海機場', transport: '地鐵', desc: '交通移動' },
+                        { time: '16:00', activity: '抵達機場', transport: '步行', desc: 'KIOSK掃描退稅條碼' },
+                        { time: '18:55', activity: '飛機起飛 (BR163)', transport: '飛機', desc: '金海-桃園' },
+                        { time: '20:25', activity: '抵達桃園機場', transport: '飛機', desc: '回到家約23:00' }
+                    ]
+                });
 
-    createApp({
-        setup() {
-            const currentTab = ref('itinerary');
-            const activeDay = ref(1);
-            const calcKRW = ref('');
-            const exchangeRate = ref(41.5);
-            const expenses = ref([]);
-            
-            const weatherData = {
-                1: { icon: 'fa-solid fa-sun', temp: '5° / -2°' },
-                2: { icon: 'fa-solid fa-cloud-sun', temp: '6° / -1°' },
-                3: { icon: 'fa-solid fa-cloud-showers-heavy', temp: '3° / -3°' },
-                4: { icon: 'fa-solid fa-snowflake', temp: '0° / -5°' },
-                5: { icon: 'fa-solid fa-wind', temp: '2° / -4°' },
-            };
+                const addItem = () => {
+                    if (newItem.value) {
+                        listItems.value.push({ title: newItem.value, done: false });
+                        newItem.value = '';
+                    }
+                };
+                const addExpense = () => {
+                    const name = prompt('項目名稱:');
+                    const amount = prompt('金額 (KRW):');
+                    if (name && amount) expenses.value.push({ name, amount: parseInt(amount) });
+                };
 
-            const tabs = [
-                { id: 'itinerary', name: '行程', icon: 'fa-solid fa-route' },
-                { id: 'money', name: '記帳', icon: 'fa-solid fa-sack-dollar' },
-                { id: 'info', name: '機票', icon: 'fa-solid fa-ticket' },
-                { id: 'guide', name: '清單', icon: 'fa-solid fa-list-check' },
-            ];
-
-            const tripDates = {
-                1: { date: '01/21', day: '週三', fullDay: '1月21日 (週三)' },
-                2: { date: '01/22', day: '週四', fullDay: '1月22日 (週四)' },
-                3: { date: '01/23', day: '週五', fullDay: '1月23日 (週五)' },
-                4: { date: '01/24', day: '週六', fullDay: '1月24日 (週六)' },
-                5: { date: '01/25', day: '週日', fullDay: '1月25日 (週日)' },
-            };
-
-            const itinerary = ref([
-                // Day 1
-                { id: 101, day: 1, time: '08:00', title: '從家裡出發', location: '家', transport: '開車2~3hr', desc: '斗六/虎尾出發', category: 'travel' },
-                { id: 102, day: 1, time: '11:00', title: '抵達連統停車場', location: '桃園市大園區國際路一段509-1號', transport: '開車', desc: '辦理停車手續', category: 'travel' },
-                { id: 103, day: 1, time: '12:00', title: '到達第二航廈', location: 'TPE T2', transport: '接駁車', desc: '辦理報到、託運、入關', category: 'flight', isFlight: true },
-                { id: 104, day: 1, time: '14:25', title: '飛機起飛 (BR164)', location: 'TPE T2', transport: '飛機', desc: '長榮航空 BR164', category: 'flight', isFlight: true },
-                { id: 105, day: 1, time: '17:40', title: '抵達釜山金海機場', location: 'PUS', transport: '飛機', desc: '預計抵達時間', category: 'flight', isFlight: true },
-                { id: 106, day: 1, time: '18:10', title: '取行李前往地鐵站', location: '金海機場', transport: '步行', desc: '由GATE3走到馬路對面右轉', category: 'travel' },
-                { id: 107, day: 1, time: '18:30', title: '搭乘地鐵到沙上站', location: '沙上站', transport: '地鐵', desc: '轉乘綠色2號線往西面/萇山方向', category: 'travel' },
-                { id: 108, day: 1, time: '18:40', title: '由西面站到札嘎其站', location: '札嘎其站', transport: '地鐵', desc: '轉乘橘色1號線往多南浦/大浦海水浴場方向', category: 'travel' },
-                { id: 109, day: 1, time: '19:05', title: '入住 NEWCZ NAMPO', location: 'NEWCZ Nampo', transport: '步行', desc: '5號出口有電梯，出電梯直走過7號出口左轉', category: 'travel' },
-                { id: 110, day: 1, time: '20:00', title: '晚餐及宵夜', location: '飯店周邊', transport: '步行', desc: '豬肉湯飯、人蔘雞湯；宵夜：炸雞(BHC/老爺炸雞)', category: 'food' },
-
-                // Day 2
-                { id: 201, day: 2, time: '08:00', title: '吃早餐', location: '飯店周邊', transport: '步行', desc: '享用早餐', category: 'food' },
-                { id: 202, day: 2, time: '09:30', title: '出發前往海雲台', location: '海雲台', transport: '地鐵/計程車', desc: '地鐵約50分鐘(1800韓幣)或計程車約40-60分鐘(20000韓幣)', category: 'travel' },
-                { id: 203, day: 2, time: '10:30', title: '東釜山樂天OUTLET', location: 'Lotte Outlet', transport: '計程車', desc: '可玩旁邊滑車(不怕冷的話)', category: 'shopping' },
-                { id: 204, day: 2, time: '13:55', title: '海雲台傳統市場', location: '海雲台市場', transport: '計程車', desc: '古來司魚糕、31公分海鮮湯麵', category: 'food' },
-                { id: 205, day: 2, time: '14:25', title: '新世界百貨', location: 'Centum City', transport: '計程車', desc: '世界最大百貨公司', category: 'shopping' },
-                { id: 206, day: 2, time: '15:30', title: 'SPA LAND 汗蒸幕', location: '新世界百貨 B1', transport: '步行', desc: '停留2-3小時。步驟：換票→鞋櫃→領衣→清洗→泡湯→換裝→桑拿→結算', category: 'sightseeing' },
-                { id: 207, day: 2, time: '18:00', title: '前往西面站', location: '西面', transport: '地鐵/計程車', desc: '綠線直達', category: 'travel' },
-                { id: 208, day: 2, time: '18:30', title: '晚餐吃烤肉', location: '西面烤肉店', transport: '步行', desc: '推薦：烤肉的男子、味贊王、釜山宅、83獬豸', category: 'food' },
-                { id: 209, day: 2, time: '18:40', title: '西面站逛街', location: '西面地下街', transport: '步行', desc: '文創店、大創百貨', category: 'shopping' },
-
-                // Day 3
-                { id: 301, day: 3, time: '08:00', title: '吃早餐', location: '飯店周邊', transport: '步行', desc: '享用早餐', category: 'food' },
-                { id: 302, day: 3, time: '09:00', title: 'KKday一日遊集合', location: '釜山站1號出口', transport: '地鐵', desc: '集合地點：KTX釜山站1號出口', category: 'sightseeing' },
-                { id: 303, day: 3, time: '10:30', title: '藍線公園天空膠囊', location: '尾浦/青沙浦', transport: '專車', desc: 'KKday行程', category: 'sightseeing' },
-                { id: 304, day: 3, time: '13:10', title: '海東龍宮寺', location: '海東龍宮寺', transport: '專車', desc: 'KKday行程', category: 'sightseeing' },
-                { id: 305, day: 3, time: '15:00', title: '佛國寺', location: '慶州', transport: '專車', desc: 'KKday行程', category: 'sightseeing' },
-                { id: 306, day: 3, time: '16:40', title: '大陵院+皇理團路', location: '慶州', transport: '專車', desc: 'KKday行程', category: 'sightseeing' },
-                { id: 307, day: 3, time: '19:00', title: '東宮與月池', location: '慶州', transport: '專車', desc: 'KKday行程', category: 'sightseeing' },
-                { id: 308, day: 3, time: '21:50', title: '返回市區', location: '釜山站/西面', transport: '專車', desc: '行程結束返抵', category: 'travel' },
-
-                // Day 4
-                { id: 401, day: 4, time: '09:00', title: '飯店出發', location: '飯店', transport: '計程車', desc: '前往松島', category: 'travel' },
-                { id: 402, day: 4, time: '09:30', title: '松島天空步道', location: '松島', transport: '步行', desc: '看海景', category: 'sightseeing' },
-                { id: 403, day: 4, time: '10:00', title: '松島海上纜車', location: '松島纜車站', transport: '纜車', desc: '搭乘體驗', category: 'sightseeing' },
-                { id: 404, day: 4, time: '12:00', title: '午餐：札嘎其市場', location: '札嘎其市場', transport: '計程車', desc: '帝王蟹(約6-8萬韓幣/kg)', category: 'food' },
-                { id: 405, day: 4, time: '13:50', title: '影島大橋開橋', location: '影島大橋', transport: '步行', desc: '觀賞開橋儀式', category: 'sightseeing' },
-                { id: 406, day: 4, time: '14:30', title: '白淺灘文化村', location: '白淺灘', transport: '計程車', desc: '海景、咖啡廳 (停留40-60分)', category: 'sightseeing' },
-                { id: 407, day: 4, time: '15:30', title: '太宗台', location: '太宗台', transport: '計程車', desc: '遊園車最後一班 17:30', category: 'sightseeing' },
-                { id: 408, day: 4, time: '18:30', title: '富平罐頭市場', location: '富平市場', transport: '計程車', desc: '吃晚餐、特色小吃', category: 'food' },
-                { id: 409, day: 4, time: '21:00', title: '釜山塔夜景', location: '釜山塔', transport: '步行/電扶梯', desc: '龍頭山公園', category: 'sightseeing' },
-
-                // Day 5
-                { id: 501, day: 5, time: '08:00', title: '整理行李', location: '飯店', transport: '步行', desc: '辦理退房並寄放行李', category: 'travel' },
-                { id: 502, day: 5, time: '08:30', title: '甘川洞文化村', location: '甘川洞', transport: '計程車', desc: '小王子拍照、彩色階梯 (停留2hr)', category: 'sightseeing' },
-                { id: 503, day: 5, time: '12:00', title: '午餐及逛街', location: '南浦洞', transport: '步行', desc: '自由活動、補齊伴手禮', category: 'food' },
-                { id: 504, day: 5, time: '14:30', title: '回飯店領行李', location: '飯店', transport: '步行', desc: '領取行李', category: 'travel' },
-                { id: 505, day: 5, time: '15:00', title: '前往機場', location: '機場', transport: '地鐵/計程車', desc: '預留時間辦理登機', category: 'travel' },
-                { id: 506, day: 5, time: '18:55', title: '飛機起飛 (BR163)', location: 'PUS', transport: '飛機', desc: '飛往桃園機場', category: 'flight', isFlight: true },
-                { id: 507, day: 5, time: '20:25', title: '抵達桃園機場', location: 'TPE', transport: '飛機', desc: '旅程結束', category: 'flight', isFlight: true }
-            ]);
-
-            const filteredItinerary = computed(() => itinerary.value.filter(item => item.day === activeDay.value).sort((a, b) => a.time.localeCompare(b.time)));
-            const calculatedTWD = computed(() => Math.round((Number(calcKRW.value) || 0) / exchangeRate.value));
-            const formatNumber = (n) => n?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            const getDayInfo = (d) => tripDates[d];
-            const getDayWeather = (d) => weatherData[d];
-            const getNaverMapLink = (q) => `https://map.naver.com/p/search/${encodeURIComponent(q)}`;
-            const getGoogleMapLink = (q) => `https://www.google.com/maps/search/${encodeURIComponent(q)}`;
-            const currentTabName = computed(() => tabs.find(t => t.id === currentTab.value)?.name);
-            const currentTabIcon = computed(() => tabs.find(t => t.id === currentTab.value)?.icon);
-
-            return { currentTab, activeDay, itinerary, filteredItinerary, calcKRW, calculatedTWD, formatNumber, getDayInfo, getDayWeather, getNaverMapLink, getGoogleMapLink, tabs, currentTabName, currentTabIcon };
-        }
-    }).mount('#app');
-</script>
+                return {
+                    view, activeDay, itineraries, rate, calcInput,
+                    newItem, listItems, addItem, expenses, addExpense
+                };
+            }
+        }).mount('#app');
+    </script>
 </body>
 </html>
