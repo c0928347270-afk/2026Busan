@@ -14,7 +14,6 @@
         .wave-header { background: linear-gradient(135deg, #0c4a6e 0%, #0284c7 100%); clip-path: ellipse(150% 100% at 50% 0%); }
         .ocean-card { border-radius: 2rem; border: 4px solid #bae6fd; box-shadow: 0 4px 15px rgba(186, 230, 253, 0.4); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .btn-map { @apply flex-1 py-3 px-2 rounded-xl font-black text-sm flex items-center justify-center transition-all active:scale-95; }
     </style>
 </head>
 <body class="text-slate-800 text-xl">
@@ -23,9 +22,9 @@
         <header class="wave-header text-white p-10 pb-16 text-center">
             <h1 class="text-3xl font-black mb-2 tracking-tighter">🐳 釜山・海景冒險 2026</h1>
             <nav class="flex bg-sky-900/40 backdrop-blur-md rounded-3xl mt-8 p-1.5 border border-white/20">
-                <button @click="view = 'itinerary'" :class="view === 'itinerary' ? 'bg-white text-sky-700 shadow-lg' : 'text-white'" class="flex-1 py-3 rounded-2xl font-black">🐚 行程</button>
-                <button @click="view = 'accounting'" :class="view === 'accounting' ? 'bg-white text-sky-700 shadow-lg' : 'text-white'" class="flex-1 py-3 rounded-2xl font-black">🦀 記帳</button>
-                <button @click="view = 'checklist'" :class="view === 'checklist' ? 'bg-white text-sky-700 shadow-lg' : 'text-white'" class="flex-1 py-3 rounded-2xl font-black">🎒 清單</button>
+                <button @click="view = 'itinerary'" :class="view === 'itinerary' ? 'bg-white text-sky-700 shadow-lg' : 'text-white'" class="flex-1 py-3 rounded-2xl font-black transition-all">🐚 行程</button>
+                <button @click="view = 'accounting'" :class="view === 'accounting' ? 'bg-white text-sky-700 shadow-lg' : 'text-white'" class="flex-1 py-3 rounded-2xl font-black transition-all">🦀 記帳</button>
+                <button @click="view = 'checklist'" :class="view === 'checklist' ? 'bg-white text-sky-700 shadow-lg' : 'text-white'" class="flex-1 py-3 rounded-2xl font-black transition-all">🎒 清單</button>
             </nav>
         </header>
 
@@ -52,13 +51,9 @@
                             <p class="text-slate-700 text-2xl leading-relaxed remarks-wrap font-medium">{{ item.desc }}</p>
                         </div>
                         
-                        <div class="flex space-x-3">
-                            <button @click="openMap('naver', item.activity)" class="flex-1 py-3 rounded-xl font-black text-sm bg-green-500 text-white flex items-center justify-center active:scale-95 transition-all">
-                                📍 Naver Maps
-                            </button>
-                            <button @click="openMap('google', item.activity)" class="flex-1 py-3 rounded-xl font-black text-sm bg-blue-500 text-white flex items-center justify-center active:scale-95 transition-all">
-                                🗺️ Google Maps
-                            </button>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button @click="openMap('naver', item.activity)" class="bg-green-500 text-white py-4 rounded-2xl font-black text-sm shadow-md active:scale-95 transition-all">📍 Naver Map</button>
+                            <button @click="openMap('google', item.activity)" class="bg-blue-500 text-white py-4 rounded-2xl font-black text-sm shadow-md active:scale-95 transition-all">🗺️ Google Map</button>
                         </div>
 
                         <div v-if="idx !== itineraries[activeDay].length - 1" class="mt-12 border-b-4 border-dotted border-sky-100"></div>
@@ -77,15 +72,15 @@
                 </div>
 
                 <div class="ocean-card bg-sky-600 p-8 text-white shadow-2xl">
-                    <h2 class="text-2xl font-black mb-6 text-center tracking-widest">新增支出紀錄</h2>
+                    <h2 class="text-2xl font-black mb-6 text-center">🐙 新增支出紀錄</h2>
                     <div class="space-y-5">
                         <div class="bg-white/10 rounded-3xl p-5 border border-white/20">
                             <label class="text-xs font-black text-sky-200 block mb-2 uppercase">項目名稱</label>
-                            <input v-model="expenseName" type="text" class="w-full bg-transparent text-2xl font-black outline-none placeholder:text-sky-300" placeholder="消費項目...">
+                            <input v-model="expenseName" type="text" class="w-full bg-transparent text-2xl font-black outline-none placeholder:text-sky-300" placeholder="消費名稱">
                         </div>
                         <div class="bg-white/10 rounded-3xl p-5 border border-white/20">
                             <label class="text-xs font-black text-sky-200 block mb-2 uppercase">金額 (KRW)</label>
-                            <input v-model.number="expenseAmount" type="number" class="w-full bg-transparent text-3xl font-black outline-none placeholder:text-sky-300" placeholder="0">
+                            <input v-model.number="expenseAmount" type="number" class="w-full bg-transparent text-3xl font-black outline-none placeholder:text-sky-300 font-mono" placeholder="0">
                         </div>
                         <button @click="saveExpense" class="w-full bg-white text-sky-600 py-6 rounded-[2.5rem] font-black text-2xl shadow-xl active:bg-sky-50">確認新增 ＋</button>
                     </div>
@@ -101,7 +96,7 @@
                                 <div class="font-black text-slate-800 text-2xl mb-1">{{ exp.name }}</div>
                                 <div class="text-sm font-bold text-slate-400">KRW {{ exp.amount.toLocaleString() }} | NT$ {{ (exp.amount * 0.024).toFixed(0) }}</div>
                             </div>
-                            <button @click="removeExpense(index)" class="flex-shrink-0 bg-rose-50 text-rose-500 font-black px-5 py-3 rounded-2xl active:bg-rose-100">
+                            <button @click.stop="handleDelete(index)" class="flex-shrink-0 bg-rose-50 text-rose-500 font-black px-5 py-3 rounded-2xl active:bg-rose-100">
                                 刪除
                             </button>
                         </div>
@@ -173,23 +168,21 @@
                         expenseName.value = '';
                         expenseAmount.value = null;
                         document.activeElement.blur();
-                    } else { alert('請填寫完整喔！🐙'); }
+                    } else { alert('請填寫完整資訊！'); }
                 };
 
-                const removeExpense = (index) => {
+                // 修正後的刪除函數
+                const handleDelete = (idx) => {
                     if(confirm('確定要刪除這筆紀錄嗎？')) {
-                        expenses.value.splice(index, 1);
+                        expenses.value.splice(idx, 1);
                     }
                 };
 
                 // 地圖功能
                 const openMap = (type, query) => {
-                    let url = "";
-                    if (type === 'naver') {
-                        url = `https://map.naver.com/v5/search/${encodeURIComponent(query)}`;
-                    } else {
-                        url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
-                    }
+                    const url = type === 'naver' 
+                        ? `https://map.naver.com/v5/search/${encodeURIComponent(query)}`
+                        : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
                     window.open(url, '_blank');
                 };
 
@@ -202,13 +195,13 @@
                 ]);
                 const addItem = () => { if (newItem.value.trim()) { listItems.value.push({ title: newItem.value, done: false }); newItem.value = ''; } };
 
-                // 行程資料 (依據 2026釜山.txt)
+                // 行程資料 (依據檔案校對)
                 const itineraries = ref({
                     1: [
                         { time: '11:00', activity: '連統停車場', transport: '停車', desc: '桃園市大園區國際路一段 509-1 號' },
                         { time: '14:25', activity: '長榮航空 BR164', transport: '飛機', desc: '桃園 ➔ 釜山' },
                         { time: '19:05', activity: 'NEWCZ NAMPO HOTEL', transport: '入住', desc: '札嘎其站 7 號出口左轉' },
-                        { time: '20:00', activity: '南浦雪濃湯', transport: '美食', desc: '推薦南浦洞必吃雪濃湯' }
+                        { time: '20:00', activity: '南浦雪濃湯', transport: '美食', desc: '南浦洞必吃雪濃湯' }
                     ],
                     2: [
                         { time: '10:30', activity: '樂天名牌折扣購物中心 東釜山店', transport: '計程車', desc: 'Outlet 購物與斜坡滑車' },
@@ -217,19 +210,19 @@
                         { time: '18:30', activity: '西面站 烤肉的男子', transport: '晚餐', desc: '西面人氣烤肉店' }
                     ],
                     3: [
-                        { time: '10:30', activity: '海雲台藍線公園 尾浦站', transport: '團體', desc: '天空膠囊火車 尾浦 ➔ 青沙浦' },
-                        { time: '13:10', activity: '海東龍宮寺', transport: '團體', desc: '臨海美麗佛寺' },
-                        { time: '16:40', activity: '慶州 皇理團路', transport: '團體', desc: '10 元起司餅、文創小物' },
+                        { time: '10:30', activity: '海雲台藍線公園', transport: '景點', desc: '天空膠囊火車 (尾浦 ➔ 青沙浦)' },
+                        { time: '13:10', activity: '海東龍宮寺', transport: '景點', desc: '臨海美麗佛寺' },
+                        { time: '16:40', activity: '慶州 皇理團路', transport: '景點', desc: '10 元起司餅、文創小物' },
                         { time: '19:00', activity: '東宮與月池', transport: '夜景', desc: '慶州古都絕美亮燈' }
                     ],
                     4: [
                         { time: '09:00', activity: '松島海上纜車', transport: '纜車', desc: '水晶車廂體驗' },
                         { time: '12:00', activity: '札嘎其市場', transport: '海鮮', desc: '帝王蟹大餐' },
-                        { time: '15:30', activity: '白淺灘文化村', transport: '計程車', desc: '海岸咖啡廳拍照' },
+                        { time: '15:30', activity: '白淺灘文化村', transport: '景點', desc: '海岸咖啡廳拍照' },
                         { time: '19:30', activity: '富平罐頭市場', transport: '消夜', desc: '釜山魚板、紅豆麻吉' }
                     ],
                     5: [
-                        { time: '09:00', activity: '甘川洞文化村', transport: '計程車', desc: '尋找小王子' },
+                        { time: '09:00', activity: '甘川洞文化村', transport: '景點', desc: '尋找小王子' },
                         { time: '11:00', activity: '樂天超市 南浦店', transport: '購物', desc: '最後採買伴手禮' },
                         { time: '13:00', activity: '李在模披薩 南浦總店', transport: '必吃', desc: '釜山人氣第一披薩' }
                     ]
@@ -238,7 +231,7 @@
                 return {
                     view, activeDay, itineraries, calcInput, weatherData,
                     newItem, listItems, addItem, 
-                    expenses, expenseName, expenseAmount, saveExpense, removeExpense, openMap
+                    expenses, expenseName, expenseAmount, saveExpense, handleDelete, openMap
                 };
             }
         }).mount('#app');
