@@ -14,6 +14,8 @@
         .wave-header { background: linear-gradient(135deg, #0c4a6e 0%, #0284c7 100%); clip-path: ellipse(150% 100% at 50% 0%); }
         .ocean-card { border-radius: 2rem; border: 4px solid #bae6fd; box-shadow: 0 4px 15px rgba(186, 230, 253, 0.4); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        /* 優化手機點擊感 */
+        button:active { transform: scale(0.98); }
     </style>
 </head>
 <body class="text-slate-800 text-xl">
@@ -42,44 +44,33 @@
                     </button>
                 </div>
 
-                <div class="mb-10 bg-sky-50 rounded-3xl p-5 border-2 border-sky-100 flex items-center justify-between">
-                    <span class="font-black text-sky-700">今日天氣概況</span>
-                    <span class="text-xl font-bold text-sky-600">{{ weatherData[activeDay].desc }} ({{ weatherData[activeDay].temp }})</span>
-                </div>
-
                 <div class="space-y-12">
                     <div v-for="(item, idx) in itineraries[activeDay]" :key="idx" class="relative">
                         <div class="flex items-center space-x-4 mb-3">
                             <span class="font-mono font-black text-sky-600 text-3xl tracking-tight">{{ item.time }}</span>
                             <span class="text-base bg-sky-100 text-sky-600 px-4 py-1 rounded-full font-black uppercase shadow-sm">{{ item.transport }}</span>
                         </div>
-                        
                         <h3 class="text-3xl font-black text-slate-900 mb-4 leading-snug">{{ item.activity }}</h3>
-                        
                         <div class="ocean-card bg-sky-50/40 p-8 border-2">
                             <p class="text-slate-700 text-2xl leading-relaxed remarks-wrap font-medium">{{ item.desc }}</p>
                         </div>
-                        
                         <div v-if="idx !== itineraries[activeDay].length - 1" class="mt-12 border-b-4 border-dotted border-sky-100"></div>
                     </div>
                 </div>
             </div>
 
             <div v-if="view === 'accounting'" class="space-y-8">
-                
                 <div class="ocean-card bg-white p-8 border-4 text-center">
-                    <h2 class="text-sm font-black text-sky-400 uppercase tracking-[0.2em] mb-4">KRW ➜ TWD 匯率換算 (0.024)</h2>
+                    <h2 class="text-sm font-black text-sky-400 uppercase tracking-widest mb-4">KRW ➜ TWD 換算 (0.024)</h2>
                     <div class="flex items-center justify-center space-x-4">
-                        <input v-model.number="calcInput" type="number" class="w-2/3 text-center text-4xl font-black text-sky-600 outline-none border-b-4 border-sky-100 focus:border-sky-500 pb-2" placeholder="輸入韓元">
+                        <input v-model.number="calcInput" type="number" class="w-2/3 text-center text-4xl font-black text-sky-600 outline-none border-b-4 border-sky-100 focus:border-sky-500 pb-2" placeholder="0">
                         <span class="text-2xl font-black text-slate-300">₩</span>
                     </div>
-                    <div class="mt-4 text-4xl font-black text-slate-400">
-                        ≈ <span class="text-sky-500 font-black">NT$ {{ (calcInput * 0.024).toFixed(0) }}</span>
-                    </div>
+                    <div class="mt-4 text-4xl font-black text-slate-400">≈ <span class="text-sky-500">NT$ {{ (calcInput * 0.024).toFixed(0) }}</span></div>
                 </div>
 
                 <div class="ocean-card bg-sky-600 p-8 text-white shadow-2xl">
-                    <h2 class="text-2xl font-black mb-6">🐙 新增一筆支出</h2>
+                    <h2 class="text-2xl font-black mb-6 font-black tracking-widest text-center">新增支出紀錄</h2>
                     <div class="space-y-5">
                         <div class="bg-white/10 rounded-3xl p-5 border border-white/20">
                             <label class="text-xs font-black text-sky-200 block mb-2 uppercase">項目名稱</label>
@@ -89,25 +80,21 @@
                             <label class="text-xs font-black text-sky-200 block mb-2 uppercase">金額 (KRW)</label>
                             <input v-model.number="expenseAmount" type="number" class="w-full bg-transparent text-3xl font-black outline-none placeholder:text-sky-300 font-mono" placeholder="0">
                         </div>
-                        <button @click="saveExpense" class="w-full bg-white text-sky-600 py-6 rounded-[2.5rem] font-black text-2xl shadow-xl active:bg-sky-50 transition-all">確認新增 ＋</button>
+                        <button @click="saveExpense" class="w-full bg-white text-sky-600 py-6 rounded-[2.5rem] font-black text-2xl shadow-xl">確認新增 ＋</button>
                     </div>
                 </div>
 
                 <div class="ocean-card bg-white border-4 overflow-hidden">
-                    <div class="p-6 bg-sky-50 border-b-4 border-sky-100 flex justify-between items-center font-black">
-                        <span class="text-sky-700 text-2xl">消費清單 🐚</span>
-                    </div>
+                    <div class="p-6 bg-sky-50 border-b-4 border-sky-100 font-black text-sky-700 text-2xl">消費明細 🐚</div>
                     <div class="divide-y-4 divide-sky-50">
-                        <div v-for="(exp, i) in expenses" :key="i" class="p-8 flex justify-between items-center bg-white">
-                            <div>
+                        <div v-for="(exp, i) in expenses" :key="i" class="p-8 flex justify-between items-center bg-white group">
+                            <div class="flex-grow">
                                 <div class="font-black text-slate-800 text-2xl mb-1">{{ exp.name }}</div>
-                                <div class="text-sm font-bold text-slate-400 font-mono">₩ {{ exp.amount.toLocaleString() }}</div>
+                                <div class="text-sm font-bold text-slate-400 font-mono">KRW {{ exp.amount.toLocaleString() }} | NT$ {{ (exp.amount * 0.024).toFixed(0) }}</div>
                             </div>
-                            <div class="text-right font-black text-sky-500 text-3xl">
-                                NT$ {{ (exp.amount * 0.024).toFixed(0) }}
-                            </div>
+                            <button @click="deleteExpense(i)" class="ml-4 text-rose-400 text-xl font-black bg-rose-50 px-4 py-2 rounded-2xl active:bg-rose-100">刪除</button>
                         </div>
-                        <div v-if="expenses.length === 0" class="p-16 text-center text-sky-200 italic font-black">目前還沒有紀錄喔 🏖️</div>
+                        <div v-if="expenses.length === 0" class="p-16 text-center text-sky-200 italic font-black">目前尚無紀錄</div>
                     </div>
                 </div>
             </div>
@@ -115,13 +102,22 @@
             <div v-if="view === 'checklist'" class="space-y-6">
                 <div class="ocean-card bg-white p-8 border-4">
                     <h2 class="font-black text-3xl mb-10 text-sky-700 text-center border-b-4 border-sky-50 pb-5">行前準備 🐧</h2>
-                    <div class="flex space-x-3 mb-10">
-                        <input v-model="newItem" @keyup.enter="addItem" type="text" class="flex-grow bg-sky-50 rounded-3xl px-8 py-5 text-xl font-bold outline-none border-2 border-transparent focus:border-sky-200" placeholder="要記得帶...">
-                        <button @click="addItem" class="bg-sky-500 text-white px-10 rounded-3xl font-black text-xl shadow-lg">加</button>
+                    
+                    <div class="flex flex-col space-y-4 mb-10">
+                        <input v-model="newItem" @keyup.enter="addItem" type="text" 
+                            class="w-full bg-sky-50 rounded-3xl px-8 py-5 text-xl font-bold outline-none border-4 border-transparent focus:border-sky-200" 
+                            placeholder="輸入要攜帶的項目...">
+                        <button @click="addItem" 
+                            class="w-full bg-sky-500 text-white py-5 rounded-3xl font-black text-2xl shadow-lg active:bg-sky-600">
+                            新增項目 ＋
+                        </button>
                     </div>
+
                     <ul class="space-y-5">
-                        <li v-for="(task, idx) in listItems" :key="idx" @click="task.done = !task.done" class="flex items-center p-6 bg-sky-50/50 rounded-[2rem] border-2 border-sky-50 transition-all" :class="task.done ? 'opacity-40' : 'shadow-sm'">
-                            <div class="w-12 h-12 rounded-full border-4 flex items-center justify-center transition-all" :class="task.done ? 'bg-green-400 border-green-300' : 'bg-white border-sky-100'">
+                        <li v-for="(task, idx) in listItems" :key="idx" @click="task.done = !task.done" 
+                            class="flex items-center p-6 bg-sky-50/50 rounded-[2rem] border-2 border-sky-50 transition-all" :class="task.done ? 'opacity-40' : 'shadow-sm'">
+                            <div class="w-12 h-12 rounded-full border-4 flex items-center justify-center transition-all" 
+                                :class="task.done ? 'bg-green-400 border-green-300' : 'bg-white border-sky-100'">
                                 <span v-if="task.done" class="text-white text-2xl font-black">✓</span>
                             </div>
                             <span :class="task.done ? 'line-through' : ''" class="ml-6 font-black text-2xl flex-grow text-slate-700 leading-tight">{{ task.title }}</span>
@@ -145,7 +141,7 @@
                 const activeDay = ref(1);
                 const calcInput = ref(null);
                 
-                // 天氣數據 (1月釜山預測)
+                // 天氣數據
                 const weatherData = ref({
                     1: { icon: '☀️', temp: '-1°/7°', desc: '晴朗/寒冷' },
                     2: { icon: '⛅', temp: '0°/8°', desc: '多雲時晴' },
@@ -154,10 +150,10 @@
                     5: { icon: '🌦️', temp: '0°/7°', desc: '局部短暫雨' }
                 });
 
-                // 記帳變數
+                // 記帳：已取消預設項目
                 const expenseName = ref('');
                 const expenseAmount = ref(null);
-                const expenses = ref([{ name: 'WOWPASS 儲值', amount: 50000 }]);
+                const expenses = ref([]);
 
                 const saveExpense = () => {
                     const name = expenseName.value.trim();
@@ -167,64 +163,68 @@
                         expenseName.value = '';
                         expenseAmount.value = null;
                         document.activeElement.blur();
-                    } else {
-                        alert('項目名稱跟金額要填寫正確喔！🐙');
+                    } else { alert('請輸入完整名稱與金額！🐙'); }
+                };
+
+                const deleteExpense = (index) => {
+                    if(confirm('確定要刪除這筆支出嗎？')) {
+                        expenses.value.splice(index, 1);
                     }
                 };
 
-                // 清單變數
+                // 清單
                 const newItem = ref('');
                 const listItems = ref([
                     { title: '換匯韓元', done: true },
-                    { title: '預約機場停車', done: true },
-                    { title: '下載 NAVER Map', done: true }
+                    { title: '下載 NAVER Map', done: true },
+                    { title: '確認飯店訂位', done: true }
                 ]);
                 const addItem = () => { if (newItem.value.trim()) { listItems.value.push({ title: newItem.value, done: false }); newItem.value = ''; } };
 
-                // 行程資料 (依據 活頁簿2.xlsx 校對)
+                // 行程資料
                 const itineraries = ref({
                     1: [
                         { time: '08:00', activity: '家裡出發', transport: '開車', desc: '斗六/虎尾 (預計 2.5 小時車程)' },
                         { time: '11:00', activity: '連統停車場', transport: '停車', desc: '桃園市大園區國際路一段 509-1 號' },
                         { time: '12:00', activity: '第二航廈報到', transport: '接駁', desc: '辦理報到、託運、入關手續' },
-                        { time: '14:25', activity: 'BR164 飛航中', transport: '飛機', desc: '長榮航空：桃園 ➔ 釜山' },
-                        { time: '17:40', activity: '抵達釜山金海機場', transport: '入境', desc: '辦理入境手續、領取行李' },
-                        { time: '19:05', activity: '飯店 Check-in', transport: '入住', desc: 'NEWCZ NAMPO HOTEL\n札嘎其站 7 號出口左轉即達' },
-                        { time: '20:00', activity: '南浦洞覓食', transport: '步行', desc: '推薦：人蔘雞湯粥 / 南浦雪濃湯 / Bhc 炸雞' }
+                        { time: '14:25', activity: 'BR164 飛機起飛', transport: '飛機', desc: '長榮航空：桃園 ➔ 釜山' },
+                        { time: '17:40', activity: '抵達釜山金海機場', transport: '入境', desc: '領行李、入境手續。前往地鐵站(GATE 3 出右轉)' },
+                        { time: '19:05', activity: '飯店入住', transport: '入住', desc: 'NEWCZ NAMPO HOTEL (札嘎其站 7 號出口)' },
+                        { time: '20:00', activity: '南浦洞晚餐', transport: '步行', desc: '推薦：南浦雪濃湯 / Bhc 炸雞' }
                     ],
                     2: [
                         { time: '09:30', activity: '前往海雲台', transport: '地鐵', desc: '1 號線(札嘎其) ➔ 西面 ➔ 2 號線(海雲台)' },
-                        { time: '10:30', activity: '東釜山 OUTLET/滑車', transport: '計程車', desc: '10:30 開門，北臉/國家地理購物、斜坡滑車' },
-                        { time: '13:55', activity: '海雲台市場', transport: '美食', desc: '必吃：31cm 海鮮麵 / 元祖糖餅 / 巨大牛骨湯' },
-                        { time: '15:30', activity: 'SPA LAND 汗蒸幕', transport: '新世界', desc: '必喝甜米釀、吃烤蛋、自助泡麵。位於新世界百貨 B1' },
-                        { time: '18:30', activity: '西面站烤肉', transport: '晚餐', desc: '推薦：烤肉的男子 / 83 獬豸 / 味贊王' }
+                        { time: '10:30', activity: '東釜山 OUTLET/滑車', transport: '計程車', desc: '10:30 開門購物、斜坡滑車體驗' },
+                        { time: '13:55', activity: '海雲台市場', transport: '美食', desc: '31cm 海鮮麵 / 元祖糖餅 / 巨大牛骨湯' },
+                        { time: '15:30', activity: 'SPA LAND 汗蒸幕', transport: '新世界', desc: '新世界百貨 B1。必喝甜米釀、吃烤蛋、自助泡麵' },
+                        { time: '18:30', activity: '西面站烤肉', transport: '晚餐', desc: '烤肉的男子 / 83 獬豸 / 味贊王' }
                     ],
                     3: [
-                        { time: '09:00', activity: '釜山站 1 號出口集合', transport: '跟團', desc: 'KTX 釜山站集合 (一日行程開始)' },
-                        { time: '10:30', activity: '天空膠囊火車', transport: '跟團', desc: '尾浦 ➔ 青沙浦。午餐建議：韓牛紙火鍋 / 道熙家' },
-                        { time: '16:40', activity: '慶州：大陵院/皇理團路', transport: '跟團', desc: '必吃：10 元起司餅、南瓜薯條、皇南夾心餅' },
-                        { time: '19:00', activity: '東宮與月池', transport: '夜景', desc: '欣賞古都慶州的絕美夜景導覽' }
+                        { time: '09:00', activity: '釜山站 1 號出口集合', transport: '團體', desc: '參加慶州一日行程' },
+                        { time: '10:30', activity: '天空膠囊火車', transport: '團體', desc: '尾浦 ➔ 青沙浦。午餐：韓牛紙火鍋' },
+                        { time: '16:40', activity: '慶州：大陵院/皇理團路', transport: '團體', desc: '10 元起司餅、南瓜薯條、皇南夾心餅' },
+                        { time: '19:00', activity: '東宮與月池', transport: '夜景', desc: '古都慶州絕美夜間導覽' }
                     ],
                     4: [
-                        { time: '08:30', activity: '松島天空步道', transport: '計程車', desc: '漫步海濱景觀步道' },
-                        { time: '09:00', activity: '松島海上纜車', transport: '纜車', desc: '水晶車廂體驗，欣賞松島海邊全景' },
-                        { time: '12:00', activity: '札嘎其市場', transport: '海鮮', desc: '必吃帝王蟹 (預算每公斤 6-8 萬韓幣)' },
-                        { time: '15:30', activity: '白淺灘文化村 / 太宗台', transport: '計程車', desc: '拍照聖地與遊園火車體驗' },
-                        { time: '19:30', activity: '罐頭市場消夜', transport: '步行', desc: '必吃：紅豆奶油艾草麻吉 / 釜山魚板' }
+                        { time: '08:30', activity: '松島天空步道', transport: '計程車', desc: '海濱景觀步道漫步' },
+                        { time: '09:00', activity: '松島海上纜車', transport: '纜車', desc: '水晶車廂體驗' },
+                        { time: '12:00', activity: '札嘎其市場', transport: '海鮮', desc: '帝王蟹大餐 (預算每公斤 6-8 萬韓幣)' },
+                        { time: '15:30', activity: '白淺灘文化村 / 太宗台', transport: '計程車', desc: '文化村拍照、遊園火車體驗' },
+                        { time: '19:30', activity: '罐頭市場消夜', transport: '步行', desc: '紅豆艾草麻吉 / 釜山魚板' }
                     ],
                     5: [
-                        { time: '09:00', activity: '甘川洞文化村', transport: '計程車', desc: '早起避開人潮，小王子打卡點拍照' },
-                        { time: '11:00', activity: '樂天超市採買', transport: '步行', desc: '最後補齊韓國零食、伴手禮、泡麵' },
-                        { time: '13:00', activity: '李在模披薩', transport: '必吃', desc: '釜山最知名人氣披薩 (南浦總店)' },
-                        { time: '16:30', activity: '金海機場', transport: '地鐵', desc: 'KIOSK 掃描退稅條碼並辦理登機' },
-                        { time: '18:55', activity: '返航台灣 (BR163)', transport: '飛機', desc: '20:25 抵達桃園第二航廈' }
+                        { time: '09:00', activity: '甘川洞文化村', transport: '計程車', desc: '早起拍照、尋找小王子' },
+                        { time: '11:00', activity: '樂天超市採買', transport: '步行', desc: '最後採買伴手禮' },
+                        { time: '13:00', activity: '李在模披薩', transport: '必吃', desc: '釜山名店南浦總店午餐' },
+                        { time: '16:30', activity: '金海機場', transport: '地鐵', desc: '退稅條碼掃描與登機' },
+                        { time: '18:55', activity: '返航台灣 (BR163)', transport: '飛機', desc: '20:25 抵達桃園，開心回家！' }
                     ]
                 });
 
                 return {
                     view, activeDay, itineraries, calcInput, weatherData,
                     newItem, listItems, addItem, 
-                    expenses, expenseName, expenseAmount, saveExpense
+                    expenses, expenseName, expenseAmount, saveExpense, deleteExpense
                 };
             }
         }).mount('#app');
