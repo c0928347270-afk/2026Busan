@@ -119,17 +119,19 @@
 <body class="selection:bg-[#f8a5c2] selection:text-black">
 
     <header id="main-header" class="pt-12 pb-6 border-b border-[#f8a5c2]/20 text-center bg-black">
-        <h1 class="text-4xl font-black tracking-tighter text-pink uppercase italic leading-none">Busan부산 South Korea</h1>
+        <h1 class="text-4xl font-black tracking-tighter text-pink uppercase italic leading-none">Busan부산 Korea</h1>
         <p class="text-base tracking-[0.2em] text-gray-400 font-black mt-2 uppercase italic">韓國釜山 JAN 2026</p>
     </header>
 
     <main class="px-3 pt-6">
 
+        <!-- 視圖 1: 行程 -->
         <div id="view-itinerary" class="view-content active">
             <div id="day-nav" class="flex gap-2 overflow-x-auto pb-4 no-scrollbar sticky top-[0px] z-30 py-3 bg-black"></div>
             <div id="itinerary-list" class="space-y-3"></div>
         </div>
 
+        <!-- 視圖 2: 匯率 -->
         <div id="view-calculator" class="view-content">
             <div class="mb-6 text-center px-2">
                 <p class="text-gray-400 text-sm tracking-widest mt-2 font-black uppercase italic">Rate: 1 TWD : 41.5 KRW</p>
@@ -159,13 +161,14 @@
             </div>
         </div>
 
+        <!-- 視圖 3: 紀錄 -->
         <div id="view-shopping" class="view-content">
             <div class="mb-8 px-2 flex justify-between items-end">
                 <div>
                     <h2 class="text-4xl font-black italic uppercase text-pink">Shopping</h2>
-                    <p id="user-display-id" class="text-[10px] text-gray-600 mt-1 tracking-tighter uppercase font-bold tracking-widest italic">Syncing...</p>
+                    <p id="user-display-id" class="text-[10px] text-gray-600 mt-1 tracking-tighter uppercase font-bold tracking-widest italic">Personal Log</p>
                 </div>
-                <div class="text-[10px] text-gray-500 uppercase font-black" id="cloud-status">Standby</div>
+                <div class="text-[10px] text-gray-500 uppercase font-black" id="cloud-status">Connecting...</div>
             </div>
             <div class="bg-[#111] p-6 border-2 border-[#222] rounded-2xl mb-8">
                 <div class="grid grid-cols-12 gap-3">
@@ -186,6 +189,7 @@
             </div>
         </div>
 
+        <!-- 視圖 4: 換匯 -->
         <div id="view-exchange" class="view-content px-2">
             <div class="mb-8 text-center">
                 <h2 class="text-4xl font-black italic uppercase text-pink">Exchange</h2>
@@ -224,17 +228,12 @@
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, collection, addDoc, deleteDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // --- 配置與變數 ---
         const EXCHANGE_RATE = 41.5;
-        let expenses = [];
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'busan-trip-2026';
-        const firebaseConfig = JSON.parse(__firebase_config);
+        let expenses = [];
+        let db, auth;
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        // --- 旅遊數據 ---
+        // --- 行程與靜態數據 ---
         const itineraryData = [
             { day: "DAY 1", date: "115/01/21 (三)", weather: { icon: "sun", hi: "2°", lo: "-3°" }, events: [
                 { time: "08:00", activity: "家裡出發", type: "car", loc: "斗六/虎尾", note: "開車由斗六或虎尾出發，預計車程 2~3 小時。" },
@@ -251,6 +250,7 @@
                 { time: "09:30", activity: "前往海雲台", type: "car", loc: "海雲台站", note: "1. 地鐵：約 50 分鐘 (1 號線 > 西面轉 2 號線)。2. 計程車：約 40-60 分鐘。" },
                 { time: "10:30", activity: "東釜山樂天OUTLET", type: "shopping-bag", loc: "樂天OUTLET", note: "10:30 開門。採買北臉、國家地理比台灣便宜許多。斜坡滑車就在旁。" },
                 { time: "13:55", activity: "海雲台傳統市場", type: "utensils", loc: "海雲台市場", note: "推薦：31 公分海鮮湯麵、元祖糖餅、巨大牛骨湯。" },
+                { time: "14:25", activity: "新世界百貨", type: "shopping-bag", loc: "Centum City 新世界百貨", note: "逛街消化，準備前往汗蒸幕。" },
                 { time: "15:30", activity: "SPA LAND 汗蒸幕", type: "map-pin", loc: "SPA LAND", note: "新世界百貨 B1。必喝甜米釀、吃烤蛋。預計停留 2-3 小時。" },
                 { time: "18:30", activity: "晚餐吃烤肉", type: "utensils", loc: "西面站烤肉街", note: "西面 4 選 1：烤肉的男子 (CP高)、釜山宅烤肉、味贊王、83 獬豸。" },
                 { time: "22:00", activity: "回飯店", type: "train", loc: "札嘎其站", note: "搭乘地鐵 2 號線轉 1 號線或搭計程車返回。" }
@@ -266,7 +266,6 @@
             ]},
             { day: "DAY 4", date: "115/01/24 (六)", weather: { icon: "sun", hi: "3°", lo: "-2°" }, events: [
                 { time: "08:30", activity: "松島天空步道", type: "map-pin", loc: "松島天空步道", note: "漫步在海面上 365 公尺長的透明玻璃步道。" },
-                { time: "09:00", activity: "松島海上纜車", type: "map-pin", loc: "松島海上纜車", note: "體驗跨海透明纜車。由松林公園前往岩南公園段。" },
                 { time: "12:00", activity: "札嘎其市場午餐", type: "utensils", loc: "札嘎其市場", note: "帝王蟹必吃 (每公斤約 6-8 萬韓元)，現殺現煮鮮甜美味。" },
                 { time: "13:50", activity: "影島大橋開橋", type: "map-pin", loc: "樂天百貨頂樓", note: "14:00 準時開橋。建議先到樂天光復店頂樓『星光花園』俯瞰。" },
                 { time: "14:30", activity: "白淺灘文化村", type: "map-pin", loc: "白淺灘文化村", note: "釜山的聖托里尼，海邊彩色村落與彩色隧道必拍。" },
@@ -284,12 +283,12 @@
         ];
 
         const exchangeData = [
-            { region: "gimhae", name: "Money Box 金海機場店", note: "位置：機場航廈 GATE 3 橫跨馬路直走，就在『輕軌機場站』1 號出口正下方。這是 24 小時自助機台。匯率優於機場內，適合急用。" },
-            { region: "nampo", name: "映真換錢所 (Youngjin)", note: "位置：地鐵南浦站 7 號出口直走第一個十字路口。看到便利商店右轉巷內約 30 公尺。釜山指標，建議帶台幣千元大鈔直接更換。" },
-            { region: "nampo", name: "友利換錢所 (Woori)", note: "位置：映真換錢所正隔壁。若映真排隊過長，直接換這家即可。兩家匯率長期一致。" },
-            { region: "seomyeon", name: "那英換錢所 (Nayoung)", note: "位置：西面站 7 號出口直走，過星巴克後大路口右轉進入『西面市場』。豬肉湯飯街入口附近。老字號，匯率優。" },
-            { region: "seomyeon", name: "Money Box 西面店", note: "位置：西面站 7 號出口附近主要商務大樓內。24 小時自助換錢機，匯率透明顯示。" },
-            { region: "haeundae", name: "Money Box 海雲台店", note: "位置：地鐵海雲台站 5 號出口，往海灘步行 2 分鐘轉角處。介面支援中文，方便活動時兌換。" }
+            { region: "gimhae", name: "Money Box 金海機場店", note: "如何前往：走出金海機場 1 樓 GATE 3 號門，穿越前方馬路朝向『金海輕軌機場站』建築直走。進入輕軌站建築後，Money Box 自助機台就在 1 號出口附近（航廈正對面）。這是 24 小時機台，匯率優於機場內銀行。" },
+            { region: "nampo", name: "映真換錢所 (Youngjin)", note: "如何前往：地鐵南浦站 7 號出口出站直走，第一個十字路口看到便利商店右轉進入巷弄。這是釜山指標性的換錢所。建議帶台幣千元大鈔直接更換。" },
+            { region: "nampo", name: "友利換錢所 (Woori)", note: "如何前往：就在映真換錢所正隔壁。兩家匯率長期一致，人多時可換這家。" },
+            { region: "seomyeon", name: "那英換錢所 (Nayoung)", note: "如何前往：地鐵西面站 7 號出口直走，過星巴克後大路口右轉進入『西面市場』。在豬肉湯飯街入口附近。匯率是西面區最好的。" },
+            { region: "seomyeon", name: "Money Box 西面店", note: "如何前往：位於西面站附近商務大樓內。提供 24 小時自助換錢服務。機台匯率透明。" },
+            { region: "haeundae", name: "Money Box 海雲台店", note: "如何前往：地鐵海雲台站 5 號出口直走步行約 2 分鐘轉角處。介面支援中文，兌換快速。" }
         ];
 
         // --- 全域導覽與顯示邏輯 ---
@@ -298,15 +297,15 @@
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             const target = document.getElementById(`view-${viewId}`);
             const btn = document.getElementById(`btn-view-${viewId}`);
-            if(target) target.classList.add('active');
-            if(btn) btn.classList.add('active');
+            if (target) target.classList.add('active');
+            if (btn) btn.classList.add('active');
             window.scrollTo(0, 0);
         };
 
         const renderDay = (index) => {
             document.querySelectorAll('#day-nav button').forEach(b => b.classList.remove('active-day-pill'));
             const btn = document.getElementById(`day-pill-${index}`);
-            if(btn) btn.classList.add('active-day-pill');
+            if (btn) btn.classList.add('active-day-pill');
 
             const container = document.getElementById('itinerary-list');
             const data = itineraryData[index];
@@ -350,53 +349,52 @@
 
         const renderExchange = () => {
             const containers = { gimhae: "ex-gimhae", nampo: "ex-nampo", seomyeon: "ex-seomyeon", haeundae: "ex-haeundae" };
-            Object.keys(containers).forEach(k => { const el = document.getElementById(containers[k]); if(el) el.innerHTML = ""; });
+            Object.keys(containers).forEach(k => { const el = document.getElementById(containers[k]); if (el) el.innerHTML = ""; });
             exchangeData.forEach(ex => {
                 const html = `<div class="bg-[#111] p-6 border-2 border-[#222] rounded-3xl"><h4 class="font-black text-white text-xl mb-2">${ex.name}</h4><p class="text-base text-gray-400 font-bold leading-relaxed">${ex.note}</p></div>`;
                 const target = document.getElementById(containers[ex.region]);
-                if(target) target.innerHTML += html;
+                if (target) target.innerHTML += html;
             });
             lucide.createIcons();
         };
 
-        // --- 購物紀錄邏輯 ---
+        // --- 購物紀錄功能 (掛載於 window 確保可被調用) ---
         const renderExpenses = () => {
             const list = document.getElementById('expense-container');
             const totalKrwEl = document.getElementById('total-krw');
             const totalTwdEl = document.getElementById('total-twd');
             if (!list) return;
 
-            list.innerHTML = expenses.map(ex => `
+            list.innerHTML = expenses.length === 0 ? '<p class="text-center text-gray-600 py-10 uppercase font-black">No Records</p>' : expenses.map(ex => `
                 <div class="flex justify-between items-center bg-[#111] p-6 rounded-3xl border border-[#222]">
                     <div class="flex-1">
                         <span class="text-xl font-black uppercase text-white block">${ex.item}</span>
-                        <div class="text-xs text-gray-500 font-bold mt-1">≈ NT$ ${Math.round(ex.cost/EXCHANGE_RATE).toLocaleString()}</div>
+                        <div class="text-xs text-gray-500 font-bold mt-1">≈ NT$ ${Math.round(ex.cost / EXCHANGE_RATE).toLocaleString()}</div>
                     </div>
                     <div class="flex items-center gap-4">
                         <div class="text-right"><div class="text-pink font-mono font-black text-2xl">₩${ex.cost.toLocaleString()}</div></div>
-                        <button class="delete-btn p-2 text-gray-600 hover:text-pink transition-transform active:scale-75" data-id="${ex.id}"><i data-lucide="trash-2" class="w-6 h-6"></i></button>
+                        <button class="delete-expense-btn p-2 text-gray-600 hover:text-pink transition-transform active:scale-75" data-id="${ex.id}"><i data-lucide="trash-2" class="w-6 h-6"></i></button>
                     </div>
                 </div>`).join('');
 
             const total = expenses.reduce((s, c) => s + (Number(c.cost) || 0), 0);
             totalKrwEl.innerText = `₩${total.toLocaleString()}`;
-            totalTwdEl.innerText = `≈ NT$ ${Math.round(total/EXCHANGE_RATE).toLocaleString()}`;
+            totalTwdEl.innerText = `≈ NT$ ${Math.round(total / EXCHANGE_RATE).toLocaleString()}`;
             lucide.createIcons();
-            
-            // 綁定事件
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.onclick = () => window.deleteExpense(btn.dataset.id);
+
+            document.querySelectorAll('.delete-expense-btn').forEach(btn => {
+                btn.onclick = () => window.handleDeleteExpense(btn.dataset.id);
             });
         };
 
-        window.deleteExpense = async (id) => { 
-            if(!db || !auth.currentUser) return; 
+        window.handleDeleteExpense = async (id) => {
+            if (!db || !auth.currentUser) return;
             try {
                 await deleteDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'shopping_records', id));
-            } catch(e) { console.error("Delete failed:", e); }
+            } catch (e) { console.error("Delete failed:", e); }
         };
 
-        window.addExpenseAction = async () => {
+        window.handleAddExpense = async () => {
             const itemInput = document.getElementById('exp-item');
             const costInput = document.getElementById('exp-cost');
             const item = itemInput.value;
@@ -404,54 +402,59 @@
 
             if (db && auth.currentUser && item && cost) {
                 try {
-                    await addDoc(collection(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'shopping_records'), { 
-                        item: item, 
-                        cost: Number(cost), 
-                        createdAt: serverTimestamp() 
+                    await addDoc(collection(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'shopping_records'), {
+                        item: item,
+                        cost: Number(cost),
+                        createdAt: serverTimestamp()
                     });
-                    itemInput.value = ""; costInput.value = "";
-                } catch(e) { console.error("Add failed:", e); }
+                    itemInput.value = "";
+                    costInput.value = "";
+                } catch (e) { console.error("Add failed:", e); }
             }
         };
 
         const setupShoppingSync = (userId) => {
             const colRef = collection(db, 'artifacts', appId, 'users', userId, 'shopping_records');
             onSnapshot(colRef, (s) => {
-                expenses = s.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => {
-                    const tA = a.createdAt?.seconds || 9999999999;
-                    const tB = b.createdAt?.seconds || 9999999999;
+                expenses = s.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => {
+                    const tA = a.createdAt?.seconds || Date.now();
+                    const tB = b.createdAt?.seconds || Date.now();
                     return tB - tA;
                 });
                 renderExpenses();
             }, (err) => console.error("Sync error:", err));
         };
 
-        // --- 初始化 ---
+        // --- 初始化流程 ---
         const init = async () => {
+            // 1. 優先渲染靜態組件 (不等待雲端)
             const nav = document.getElementById('day-nav');
-            itineraryData.forEach((d, i) => { 
-                const b = document.createElement('button'); 
-                b.id = `day-pill-${i}`; 
-                b.className = "flex-shrink-0 px-6 py-2 rounded-full border border-[#333] text-sm font-black uppercase bg-[#0a0a0a]"; 
-                b.innerText = d.day; 
-                b.onclick = () => renderDay(i); 
-                nav.appendChild(b); 
+            itineraryData.forEach((d, i) => {
+                const b = document.createElement('button');
+                b.id = `day-pill-${i}`;
+                b.className = "flex-shrink-0 px-6 py-2 rounded-full border border-[#333] text-sm font-black uppercase bg-[#0a0a0a]";
+                b.innerText = d.day;
+                b.onclick = () => renderDay(i);
+                nav.appendChild(b);
             });
             renderDay(0);
             renderExchange();
-            
+
+            // 2. 綁定按鈕 (Module 內部綁定避免 onclick 遺失)
             document.getElementById('btn-view-itinerary').onclick = () => window.switchView('itinerary');
             document.getElementById('btn-view-calculator').onclick = () => window.switchView('calculator');
             document.getElementById('btn-view-shopping').onclick = () => window.switchView('shopping');
             document.getElementById('btn-view-exchange').onclick = () => window.switchView('exchange');
-            document.getElementById('add-expense-btn').onclick = () => window.addExpenseAction();
+            document.getElementById('add-expense-btn').onclick = () => window.handleAddExpense();
 
+            // 3. 匯率邏輯
             const t = document.getElementById('twd-input'), k = document.getElementById('krw-input');
             k.oninput = (e) => t.value = e.target.value ? (e.target.value / EXCHANGE_RATE).toFixed(0) : "";
             t.oninput = (e) => k.value = e.target.value ? Math.round(e.target.value * EXCHANGE_RATE) : "";
 
+            // 4. Firebase 初始化
             try {
-                if (typeof __firebase_config === 'undefined') throw new Error("Config missing");
+                if (typeof __firebase_config === 'undefined') throw new Error("Firebase Config Missing");
                 const config = JSON.parse(__firebase_config);
                 const appInstance = initializeApp(config);
                 auth = getAuth(appInstance);
@@ -470,8 +473,8 @@
                         setupShoppingSync(user.uid);
                     }
                 });
-            } catch(e) {
-                console.warn("Cloud error, using local UI.");
+            } catch (e) {
+                console.warn("Cloud connection error, using local UI.");
                 document.getElementById('cloud-status').innerText = "Local Mode";
             }
             lucide.createIcons();
