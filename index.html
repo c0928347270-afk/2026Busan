@@ -142,7 +142,7 @@
                 </div>
             </div>
 
-            <!-- 天數導航：修改為單排顯示 -->
+            <!-- 天數導覽列：單排固定顯示 -->
             <div id="day-nav" class="grid grid-cols-5 gap-1.5 pb-4 sticky top-[0px] z-30 py-3 bg-black"></div>
             <div id="itinerary-list" class="space-y-3"></div>
         </div>
@@ -186,7 +186,7 @@
             <div class="bg-[#111] p-6 border-2 border-[#222] rounded-2xl mb-8">
                 <div class="grid grid-cols-12 gap-3">
                     <input type="text" id="exp-item" placeholder="品項名稱" class="col-span-7 bg-black border border-[#333] p-4 text-base rounded-xl font-black text-white outline-none focus:border-pink">
-                    <input type="number" id="exp-cost" placeholder="KRW" class="col-span-3 bg-black border border-[#333] p-4 text-base rounded-xl font-mono text-white outline-none focus:border-pink">
+                    <input type="number" inputmode="decimal" id="exp-cost" placeholder="KRW" class="col-span-3 bg-black border border-[#333] p-4 text-base rounded-xl font-mono text-white outline-none focus:border-pink">
                     <button id="add-expense-btn" class="col-span-2 bg-pink text-black rounded-xl font-black text-3xl active:scale-90 transition-transform shadow-lg">+</button>
                 </div>
             </div>
@@ -264,7 +264,7 @@
                 { time: "14:25", activity: "新世界百貨", type: "shopping-bag", loc: "新世界百貨", note: "交通：計程車/地鐵。說明：逛街消化一下接著去汗蒸幕" },
                 { time: "15:30", activity: "SPA LAND 汗蒸幕", type: "map-pin", loc: "SPA LAND", note: "地點：新世界百貨 B1。預計停留2-3小時(必喝甜米釀/吃烤蛋)自助泡麵。步驟:換票→寄鞋→領衣服毛巾→清洗→泡湯→穿發的衣服→桑拿房→換私服→結算→穿鞋" },
                 { time: "18:00", activity: "搭車前往西面站", type: "train", loc: "西面站", note: "交通：1.地鐵 2.計程車。說明：新世界百貨旁就有地鐵站，搭綠線可直達西面站" },
-                { time: "18:30", activity: "晚餐吃烤肉", type: "utensils", loc: "西面站", note: "說明：烤肉4選1。烤肉的男子(고기굽는남자서면점)/釜山宅烤肉(부산댁)/味贊王(맛찬들왕소금구이서면점)/83獬豸(83 해치)" },
+                { time: "18:30", activity: "晚餐吃烤肉", type: "utensils", loc: "西面站", note: "說明：烤肉4選1。烤肉的男子(고기굽는남자서면점)/釜山宅烤肉(부산댁)/味贊王(맛찬들왕소금구い서면점)/83獬豸(83 해치)" },
                 { time: "18:40", activity: "西面站逛街", type: "shopping-bag", loc: "西面站", note: "景點：西面地下街文創店(地鐵西面站) /大創百貨" },
                 { time: "22:00", activity: "回飯店", type: "train", loc: "南浦", note: "交通：地鐵/計程車" }
             ]},
@@ -443,8 +443,8 @@
             itineraryData.forEach((d, i) => { 
                 const b = document.createElement('button'); 
                 b.id = `day-pill-${i}`; 
-                // 移除 px 改用 w-full 並微調邊距
-                b.className = "w-full py-2 rounded-full border border-[#333] text-[10px] font-black uppercase bg-[#0a0a0a]"; 
+                // 放大點選範圍與字體
+                b.className = "w-full py-4 rounded-full border border-[#333] text-sm font-black uppercase bg-[#0a0a0a]"; 
                 b.innerText = d.day; 
                 b.onclick = () => renderDay(i); 
                 nav.appendChild(b); 
