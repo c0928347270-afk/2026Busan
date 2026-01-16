@@ -36,7 +36,7 @@
             background: #1a1a1a;
         }
 
-        /* 項目標題區域底色：增強分界感 */
+        /* 項目標題區域底色 */
         .item-header {
             background: rgba(255, 255, 255, 0.08);
             border-bottom: 1px solid var(--bp-border);
@@ -108,7 +108,7 @@
         }
         input[type=number] { -moz-appearance: textfield; }
 
-        /* 匯率輸入框：粉紅底黑字 */
+        /* 匯率輸入框 */
         .calc-input-box {
             background-color: var(--bp-pink);
             padding: 24px;
@@ -125,7 +125,7 @@
 <body class="selection:bg-[#f8a5c2] selection:text-black">
 
     <header id="main-header" class="pt-12 pb-6 border-b border-[#f8a5c2]/20 text-center bg-black">
-        <h1 class="text-4xl font-black tracking-tighter text-pink uppercase italic leading-none">Busan Vibe</h1>
+        <h1 class="text-4xl font-black tracking-tighter text-pink uppercase italic leading-none">Busan부산 South Korea</h1>
         <p class="text-base tracking-[0.2em] text-gray-400 font-black mt-2 uppercase italic">韓國釜山 JAN 2026</p>
     </header>
 
@@ -179,7 +179,7 @@
             <div class="bg-[#111] p-6 border-2 border-[#222] rounded-2xl mb-8">
                 <div class="grid grid-cols-12 gap-3">
                     <input type="text" id="exp-item" placeholder="品項名稱" class="col-span-7 bg-black border border-[#333] p-4 text-base rounded-xl font-black text-white outline-none focus:border-pink">
-                    <input type="number" id="exp-cost" placeholder="KRW" class="col-span-3 bg-black border border-[#333] p-4 text-base rounded-xl font-mono text-white outline-none focus:border-pink">
+                    <input type="number" inputmode="decimal" id="exp-cost" placeholder="KRW" class="col-span-3 bg-black border border-[#333] p-4 text-base rounded-xl font-mono text-white outline-none focus:border-pink">
                     <button id="add-expense-btn" class="col-span-2 bg-pink text-black rounded-xl font-black text-3xl active:scale-90 transition-transform shadow-lg">+</button>
                 </div>
             </div>
@@ -234,39 +234,15 @@
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, collection, addDoc, deleteDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // --- 全域變數與配置 ---
+        // --- 配置與變數 ---
         const EXCHANGE_RATE = 41.5;
         let expenses = [];
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'busan-trip-2026';
-        
-        // 安全獲取 Firebase 配置
-        let db, auth;
-        const initFirebase = async () => {
-            try {
-                if (typeof __firebase_config === 'undefined') throw new Error("Firebase Config Missing");
-                const config = JSON.parse(__firebase_config);
-                const app = initializeApp(config);
-                auth = getAuth(app);
-                db = getFirestore(app);
+        const firebaseConfig = JSON.parse(__firebase_config);
 
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-
-                onAuthStateChanged(auth, (user) => {
-                    if (user) {
-                        document.getElementById('cloud-status').innerText = "Cloud Sync Active";
-                        document.getElementById('user-display-id').innerText = `User ID: ${user.uid.substring(0, 8)}...`;
-                        setupShoppingSync(user.uid);
-                    }
-                });
-            } catch(e) {
-                console.warn("Firebase Init Error:", e);
-                document.getElementById('cloud-status').innerText = "Local Mode";
-            }
-        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
         // --- 旅遊數據 ---
         const itineraryData = [
@@ -325,7 +301,7 @@
             { region: "haeundae", name: "Money Box 海雲台店", note: "位置：地鐵海雲台站 5 號出口，往海灘方向直走步行約 2 分鐘即可在轉角處看到。這裡的機台匯率比飯店或海邊小店好很多，且支援各種主要貨幣。" }
         ];
 
-        // --- 核心渲染邏輯 ---
+        // --- 介面控制 ---
         const switchView = (viewId) => {
             document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -392,7 +368,7 @@
             lucide.createIcons();
         };
 
-        // --- 購物紀錄邏輯 ---
+        // --- 購物紀錄邏輯 (Firebase 修復) ---
         const renderExpenses = () => {
             const list = document.getElementById('expense-container');
             const totalKrwEl = document.getElementById('total-krw');
@@ -416,6 +392,7 @@
             totalTwdEl.innerText = `≈ NT$ ${Math.round(total/EXCHANGE_RATE).toLocaleString()}`;
             lucide.createIcons();
             
+            // 重新綁定刪除事件
             document.querySelectorAll('.delete-expense-btn').forEach(btn => {
                 btn.onclick = () => deleteExpense(btn.dataset.id);
             });
@@ -424,20 +401,27 @@
         const deleteExpense = async (id) => { 
             if(!auth || !auth.currentUser) return; 
             try {
-                await deleteDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'shopping_records', id));
+                const docRef = doc(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'shopping_records', id);
+                await deleteDoc(docRef);
             } catch(e) { console.error("Delete failed:", e); }
         };
 
         const addExpenseAction = async () => {
-            const item = document.getElementById('exp-item'), cost = document.getElementById('exp-cost');
-            if (auth && auth.currentUser && item.value && cost.value) {
+            const itemInput = document.getElementById('exp-item');
+            const costInput = document.getElementById('exp-cost');
+            const item = itemInput.value;
+            const cost = costInput.value;
+
+            if (auth && auth.currentUser && item && cost) {
                 try {
-                    await addDoc(collection(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'shopping_records'), { 
-                        item: item.value, 
-                        cost: Number(cost.value), 
+                    const colRef = collection(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'shopping_records');
+                    await addDoc(colRef, { 
+                        item: item, 
+                        cost: Number(cost), 
                         createdAt: serverTimestamp() 
                     });
-                    item.value = ""; cost.value = "";
+                    itemInput.value = ""; 
+                    costInput.value = "";
                 } catch(e) { console.error("Add failed:", e); }
             }
         };
@@ -448,15 +432,15 @@
                 expenses = s.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => {
                     const timeA = a.createdAt?.seconds || 0;
                     const timeB = b.createdAt?.seconds || 0;
-                    return timeB - timeA;
+                    return timeB - timeA; // 最新顯示在最前
                 });
                 renderExpenses();
             }, (err) => console.error("Sync error:", err));
         };
 
-        // --- 初始化入口 ---
+        // --- 初始化 ---
         const init = () => {
-            // 1. 立即渲染靜態 UI (不等待 Firebase)
+            // 1. 立即渲染行程導航按鈕
             const nav = document.getElementById('day-nav');
             itineraryData.forEach((d, i) => { 
                 const b = document.createElement('button'); 
@@ -466,27 +450,29 @@
                 b.onclick = () => renderDay(i); 
                 nav.appendChild(b); 
             });
+            
             renderDay(0);
             renderExchange();
             
-            // 2. 綁定按鈕監聽
+            // 2. 設置按鈕點擊監聽 (全域掛載)
             document.getElementById('btn-view-itinerary').onclick = () => switchView('itinerary');
             document.getElementById('btn-view-calculator').onclick = () => switchView('calculator');
             document.getElementById('btn-view-shopping').onclick = () => switchView('shopping');
             document.getElementById('btn-view-exchange').onclick = () => switchView('exchange');
             document.getElementById('add-expense-btn').onclick = addExpenseAction;
 
-            // 3. 匯率計算
-            const t = document.getElementById('twd-input'), k = document.getElementById('krw-input');
+            // 3. 匯率即時換算
+            const t = document.getElementById('twd-input');
+            const k = document.getElementById('krw-input');
             k.oninput = (e) => t.value = e.target.value ? (e.target.value / EXCHANGE_RATE).toFixed(0) : "";
             t.oninput = (e) => k.value = e.target.value ? Math.round(e.target.value * EXCHANGE_RATE) : "";
 
-            // 4. 非同步初始化 Firebase
+            // 4. 初始化雲端服務
             initFirebase();
             lucide.createIcons();
         };
 
-        // 確保 DOM 載入後執行
+        // 確保 DOM 執行
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', init);
         } else {
