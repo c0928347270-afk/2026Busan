@@ -111,6 +111,17 @@
         input[type=number] {
             -moz-appearance: textfield;
         }
+
+        /* 匯率輸入框特定樣式 */
+        .calc-input-box {
+            background-color: var(--bp-pink);
+            color: #000;
+            border: 2px solid white;
+            box-shadow: 0 4px 15px rgba(248, 165, 194, 0.3);
+        }
+        .calc-input-box input {
+            color: #000 !important;
+        }
     </style>
 </head>
 <body class="selection:bg-[#f8a5c2] selection:text-black">
@@ -130,30 +141,30 @@
 
         <!-- 視圖 2: 匯率 -->
         <div id="view-calculator" class="view-content">
-            <div class="mb-4 text-center px-2">
-                <h2 class="text-3xl font-black italic uppercase text-pink leading-none">Currency</h2>
+            <div class="mb-6 text-center px-2">
+                <h2 class="text-4xl font-black italic uppercase text-pink leading-none">Currency</h2>
                 <p class="text-gray-400 text-sm tracking-widest mt-2 font-black">1 TWD : 41.5 KRW</p>
             </div>
-            <div class="space-y-4">
-                <div class="bg-[#111] p-6 border-2 border-[#222] rounded-[24px]">
-                    <label class="text-xs text-gray-500 uppercase font-black tracking-widest mb-2 block">KRW 韓元</label>
+            <div class="space-y-6">
+                <div class="calc-input-box p-6 rounded-[24px]">
+                    <label class="text-xs text-black/60 uppercase font-black tracking-widest mb-2 block">KRW 韓元</label>
                     <div class="flex items-center">
-                        <span class="text-3xl text-pink font-mono mr-3 font-black">₩</span>
-                        <input type="number" inputmode="decimal" id="krw-input" placeholder="0" class="w-full text-5xl font-mono bg-transparent outline-none text-white font-black">
+                        <span class="text-3xl text-black font-mono mr-3 font-black">₩</span>
+                        <input type="number" inputmode="decimal" id="krw-input" placeholder="0" class="w-full text-5xl font-mono bg-transparent outline-none text-black font-black placeholder-black/30">
                     </div>
                 </div>
                 
-                <div class="flex justify-center -my-6 relative z-10">
-                    <div class="w-12 h-12 rounded-full bg-pink flex items-center justify-center text-black shadow-lg border-4 border-black">
+                <div class="flex justify-center -my-8 relative z-10">
+                    <div class="w-14 h-14 rounded-full bg-white flex items-center justify-center text-black shadow-lg border-4 border-pink">
                         <i data-lucide="arrow-down-up" class="w-6 h-6"></i>
                     </div>
                 </div>
 
-                <div class="bg-[#111] p-6 border-2 border-[#222] rounded-[24px] opacity-90">
-                    <label class="text-xs text-gray-500 uppercase font-black tracking-widest mb-2 block">TWD 台幣</label>
+                <div class="calc-input-box p-6 rounded-[24px]">
+                    <label class="text-xs text-black/60 uppercase font-black tracking-widest mb-2 block">TWD 台幣</label>
                     <div class="flex items-center">
-                        <span class="text-2xl text-pink font-mono mr-3 font-black">$</span>
-                        <input type="number" inputmode="decimal" id="twd-input" placeholder="0" class="w-full text-4xl font-mono bg-transparent outline-none text-gray-300 font-black">
+                        <span class="text-2xl text-black font-mono mr-3 font-black">$</span>
+                        <input type="number" inputmode="decimal" id="twd-input" placeholder="0" class="w-full text-4xl font-mono bg-transparent outline-none text-black font-black placeholder-black/30">
                     </div>
                 </div>
             </div>
@@ -189,6 +200,10 @@
                 <h2 class="text-4xl font-black italic uppercase text-pink">Exchange</h2>
             </div>
             <div class="space-y-10 pb-20">
+                <div>
+                    <h3 class="text-pink font-black text-xl uppercase tracking-widest mb-4 border-l-4 border-pink pl-3 italic">Gimhae Airport 金海機場</h3>
+                    <div class="grid gap-4" id="ex-gimhae"></div>
+                </div>
                 <div>
                     <h3 class="text-pink font-black text-xl uppercase tracking-widest mb-4 border-l-4 border-pink pl-3 italic">Nampo 南浦洞</h3>
                     <div class="grid gap-4" id="ex-nampo"></div>
@@ -234,89 +249,90 @@
                 day: "DAY 1", date: "115/01/21 (三)", 
                 weather: { icon: "sun", hi: "2°", lo: "-3°" }, 
                 events: [
-                    { time: "08:00", activity: "家裡出發", type: "car", loc: "斗六/虎尾", note: "開車 2~3hr" },
-                    { time: "11:00", activity: "抵達連統停車場", type: "car", loc: "連統停車場", note: "桃園市大園區國際路一段509-1號" },
-                    { time: "12:00", activity: "抵達第二航廈", type: "bus", loc: "桃園機場 T2", note: "接駁車、報到、託運、入關" },
-                    { time: "13:55", activity: "登機時間", type: "clock", loc: "登機口", note: "預計登機" },
-                    { time: "14:25", activity: "飛機起飛 (BR164)", type: "plane", loc: "桃園機場 T2", note: "長榮航空 BR164" },
-                    { time: "17:40", activity: "抵達金海機場", type: "plane", loc: "金海機場", note: "抵達釜山" },
-                    { time: "18:10", activity: "取得行李", type: "shopping-bag", loc: "行李轉盤", note: "前往地鐵站：由 GATE3 走到馬路對面右轉" },
-                    { time: "18:30", activity: "搭地鐵到沙上站", type: "train", loc: "沙上站", note: "地鐵轉乘綠色 2 號線往西面/萇山方向" },
-                    { time: "18:40", activity: "西面轉乘至札嘎其站", type: "train", loc: "札嘎其站", note: "轉乘橘色 1 號線往多南浦/大浦海水浴場方向" },
-                    { time: "19:00", activity: "抵達札嘎其站 7 號出口", type: "map-pin", loc: "札嘎其站", note: "7號出口出站正前方路口左轉第二棟大樓 (5號出口有電梯，出梯直行過7號出口左轉)" },
-                    { time: "19:05", activity: "NewCZ 南浦店辦理入住", type: "hotel", loc: "NewCZ Nampo Hotel", note: "飯店地址：20 BIFFGWANGJANGRO, 中區" },
-                    { time: "20:00", activity: "南浦洞周邊覓食", type: "utensils", loc: "南浦洞", note: "景點：KPOP唱片行。晚餐建議：人蔘雞湯粥/南浦雪濃湯。消夜：Bhc炸雞、老爺炸雞" }
+                    { time: "08:00", activity: "家裡出發", type: "car", loc: "斗六/虎尾", note: "開車約 2~3 小時。" },
+                    { time: "11:00", activity: "抵達連統停車場", type: "car", loc: "連統停車場", note: "地址：桃園市大園區國際路一段509-1號。" },
+                    { time: "12:00", activity: "抵達第二航廈", type: "bus", loc: "桃園機場 T2", note: "搭乘接駁車至航廈，辦理報到、託運並入關。" },
+                    { time: "13:55", activity: "登機時間", type: "clock", loc: "登機口", note: "請準時至指定登機門候機。" },
+                    { time: "14:25", activity: "飛機起飛 (BR164)", type: "plane", loc: "桃園機場 T2", note: "長榮航空 BR164，飛行時間約 2 小時 15 分。" },
+                    { time: "17:40", activity: "抵達金海機場", type: "plane", loc: "金海機場", note: "抵達釜山，辦理入境手續。" },
+                    { time: "18:10", activity: "取得行李", type: "shopping-bag", loc: "行李轉盤", note: "取得行李後前往地鐵站：由 GATE 3 走到馬路對面右轉。" },
+                    { time: "18:30", activity: "搭地鐵到沙上站", type: "train", loc: "沙上站", note: "搭乘紫色輕軌至沙上，轉乘綠色 2 號線往西面/萇山方向。" },
+                    { time: "18:40", activity: "西面轉乘至札嘎其站", type: "train", loc: "札嘎其站", note: "轉乘橘色 1 號線往多南浦/大浦海水浴場方向。" },
+                    { time: "19:00", activity: "抵達札嘎其站 7 號出口", type: "map-pin", loc: "札嘎其站", note: "出站正前方路口左轉第二棟大樓 (5 號出口有電梯，出電梯直行過 7 號出口左轉)。" },
+                    { time: "19:05", activity: "NewCZ 南浦店辦理入住", type: "hotel", loc: "NewCZ Nampo Hotel", note: "辦理入住後放置行李。" },
+                    { time: "20:00", activity: "南浦洞周邊覓食", type: "utensils", loc: "南浦洞", note: "景點：KPOP 唱片行。晚餐推薦：人蔘雞湯粥/南浦雪濃湯。消夜推薦：Bhc 炸雞或老爺炸雞。" }
                 ]
             },
             { 
                 day: "DAY 2", date: "115/01/22 (四)", 
                 weather: { icon: "cloud", hi: "4°", lo: "-1°" }, 
                 events: [
-                    { time: "08:00", activity: "吃早餐", type: "utensils", loc: "新昌吐司 / EggDrop", note: "新昌吐司/路邊小吃/便利商店" },
-                    { time: "09:30", activity: "前往海雲台", type: "car", loc: "海雲台站", note: "1.地鐵: 約50分 (1號線>西面轉2號線)。2.計程車: 約40-60分" },
-                    { time: "10:30", activity: "東釜山樂天OUTLET", type: "shopping-bag", loc: "東釜山樂天OUTLET", note: "10:30開門 (北臉/國家地理比台灣便宜)。滑車就在旁 (不怕冷可去)" },
-                    { time: "13:55", activity: "海雲台傳統市場", type: "utensils", loc: "海雲台傳統市場", note: "午餐建議：31公分海鮮湯麵/小麥冷麵/元祖糖餅/巨大牛骨湯" },
-                    { time: "14:25", activity: "新世界百貨", type: "shopping-bag", loc: "Centum City 新世界百貨", note: "逛街消化，準備去汗蒸幕" },
-                    { time: "15:30", activity: "SPA LAND 汗蒸幕", type: "map-pin", loc: "Spa Land Centum City", note: "必喝甜米釀/吃烤蛋。售票處換票>寄鞋>領衣服>洗浴泡湯>桑拿>手環結算" },
-                    { time: "18:00", activity: "搭車前往西面站", type: "train", loc: "西面站", note: "地鐵綠線直達西面" },
-                    { time: "18:30", activity: "晚餐吃烤肉", type: "utensils", loc: "西面站烤肉街", note: "建議：烤肉的男子(高CP)、釜山宅、味贊王、83獬豸" },
-                    { time: "18:40", activity: "西面地下街逛街", type: "shopping-bag", loc: "西面地下街", note: "景點：文創店/大創百貨" },
-                    { time: "22:00", activity: "回飯店", type: "train", loc: "札嘎其站", note: "地鐵或計程車返回" }
+                    { time: "08:00", activity: "吃早餐", type: "utensils", loc: "新昌吐司 / EggDrop", note: "可選擇新昌吐司、EggDrop 或是路邊小吃與便利商店。" },
+                    { time: "09:30", activity: "前往海雲台", type: "car", loc: "海雲台站", note: "1. 地鐵：約 50 分鐘 (1 號線 > 西面轉 2 號線)。2. 計程車：約 40-60 分鐘。" },
+                    { time: "10:30", activity: "東釜山樂天OUTLET", type: "shopping-bag", loc: "東釜山樂天OUTLET", note: "10:30 開門 (北臉、國家地理比台灣便宜許多)。斜坡滑車就在旁，不怕冷可前往嘗試。" },
+                    { time: "13:55", activity: "海雲台傳統市場", type: "utensils", loc: "海雲台傳統市場", note: "午餐建議：31 公分海鮮湯麵、小麥冷麵、元祖糖餅或巨大牛骨湯。" },
+                    { time: "14:25", activity: "新世界百貨", type: "shopping-bag", loc: "Centum City 新世界百貨", note: "逛街消化，準備前往汗蒸幕。" },
+                    { time: "15:30", activity: "SPA LAND 汗蒸幕", type: "map-pin", loc: "Spa Land Centum City", note: "預計停留 2-3 小時。必喝甜米釀、吃烤蛋。售票處換票 > 寄鞋 > 領衣服 > 洗浴泡湯 > 桑拿 > 結算。" },
+                    { time: "18:00", activity: "搭車前往西面站", type: "train", loc: "西面站", note: "搭乘地鐵 2 號線 (綠線) 可直達西面站。" },
+                    { time: "18:30", activity: "晚餐吃烤肉", type: "utensils", loc: "西面站烤肉街", note: "建議：烤肉的男子 (高CP)、釜山宅烤肉、味贊王 (較遠) 或 83 獬豸。" },
+                    { time: "18:40", activity: "西面地下街逛街", type: "shopping-bag", loc: "西面地下街", note: "逛西面地下街文創店或大創百貨。" },
+                    { time: "22:00", activity: "回飯店", type: "train", loc: "札嘎其站", note: "搭乘地鐵或計程車返回飯店休息。" }
                 ]
             },
             { 
                 day: "DAY 3", date: "115/01/23 (五)", 
                 weather: { icon: "snow", hi: "1°", lo: "-5°" }, 
                 events: [
-                    { time: "08:00", activity: "吃早餐", type: "utensils", loc: "南浦洞", note: "吃附近小吃或便利商店，避免耽誤集合" },
-                    { time: "09:00", activity: "釜山站 1 號出口集合", type: "users", loc: "KTX 釜山站 1 號出口", note: "地鐵往老匍方向。集合座標：35.1147, 129.0410" },
-                    { time: "10:30", activity: "天空膠囊 (藍線公園)", type: "train", loc: "海雲台藍線公園", note: "午餐1：清沙浦 (道熙家/秀敏家/韓牛紙火鍋)。午餐2：松亭站 (31cm海鮮麵)" },
-                    { time: "13:10", activity: "海東龍宮寺", type: "map-pin", loc: "海東龍宮寺", note: "跟團行程" },
-                    { time: "15:00", activity: "佛國寺", type: "map-pin", loc: "慶州 佛國寺", note: "跟團行程" },
-                    { time: "16:40", activity: "大陵院 + 皇理團路", type: "utensils", loc: "慶州 皇理團路", note: "必吃：起司10元餅、南瓜薯條、皇南夾心餅。晚餐建議：鄉花亭 / 百年客人" },
-                    { time: "19:00", activity: "東宮與月池夜景", type: "map-pin", loc: "東宮與月池", note: "唯美韓式燈光夜景" },
-                    { time: "21:30", activity: "返回西面站 / 釜山站", type: "bus", loc: "釜山站", note: "行程結束解散回飯店" }
+                    { time: "08:00", activity: "吃早餐", type: "utensils", loc: "南浦洞", note: "簡單吃附近小吃或便利商店，避免耽誤跟團集合時間。" },
+                    { time: "09:00", activity: "釜山站 1 號出口集合", type: "users", loc: "KTX 釜山站 1 號出口", note: "搭地鐵橘線往老匍方向。集合地點為 KTX 釜山站 1 號出口。" },
+                    { time: "10:30", activity: "天空膠囊 (藍線公園)", type: "train", loc: "海雲台藍線公園", note: "跟團午餐建議：1. 清沙浦 (道熙家/秀敏家/韓牛紙火鍋)。2. 松亭站 (31cm 海鮮麵)。" },
+                    { time: "13:10", activity: "海東龍宮寺", type: "map-pin", loc: "海東龍宮寺", note: "韓國唯一蓋在海邊的佛寺，景色絕佳。" },
+                    { time: "15:00", activity: "佛國寺", type: "map-pin", loc: "慶州 佛國寺", note: "UNESCO 世界文化遺產，欣賞千年古建築之美。" },
+                    { time: "16:40", activity: "大陵院 + 皇理團路", type: "utensils", loc: "慶州 皇理團路", note: "必吃：起司 10 元餅、南瓜薯條、皇南夾心餅。晚餐建議：鄉花亭或百年客人。" },
+                    { time: "19:00", activity: "東宮與月池夜景", type: "map-pin", loc: "東宮與月池", note: "欣賞唯美韓式燈光倒映池畔的壯麗夜景。" },
+                    { time: "21:30", activity: "返回西面站 / 釜山站", type: "bus", loc: "釜山站", note: "行程結束由跟團巴士送回指定地點後解散回飯店。" }
                 ]
             },
             { 
                 day: "DAY 4", date: "115/01/24 (六)", 
                 weather: { icon: "sun", hi: "3°", lo: "-2°" }, 
                 events: [
-                    { time: "08:00", activity: "早餐後出發", type: "utensils", loc: "古來司魚糕 札嘎其店", note: "早餐或帶一點魚板路上吃" },
-                    { time: "08:30", activity: "松島天空步道", type: "map-pin", loc: "松島天空步道", note: "計程車前往" },
-                    { time: "09:00", activity: "松島海上纜車", type: "map-pin", loc: "松島海上纜車", note: "09:00 開始營運" },
-                    { time: "12:00", activity: "札嘎其市場午餐", type: "utensils", loc: "札嘎其市場", note: "帝王蟹必吃 (每公斤約 6-8 萬韓元)" },
-                    { time: "13:50", activity: "看影島大橋開橋", type: "map-pin", loc: "樂天百貨光復店頂樓", note: "14:00 開橋。進百貨逛超市或直接去橋邊" },
-                    { time: "14:30", activity: "白淺灘文化村", type: "map-pin", loc: "白淺灘文化村", note: "停留 1-2 小時" },
-                    { time: "15:30", activity: "太宗台", type: "car", loc: "太宗台", note: "遊園車只開到 17:30，請注意時間" },
-                    { time: "18:00", activity: "釜山塔夜景", type: "map-pin", loc: "釜山塔", note: "計程車至龍頭山公園手扶梯。售票至 21:30" },
-                    { time: "19:30", activity: "富平罐頭市場", type: "utensils", loc: "富平罐頭市場", note: "晚餐宵夜 (艾草麻吉、魚板)，返回飯店" },
-                    { time: "22:00", activity: "回飯店", type: "car", loc: "南浦洞", note: "步行約 1 公里逛回飯店" }
+                    { time: "08:00", activity: "早餐後出發", type: "utensils", loc: "古來司魚糕 札嘎其店", note: "推薦購買現做的魚糕或是在路邊小吃店進食。" },
+                    { time: "08:30", activity: "松島天空步道", type: "map-pin", loc: "松島天空步道", note: "搭乘計程車前往，漫步在海面上的透明步道。" },
+                    { time: "09:00", activity: "松島海上纜車", type: "map-pin", loc: "松島海上纜車", note: "09:00 開始營運，俯瞰松島海景。" },
+                    { time: "12:00", activity: "札嘎其市場午餐", type: "utensils", loc: "札嘎其市場", note: "帝王蟹必吃 (每公斤約 6-8 萬韓元)，現殺現煮。" },
+                    { time: "13:50", activity: "看影島大橋開橋", type: "map-pin", loc: "樂天百貨光復店頂樓", note: "14:00 準時開橋。建議先到百貨公司頂樓星光花園俯瞰。" },
+                    { time: "14:30", activity: "白淺灘文化村", type: "map-pin", loc: "白淺灘文化村", note: "停留 1-2 小時。釜山的聖托里尼，海邊彩色村莊非常美。" },
+                    { time: "15:30", activity: "太宗台", type: "car", loc: "太宗台", note: "體驗自然海岬美景。注意遊園車只開到 17:30。" },
+                    { time: "18:00", activity: "釜山塔夜景", type: "map-pin", loc: "釜山塔", note: "搭計程車至龍頭山公園手扶梯上山。觀景台售票至 21:30。" },
+                    { time: "19:30", activity: "富平罐頭市場", type: "utensils", loc: "富平罐頭市場", note: "吃晚餐。推薦美食：紅豆奶油艾草麻吉、魚板、各種韓式炸物。" },
+                    { time: "22:00", activity: "回飯店", type: "car", loc: "南浦洞", note: "步行約 1 公里穿過熱鬧的南浦洞商圈逛回飯店休息。" }
                 ]
             },
             { 
                 day: "DAY 5", date: "115/01/25 (日)", 
                 weather: { icon: "cloud", hi: "5°", lo: "0°" }, 
                 events: [
-                    { time: "08:00", activity: "早餐 + 整理行李", type: "clock", loc: "飯店", note: "準備辦理退房" },
-                    { time: "09:00", activity: "甘川洞文化村", type: "map-pin", loc: "甘川洞文化村", note: "計程車前往彩色積木村" },
-                    { time: "12:00", activity: "南浦自由活動採買", type: "shopping-bag", loc: "樂天超市 南浦店", note: "補齊伴手禮。午餐建議：李在模披薩" },
-                    { time: "14:30", activity: "回飯店領行李", type: "hotel", loc: "NewCZ Nampo Hotel", note: "準備前往機場" },
-                    { time: "15:00", activity: "前往金海機場", type: "train", loc: "金海機場", note: "搭乘地鐵返回機場" },
-                    { time: "16:00", activity: "抵達金海機場", type: "plane", loc: "金海機場", note: "先去 KIOSK 掃描退稅條碼" },
-                    { time: "18:55", activity: "長榮航空起飛 (BR163)", type: "plane", loc: "金海機場", note: "釜山 -> 桃園" },
-                    { time: "20:25", activity: "抵達桃園機場", type: "plane", loc: "桃園機場 T2", note: "入境檢查" },
-                    { time: "23:00", activity: "回到溫暖的家", type: "car", loc: "斗六/虎尾", note: "開車返回" }
+                    { time: "08:00", activity: "早餐 + 整理行李", type: "clock", loc: "飯店", note: "享用早餐後辦理退房，行李可先寄存於櫃台。" },
+                    { time: "09:00", activity: "甘川洞文化村", type: "map-pin", loc: "甘川洞文化村", note: "搭乘計程車前往彩色積木村，拍攝經典小王子照片。" },
+                    { time: "12:00", activity: "南浦自由活動採買", type: "shopping-bag", loc: "樂天超市 南浦店", note: "最後一站伴手禮採買。午餐建議：李在模披薩 (人氣店需排隊)。" },
+                    { time: "14:30", activity: "回飯店領行李", type: "hotel", loc: "NewCZ Nampo Hotel", note: "回飯店領取寄存行李，準備前往機場。" },
+                    { time: "15:00", activity: "前往金海機場", type: "train", loc: "金海機場", note: "搭乘地鐵橘線轉綠線再轉輕軌返回金海機場。" },
+                    { time: "16:00", activity: "抵達金海機場", type: "plane", loc: "金海機場", note: "先去 KIOSK 機台掃描退稅條碼，再辦理報到手續。" },
+                    { time: "18:55", activity: "長榮航空起飛 (BR163)", type: "plane", loc: "金海機場", note: "預計起飛返回台灣桃園國際機場。" },
+                    { time: "20:25", activity: "抵達桃園機場", type: "plane", loc: "桃園機場 T2", note: "辦理入境後至連統停車場取車。" },
+                    { time: "23:00", activity: "回到溫塊的家", type: "car", loc: "斗六/虎尾", note: "開車返回斗六/虎尾家，行程圓滿結束。" }
                 ]
             }
         ];
 
         const exchangeData = [
-            { region: "nampo", name: "映真換錢所 (Youngjin)", note: "南浦站 7 號出口，釜山最指標。", query: "釜山映真換錢所" },
-            { region: "nampo", name: "友利換錢所 (Woori)", note: "緊鄰映真，匯率通常同步。", query: "釜山友利換錢所" },
-            { region: "seomyeon", name: "那英換錢所 (Nayoung)", note: "西面市場內老店，匯率優。", query: "釜山那英換錢所" },
-            { region: "seomyeon", name: "Money Box 西面店", note: "24H 自助機台，方便深夜兌換。", query: "MoneyBox面店" },
-            { region: "haeundae", name: "Money Box 海雲台店", note: "地鐵站附近，操作透明便利。", query: "MoneyBox海雲台店" }
+            { region: "gimhae", name: "Money Box 金海機場店 (輕軌站外)", note: "地址：金海輕軌機場站 1 號出口步行 1 分鐘（航廈對面）。24 小時自助換錢服務。若機場內銀行關閉，可在此處兌換，匯率通常優於機場內。" },
+            { region: "nampo", name: "映真換錢所 (Youngjin)", note: "地址：南浦站 7 號出口直走右手邊。釜山匯率最高指標店家，推薦使用台幣或美金現金兌換。" },
+            { region: "nampo", name: "友利換錢所 (Woori)", note: "地址：映真換錢所正隔壁。若映真人潮太多，可直接去這家，匯率通常與映真一致。" },
+            { region: "seomyeon", name: "那英換錢所 (Nayoung)", note: "地址：西面站 7 號出口，西面市場內（靠近樂天百貨後門）。當地知名的老字號，匯率非常穩定。" },
+            { region: "seomyeon", name: "Money Box 西面店", note: "地址：西面站出口附近。提供 24 小時自助換錢機，支援台幣，適合深夜臨時兌換。" },
+            { region: "haeundae", name: "Money Box 海雲台店", note: "地址：海雲台站 5 號出口步行 3 分鐘。自動機台操作透明、快速，方便在海雲台活動時使用。" }
         ];
 
         function switchView(viewId) {
@@ -352,25 +368,23 @@
                     
                     return `
                         <div class="${itemClass}">
-                            <!-- 項目標題區域：加底色以增強分界感 -->
                             <div class="item-header px-4 py-3 flex justify-between items-center">
                                 <div class="flex items-center gap-3">
-                                    <span class="text-xl font-mono font-black text-[#888] tracking-tighter">${e.time}</span>
+                                    <span class="text-xl font-mono font-black text-pink tracking-tighter">${e.time}</span>
                                     <i data-lucide="${e.type}" class="w-5 h-5 text-pink opacity-80"></i>
                                 </div>
                                 ${foodBadge}
                             </div>
                             
-                            <!-- 行程內容區域 -->
                             <div class="px-4 pb-4 pt-2">
                                 <h4 class="text-2xl font-black text-white leading-tight mb-2">
                                     ${e.activity}
                                 </h4>
                                 <div class="flex items-center gap-1.5 mb-2 opacity-60">
-                                     <i data-lucide="map-pin" class="w-3.5 h-3.5 text-gray-400"></i>
+                                     <i data-lucide="map-pin" class="w-3.5 h-3.5 text-gray-300"></i>
                                      <span class="text-xs text-gray-300 font-bold uppercase tracking-widest">${e.loc}</span>
                                 </div>
-                                <div class="text-gray-400 text-base font-medium leading-relaxed whitespace-pre-line border-l border-gray-800 pl-3">
+                                <div class="text-gray-400 text-lg font-medium leading-relaxed whitespace-pre-line border-l border-gray-800 pl-3">
                                     ${e.note}
                                 </div>
                             </div>
@@ -383,16 +397,18 @@
         }
 
         function renderExchange() {
-            const containers = { nampo: "ex-nampo", seomyeon: "ex-seomyeon", haeundae: "ex-haeundae" };
+            const containers = { gimhae: "ex-gimhae", nampo: "ex-nampo", seomyeon: "ex-seomyeon", haeundae: "ex-haeundae" };
             Object.values(containers).forEach(id => document.getElementById(id).innerHTML = "");
             exchangeData.forEach(ex => {
                 const html = `
                     <div class="bg-[#111] p-6 border-2 border-[#222] rounded-3xl">
                         <h4 class="font-black text-white text-xl mb-2">${ex.name}</h4>
-                        <p class="text-sm text-gray-500 italic mb-4 font-bold">${ex.note}</p>
+                        <p class="text-base text-gray-400 font-bold leading-relaxed">${ex.note}</p>
                     </div>
                 `;
-                document.getElementById(containers[ex.region]).innerHTML += html;
+                if(containers[ex.region]) {
+                    document.getElementById(containers[ex.region]).innerHTML += html;
+                }
             });
             lucide.createIcons();
         }
