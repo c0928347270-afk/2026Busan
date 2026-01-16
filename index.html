@@ -108,7 +108,7 @@
         }
         input[type=number] { -moz-appearance: textfield; }
 
-        /* 匯率輸入框 */
+        /* 匯率輸入框：粉紅底黑字 */
         .calc-input-box {
             background-color: var(--bp-pink);
             padding: 24px;
@@ -238,11 +238,9 @@
         const EXCHANGE_RATE = 41.5;
         let expenses = [];
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'busan-trip-2026';
-        const firebaseConfig = JSON.parse(__firebase_config);
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+        
+        // 初始化 Firebase 的變數
+        let db, auth;
 
         // --- 旅遊數據 ---
         const itineraryData = [
@@ -265,7 +263,7 @@
                 { time: "22:00", activity: "回飯店", type: "train", loc: "札嘎其站", note: "搭乘地鐵 2 號線轉 1 號線或搭計程車返回。" }
             ]},
             { day: "DAY 3", date: "115/01/23 (五)", weather: { icon: "snow", hi: "1°", lo: "-5°" }, events: [
-                { time: "09:00", activity: "釜山站 1 號出口集合", type: "users", loc: "釜山站", note: "一日團行程。搭地鐵橘線往老匍方向至釜山站，1 號出口準時集合。" },
+                { time: "09:00", activity: "釜山站 1 號出口集合", type: "users", loc: "釜山站", note: "一日團行程。搭地鐵橘線往老匍方向至釜山站， 1 號出口準時集合。" },
                 { time: "10:30", activity: "天空膠囊 (藍線公園)", type: "train", loc: "海雲台藍線公園", note: "尾浦至青沙浦段。午餐：清沙浦 (道熙家/秀敏家) 或松亭 (31cm 海鮮麵)。" },
                 { time: "13:10", activity: "海東龍宮寺", type: "map-pin", loc: "海東龍宮寺", note: "韓國唯一蓋在海邊的佛寺，景色絕佳。" },
                 { time: "15:00", activity: "慶州 佛國寺", type: "map-pin", loc: "慶州 佛國寺", note: "UNESCO 世界文化遺產，欣賞千年古建築。" },
@@ -293,16 +291,16 @@
         ];
 
         const exchangeData = [
-            { region: "gimhae", name: "Money Box 金海機場店", note: "位置：走出機場航廈 GATE 3 橫跨馬路直走，就在『輕軌機場站』1 號出口正下方。這是 24 小時自助機台，匯率比機場大廳內的銀行櫃台好許多。操作介面有中文，非常適合第一天抵達時急用。" },
+            { region: "gimhae", name: "Money Box 金海機場店", note: "位置：走出航廈 GATE 3 橫跨馬路直走，就在『輕軌機場站』1 號出口正下方。這是 24 小時自助機台，匯率比機場內的銀行更好。操作介面有中文，非常適合第一天抵達時急用。" },
             { region: "nampo", name: "映真換錢所 (Youngjin)", note: "位置：地鐵南浦站 7 號出口直走至第一個十字路口，看到便利商店右轉巷內約 30 公尺右手邊。這是釜山指標性的換錢所。建議帶台幣千元鈔或美金百元鈔直接更換。" },
-            { region: "nampo", name: "友利換錢所 (Woori)", note: "位置：緊鄰映真換錢所。如果映真排隊人潮太長，直接換這家即可。這兩家長期維持完全一致的匯率，是南浦洞最推薦的兩家。" },
-            { region: "seomyeon", name: "那英換錢所 (Nayoung)", note: "位置：西面站 7 號出口出站往前走，路過星巴克後在下一個大路口右轉進入『西面市場』。在豬肉湯飯街入口附近的一間傳統雜貨舖風格店面。雖然不起眼但匯率在西面區數一數二。" },
-            { region: "seomyeon", name: "Money Box 西面店", note: "位置：西面站 7 號出口附近的主要商務大樓內。提供 24 小時無人機台，匯率透明且顯示在螢幕上。適合晚上 10 點後逛完西面地下街想換少量韓元時使用。" },
-            { region: "haeundae", name: "Money Box 海雲台店", note: "位置：地鐵海雲台站 5 號出口，往海灘方向直走步行約 2 分鐘即可在轉角處看到。這裡的機台匯率比飯店或海邊小店好很多，且支援各種主要貨幣。" }
+            { region: "nampo", name: "友利換錢所 (Woori)", note: "位置：緊鄰映真換錢所。如果映真排隊人潮太長，換這家即可。這兩家長期維持完全一致的匯率，是南浦洞最推薦的兩家。" },
+            { region: "seomyeon", name: "那英換錢所 (Nayoung)", note: "位置：西面站 7 號出口出站往前走，路過星巴克後在下一個路口右轉進入『西面市場』。豬肉湯飯街入口附近的一間傳統雜貨舖風格店面。匯率在西面區數一數二。" },
+            { region: "seomyeon", name: "Money Box 西面店", note: "位置：西面站 7 號出口附近的主要商務大樓內。提供 24 小時無人機台，匯率透明且顯示在螢幕上。適合晚上逛完西面地下街想換少量韓元時使用。" },
+            { region: "haeundae", name: "Money Box 海雲台店", note: "位置：地鐵海雲台站 5 號出口，往海灘方向直走步行約 2 分鐘轉角處。機台介面支援中文，方便在海雲台活動時兌換。" }
         ];
 
-        // --- 介面控制 ---
-        const switchView = (viewId) => {
+        // --- UI 操作函數 (掛載至 window 以供 HTML 調用) ---
+        window.switchView = (viewId) => {
             document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             const target = document.getElementById(`view-${viewId}`);
@@ -368,7 +366,7 @@
             lucide.createIcons();
         };
 
-        // --- 購物紀錄邏輯 (Firebase 修復) ---
+        // --- 購物紀錄邏輯 ---
         const renderExpenses = () => {
             const list = document.getElementById('expense-container');
             const totalKrwEl = document.getElementById('total-krw');
@@ -383,7 +381,7 @@
                     </div>
                     <div class="flex items-center gap-4">
                         <div class="text-right"><div class="text-pink font-mono font-black text-2xl">₩${ex.cost.toLocaleString()}</div></div>
-                        <button class="delete-expense-btn p-2 text-gray-600 hover:text-pink transition-transform active:scale-75" data-id="${ex.id}"><i data-lucide="trash-2" class="w-6 h-6"></i></button>
+                        <button class="delete-btn p-2 text-gray-600 hover:text-pink transition-transform active:scale-75" data-id="${ex.id}"><i data-lucide="trash-2" class="w-6 h-6"></i></button>
                     </div>
                 </div>`).join('');
 
@@ -392,27 +390,26 @@
             totalTwdEl.innerText = `≈ NT$ ${Math.round(total/EXCHANGE_RATE).toLocaleString()}`;
             lucide.createIcons();
             
-            // 重新綁定刪除事件
-            document.querySelectorAll('.delete-expense-btn').forEach(btn => {
+            document.querySelectorAll('.delete-btn').forEach(btn => {
                 btn.onclick = () => deleteExpense(btn.dataset.id);
             });
         };
 
         const deleteExpense = async (id) => { 
-            if(!auth || !auth.currentUser) return; 
+            if(!db || !auth.currentUser) return; 
             try {
                 const docRef = doc(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'shopping_records', id);
                 await deleteDoc(docRef);
             } catch(e) { console.error("Delete failed:", e); }
         };
 
-        const addExpenseAction = async () => {
+        window.addExpenseAction = async () => {
             const itemInput = document.getElementById('exp-item');
             const costInput = document.getElementById('exp-cost');
             const item = itemInput.value;
             const cost = costInput.value;
 
-            if (auth && auth.currentUser && item && cost) {
+            if (db && auth.currentUser && item && cost) {
                 try {
                     const colRef = collection(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'shopping_records');
                     await addDoc(colRef, { 
@@ -420,8 +417,7 @@
                         cost: Number(cost), 
                         createdAt: serverTimestamp() 
                     });
-                    itemInput.value = ""; 
-                    costInput.value = "";
+                    itemInput.value = ""; costInput.value = "";
                 } catch(e) { console.error("Add failed:", e); }
             }
         };
@@ -430,17 +426,17 @@
             const colRef = collection(db, 'artifacts', appId, 'users', userId, 'shopping_records');
             onSnapshot(colRef, (s) => {
                 expenses = s.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => {
-                    const timeA = a.createdAt?.seconds || 0;
-                    const timeB = b.createdAt?.seconds || 0;
-                    return timeB - timeA; // 最新顯示在最前
+                    const tA = a.createdAt?.seconds || 9999999999;
+                    const tB = b.createdAt?.seconds || 9999999999;
+                    return tB - tA;
                 });
                 renderExpenses();
             }, (err) => console.error("Sync error:", err));
         };
 
-        // --- 初始化 ---
-        const init = () => {
-            // 1. 立即渲染行程導航按鈕
+        // --- 初始化入口 ---
+        const init = async () => {
+            // 1. 立即渲染 UI (確保畫面不會空白)
             const nav = document.getElementById('day-nav');
             itineraryData.forEach((d, i) => { 
                 const b = document.createElement('button'); 
@@ -450,34 +446,51 @@
                 b.onclick = () => renderDay(i); 
                 nav.appendChild(b); 
             });
-            
             renderDay(0);
             renderExchange();
             
-            // 2. 設置按鈕點擊監聽 (全域掛載)
-            document.getElementById('btn-view-itinerary').onclick = () => switchView('itinerary');
-            document.getElementById('btn-view-calculator').onclick = () => switchView('calculator');
-            document.getElementById('btn-view-shopping').onclick = () => switchView('shopping');
-            document.getElementById('btn-view-exchange').onclick = () => switchView('exchange');
-            document.getElementById('add-expense-btn').onclick = addExpenseAction;
+            // 2. 按鈕監聽綁定
+            document.getElementById('btn-view-itinerary').onclick = () => window.switchView('itinerary');
+            document.getElementById('btn-view-calculator').onclick = () => window.switchView('calculator');
+            document.getElementById('btn-view-shopping').onclick = () => window.switchView('shopping');
+            document.getElementById('btn-view-exchange').onclick = () => window.switchView('exchange');
+            document.getElementById('add-expense-btn').onclick = () => window.addExpenseAction();
 
-            // 3. 匯率即時換算
-            const t = document.getElementById('twd-input');
-            const k = document.getElementById('krw-input');
+            // 3. 匯率換算邏輯
+            const t = document.getElementById('twd-input'), k = document.getElementById('krw-input');
             k.oninput = (e) => t.value = e.target.value ? (e.target.value / EXCHANGE_RATE).toFixed(0) : "";
             t.oninput = (e) => k.value = e.target.value ? Math.round(e.target.value * EXCHANGE_RATE) : "";
 
-            // 4. 初始化雲端服務
-            initFirebase();
+            // 4. 執行 Firebase 初始化
+            try {
+                if (typeof __firebase_config === 'undefined') throw new Error("Config not available");
+                const config = JSON.parse(__firebase_config);
+                const appInstance = initializeApp(config);
+                auth = getAuth(appInstance);
+                db = getFirestore(appInstance);
+
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        const statusEl = document.getElementById('cloud-status');
+                        if(statusEl) statusEl.innerText = "Cloud Sync Active";
+                        document.getElementById('user-display-id').innerText = `User ID: ${user.uid.substring(0, 8)}...`;
+                        setupShoppingSync(user.uid);
+                    }
+                });
+            } catch(e) {
+                console.warn("Cloud connection error, using local UI.");
+                document.getElementById('cloud-status').innerText = "Local Mode";
+            }
             lucide.createIcons();
         };
 
-        // 確保 DOM 執行
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', init);
-        } else {
-            init();
-        }
+        init();
     </script>
 </body>
 </html>
