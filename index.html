@@ -44,7 +44,7 @@
 
         /* 餐廳高亮樣式 */
         .food-item {
-            border-left: 8px solid var(--bp-pink);
+            border-left: 10px solid var(--bp-pink);
             background: #211216;
         }
 
@@ -140,8 +140,7 @@
         <!-- 視圖 2: 匯率 -->
         <div id="view-calculator" class="view-content">
             <div class="mb-6 text-center px-2">
-                <h2 class="text-4xl font-black italic uppercase text-pink leading-none">Currency</h2>
-                <p class="text-gray-400 text-sm tracking-widest mt-2 font-black uppercase">1 TWD : 41.5 KRW</p>
+                <p class="text-gray-400 text-sm tracking-widest mt-2 font-black uppercase italic">Current Rate: 1 TWD : 41.5 KRW</p>
             </div>
             <div class="space-y-6">
                 <div class="calc-input-box">
@@ -170,24 +169,27 @@
 
         <!-- 視圖 3: 紀錄 -->
         <div id="view-shopping" class="view-content">
-            <div class="mb-8 px-2">
-                <h2 class="text-4xl font-black italic uppercase text-pink">Shopping</h2>
-                <p id="user-display-id" class="text-[10px] text-gray-600 mt-1 tracking-tighter uppercase font-bold tracking-widest">Local Mode</p>
+            <div class="mb-8 px-2 flex justify-between items-end">
+                <div>
+                    <h2 class="text-4xl font-black italic uppercase text-pink">Shopping</h2>
+                    <p id="user-display-id" class="text-[10px] text-gray-600 mt-1 tracking-tighter uppercase font-bold tracking-widest italic">Personal Log</p>
+                </div>
+                <div class="text-[10px] text-gray-500 uppercase font-black" id="cloud-status">Connecting...</div>
             </div>
             <div class="bg-[#111] p-6 border-2 border-[#222] rounded-2xl mb-8">
                 <div class="grid grid-cols-12 gap-3">
-                    <input type="text" id="exp-item" placeholder="品項" class="col-span-7 bg-black border border-[#333] p-4 text-base rounded-xl font-black text-white">
-                    <input type="number" inputmode="decimal" id="exp-cost" placeholder="KRW" class="col-span-3 bg-black border border-[#333] p-4 text-base rounded-xl font-mono text-white">
-                    <button id="add-expense-btn" class="col-span-2 bg-pink text-black rounded-xl font-black text-3xl active:scale-90 transition-transform">+</button>
+                    <input type="text" id="exp-item" placeholder="品項名稱" class="col-span-7 bg-black border border-[#333] p-4 text-base rounded-xl font-black text-white outline-none focus:border-pink">
+                    <input type="number" inputmode="decimal" id="exp-cost" placeholder="KRW" class="col-span-3 bg-black border border-[#333] p-4 text-base rounded-xl font-mono text-white outline-none focus:border-pink">
+                    <button id="add-expense-btn" class="col-span-2 bg-pink text-black rounded-xl font-black text-3xl active:scale-90 transition-transform shadow-lg">+</button>
                 </div>
             </div>
             <div id="expense-container" class="space-y-4 mb-40 px-1"></div>
             <div class="fixed bottom-[100px] left-4 right-4 max-w-md mx-auto z-50">
-                <div class="bg-pink p-6 rounded-[30px] flex justify-between items-center shadow-xl border-2 border-black">
-                    <span class="text-black font-black uppercase text-base italic">Total</span>
+                <div class="bg-pink p-6 rounded-[30px] flex justify-between items-center shadow-[0_10px_40px_rgba(0,0,0,0.8)] border-2 border-black">
+                    <span class="text-black font-black uppercase text-base italic">Total Spend</span>
                     <div class="text-right">
-                        <div id="total-krw" class="text-black font-black text-3xl leading-none">₩0</div>
-                        <div id="total-twd" class="text-black/80 font-black text-xs mt-1">≈ NT$ 0</div>
+                        <div id="total-krw" class="text-black font-black text-3xl leading-none tracking-tighter">₩0</div>
+                        <div id="total-twd" class="text-black/80 font-black text-xs mt-1 italic">≈ NT$ 0</div>
                     </div>
                 </div>
             </div>
@@ -230,13 +232,18 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, collection, addDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, collection, addDoc, deleteDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const EXCHANGE_RATE = 41.5;
         let expenses = [];
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'busan-trip-2026';
+        const firebaseConfig = JSON.parse(__firebase_config);
 
-        // 行程數據
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // --- 旅遊數據 ---
         const itineraryData = [
             { day: "DAY 1", date: "115/01/21 (三)", weather: { icon: "sun", hi: "2°", lo: "-3°" }, events: [
                 { time: "08:00", activity: "家裡出發", type: "car", loc: "斗六/虎尾", note: "開車約 2~3 小時。" },
@@ -269,7 +276,7 @@
                 { time: "12:00", activity: "札嘎其市場午餐", type: "utensils", loc: "札嘎其市場", note: "帝王蟹必吃 (每公斤約 6-8 萬韓元)。" },
                 { time: "13:50", activity: "影島大橋開橋", type: "map-pin", loc: "樂天百貨頂樓", note: "14:00 準時開橋，頂樓俯瞰最清楚。" },
                 { time: "14:30", activity: "白淺灘文化村", type: "map-pin", loc: "白淺灘", note: "釜山的聖托里尼，海邊彩色村莊。" },
-                { time: "18:00", activity: "釜山塔夜景", type: "map-pin", loc: "龍頭山公園", note: "龍頭山公園手扶梯上山，觀景台極美。" },
+                { time: "18:00", activity: "釜山塔夜景", type: "map-pin", loc: "龍頭山公園", note: "手扶梯上山，觀景台極美。" },
                 { time: "19:30", activity: "富平罐頭市場", type: "utensils", loc: "罐頭市場", note: "宵夜推薦：紅豆奶油艾草麻吉、魚板。" }
             ]},
             { day: "DAY 5", date: "115/01/25 (日)", weather: { icon: "cloud", hi: "5°", lo: "0°" }, events: [
@@ -282,15 +289,15 @@
         ];
 
         const exchangeData = [
-            { region: "gimhae", name: "Money Box 金海機場店 (輕軌站外)", note: "機場站 1 號出口直走航廈對面。24 小時自助機台。" },
-            { region: "nampo", name: "映真換錢所 (Youngjin)", note: "南浦站 7 號出口。釜山匯率指標，推薦使用現金。" },
-            { region: "nampo", name: "友利換錢所 (Woori)", note: "映真隔壁。人潮過多時的首選，匯率通常相同。" },
-            { region: "seomyeon", name: "那英換錢所 (Nayoung)", note: "西面站 7 號出口，西面市場內。老字號匯率優。" },
-            { region: "seomyeon", name: "Money Box 西面店", note: "地鐵站出口附近。24 小時機台，支援台幣。" },
-            { region: "haeundae", name: "Money Box 海雲台店", note: "海雲台站 5 號出口步行 3 分鐘。快速透明。" }
+            { region: "gimhae", name: "Money Box 金海機場店 (輕軌站外)", note: "如何前往：走出金海機場航廈 GATE 3，穿越馬路直走往『輕軌機場站』方向。換錢所就在輕軌站 1 號出口旁，外觀有明顯的 Money Box 招牌。這是 24 小時自助機台，匯率比機場航廈內銀行更好，適合抵達當下急用。" },
+            { region: "nampo", name: "映真換錢所 (Youngjin)", note: "如何前往：地鐵南浦站 7 號出口出站，往前直走約 3 分鐘。路口看到便利商店右轉進入巷子。這是釜山名氣最大、匯率最好的換錢所。建議攜帶台幣或美金現金，與正隔壁的友利通常匯率一致。" },
+            { region: "nampo", name: "友利換錢所 (Woori)", note: "如何前往：位於映真換錢所的正隔壁。若映真排隊人潮過多，請直接到隔壁這家。兩家匯率長期保持同步一致。靠近南浦洞 BIFF 廣場商圈。" },
+            { region: "seomyeon", name: "那英換錢所 (Nayoung)", note: "如何前往：地鐵西面站 7 號出口出站，往前走至第二個路口右轉進入『西面市場』。地點就在豬肉湯飯一條街的入口附近（靠近樂天百貨後門）。這家是西面老字號，雖然外觀像小攤位但信譽極佳。" },
+            { region: "seomyeon", name: "Money Box 西面店", note: "如何前往：位於西面站附近的主要商圈大樓內。提供 24 小時自助換錢機，非常適合深夜想換小額韓元逛地下街的旅客，可收台幣百元鈔與千元鈔。" },
+            { region: "haeundae", name: "Money Box 海雲台店", note: "如何前往：地鐵海雲台站 5 號出口出站，往海灘方向步行約 3 分鐘，位於轉角處大樓內。機台操作介面支援中文，方便在海雲台逛街或去海雲台市場前兌換。" }
         ];
 
-        // UI 渲染函數 (不依賴 Firebase)
+        // --- UI 操作 ---
         const switchView = (viewId) => {
             document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -298,6 +305,7 @@
             document.getElementById(`btn-${viewId}`).classList.add('active');
             window.scrollTo(0, 0);
         };
+        window.switchView = switchView;
 
         const renderDay = (index) => {
             document.querySelectorAll('#day-nav button').forEach(b => b.classList.remove('active-day-pill'));
@@ -348,7 +356,7 @@
             const containers = { gimhae: "ex-gimhae", nampo: "ex-nampo", seomyeon: "ex-seomyeon", haeundae: "ex-haeundae" };
             Object.keys(containers).forEach(k => { const el = document.getElementById(containers[k]); if(el) el.innerHTML = ""; });
             exchangeData.forEach(ex => {
-                const html = `<div class="bg-[#111] p-6 border-2 border-[#222] rounded-3xl"><h4 class="font-black text-white text-xl mb-2">${ex.name}</h4><p class="text-base text-gray-400 font-bold">${ex.note}</p></div>`;
+                const html = `<div class="bg-[#111] p-6 border-2 border-[#222] rounded-3xl"><h4 class="font-black text-white text-xl mb-2">${ex.name}</h4><p class="text-base text-gray-400 font-bold leading-relaxed">${ex.note}</p></div>`;
                 const target = document.getElementById(containers[ex.region]);
                 if(target) target.innerHTML += html;
             });
@@ -369,29 +377,44 @@
                     </div>
                     <div class="flex items-center gap-4">
                         <div class="text-right"><div class="text-pink font-mono font-black text-2xl">₩${ex.cost.toLocaleString()}</div></div>
-                        <button class="delete-btn p-2 text-gray-600 hover:text-pink" data-id="${ex.id}"><i data-lucide="trash-2" class="w-6 h-6"></i></button>
+                        <button class="delete-btn p-2 text-gray-600 hover:text-pink transition-transform active:scale-75" data-id="${ex.id}"><i data-lucide="trash-2" class="w-6 h-6"></i></button>
                     </div>
                 </div>`).join('');
 
-            const total = expenses.reduce((s, c) => s + (c.cost || 0), 0);
+            const total = expenses.reduce((s, c) => s + (Number(c.cost) || 0), 0);
             totalKrwEl.innerText = `₩${total.toLocaleString()}`;
             totalTwdEl.innerText = `≈ NT$ ${Math.round(total/EXCHANGE_RATE).toLocaleString()}`;
             lucide.createIcons();
             
-            document.querySelectorAll('.delete-btn').forEach(btn => btn.onclick = () => window.deleteExpense(btn.dataset.id));
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.onclick = () => window.deleteExpense(btn.dataset.id);
+            });
         };
 
-        // Firebase Operations
-        window.deleteExpense = async (id) => { if(!auth.currentUser) return; await deleteDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'shopping_records', id)); };
+        // --- Firebase 操作 ---
+        window.deleteExpense = async (id) => { 
+            if(!auth.currentUser) return; 
+            try {
+                await deleteDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'shopping_records', id));
+            } catch(e) { console.error("Delete failed:", e); }
+        };
+
         const addExpense = async () => {
             const item = document.getElementById('exp-item'), cost = document.getElementById('exp-cost');
             if (auth.currentUser && item.value && cost.value) {
-                await addDoc(collection(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'shopping_records'), { item: item.value, cost: Number(cost.value), createdAt: Date.now() });
-                item.value = ""; cost.value = "";
+                try {
+                    await addDoc(collection(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'shopping_records'), { 
+                        item: item.value, 
+                        cost: Number(cost.value), 
+                        createdAt: serverTimestamp() 
+                    });
+                    item.value = ""; cost.value = "";
+                } catch(e) { console.error("Add failed:", e); }
             }
         };
+        window.addExpense = addExpense;
 
-        // 初始化
+        // --- 初始化邏輯 ---
         const init = async () => {
             // 優先渲染 UI
             const nav = document.getElementById('day-nav');
@@ -403,27 +426,40 @@
             document.getElementById('btn-calculator').onclick = () => switchView('calculator');
             document.getElementById('btn-shopping').onclick = () => switchView('shopping');
             document.getElementById('btn-exchange').onclick = () => switchView('exchange');
-            document.getElementById('add-expense-btn').onclick = addExpense;
+            document.getElementById('add-expense-btn').onclick = window.addExpense;
 
             const t = document.getElementById('twd-input'), k = document.getElementById('krw-input');
             k.oninput = (e) => t.value = e.target.value ? (e.target.value / EXCHANGE_RATE).toFixed(0) : "";
             t.oninput = (e) => k.value = e.target.value ? Math.round(e.target.value * EXCHANGE_RATE) : "";
 
-            // Firebase 連線
+            // Firebase 身份驗證與連線
             try {
-                let config;
-                try { config = JSON.parse(__firebase_config); } catch(e) { return; }
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) { await signInWithCustomToken(auth, __initial_auth_token); } else { await signInAnonymously(auth); }
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
+                        const statusEl = document.getElementById('cloud-status');
+                        if(statusEl) statusEl.innerText = "Cloud Sync Active";
                         document.getElementById('user-display-id').innerText = `User ID: ${user.uid.substring(0, 8)}...`;
+                        
                         onSnapshot(collection(db, 'artifacts', appId, 'users', user.uid, 'shopping_records'), (s) => {
-                            expenses = s.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => b.createdAt - a.createdAt);
+                            expenses = s.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => {
+                                const timeA = a.createdAt?.seconds || 0;
+                                const timeB = b.createdAt?.seconds || 0;
+                                return timeB - timeA;
+                            });
                             renderExpenses();
-                        });
+                        }, (err) => console.error("Firestore error:", err));
                     }
                 });
-            } catch(e) { console.warn("Cloud connection error, using local mode."); }
+            } catch(e) { 
+                console.warn("Cloud connection error:", e); 
+                document.getElementById('cloud-status').innerText = "Offline Mode";
+            }
             lucide.createIcons();
         };
 
