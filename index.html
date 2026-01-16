@@ -25,7 +25,6 @@
         .text-pink { color: var(--bp-pink); }
         .bg-pink { background-color: var(--bp-pink); }
         
-        /* 緊湊列表樣式 */
         .itinerary-item {
             background: var(--bp-card);
             border-bottom: 2px solid var(--bp-dark);
@@ -36,13 +35,11 @@
             background: #1a1a1a;
         }
 
-        /* 項目標題區域底色 */
         .item-header {
             background: rgba(255, 255, 255, 0.08);
             border-bottom: 1px solid var(--bp-border);
         }
 
-        /* 餐廳高亮樣式 */
         .food-item {
             border-left: 10px solid var(--bp-pink);
             background: #211216;
@@ -61,7 +58,6 @@
             to { opacity: 1; }
         }
 
-        /* iOS 固定底部導覽列 */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -102,13 +98,11 @@
 
         main { width: 100%; max-width: 500px; margin: 0 auto; }
 
-        /* 隱藏數字滾輪 */
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
             -webkit-appearance: none; margin: 0;
         }
         input[type=number] { -moz-appearance: textfield; }
 
-        /* 匯率輸入框：粉紅底黑字 */
         .calc-input-box {
             background-color: var(--bp-pink);
             padding: 24px;
@@ -131,13 +125,11 @@
 
     <main class="px-3 pt-6">
 
-        <!-- 視圖 1: 行程 -->
         <div id="view-itinerary" class="view-content active">
             <div id="day-nav" class="flex gap-2 overflow-x-auto pb-4 no-scrollbar sticky top-[0px] z-30 py-3 bg-black"></div>
             <div id="itinerary-list" class="space-y-3"></div>
         </div>
 
-        <!-- 視圖 2: 匯率 -->
         <div id="view-calculator" class="view-content">
             <div class="mb-6 text-center px-2">
                 <p class="text-gray-400 text-sm tracking-widest mt-2 font-black uppercase italic">Rate: 1 TWD : 41.5 KRW</p>
@@ -167,14 +159,13 @@
             </div>
         </div>
 
-        <!-- 視圖 3: 紀錄 -->
         <div id="view-shopping" class="view-content">
             <div class="mb-8 px-2 flex justify-between items-end">
                 <div>
                     <h2 class="text-4xl font-black italic uppercase text-pink">Shopping</h2>
-                    <p id="user-display-id" class="text-[10px] text-gray-600 mt-1 tracking-tighter uppercase font-bold tracking-widest italic">Personal Log</p>
+                    <p id="user-display-id" class="text-[10px] text-gray-600 mt-1 tracking-tighter uppercase font-bold tracking-widest italic">Syncing...</p>
                 </div>
-                <div class="text-[10px] text-gray-500 uppercase font-black" id="cloud-status">Connecting...</div>
+                <div class="text-[10px] text-gray-500 uppercase font-black" id="cloud-status">Standby</div>
             </div>
             <div class="bg-[#111] p-6 border-2 border-[#222] rounded-2xl mb-8">
                 <div class="grid grid-cols-12 gap-3">
@@ -186,7 +177,7 @@
             <div id="expense-container" class="space-y-4 mb-40 px-1"></div>
             <div class="fixed bottom-[100px] left-4 right-4 max-w-md mx-auto z-50">
                 <div class="bg-pink p-6 rounded-[30px] flex justify-between items-center shadow-[0_10px_40px_rgba(0,0,0,0.8)] border-2 border-black">
-                    <span class="text-black font-black uppercase text-base italic">Total Spend</span>
+                    <span class="text-black font-black uppercase text-base italic">Total</span>
                     <div class="text-right">
                         <div id="total-krw" class="text-black font-black text-3xl leading-none tracking-tighter">₩0</div>
                         <div id="total-twd" class="text-black/80 font-black text-xs mt-1 italic">≈ NT$ 0</div>
@@ -195,7 +186,6 @@
             </div>
         </div>
 
-        <!-- 視圖 4: 換匯 -->
         <div id="view-exchange" class="view-content px-2">
             <div class="mb-8 text-center">
                 <h2 class="text-4xl font-black italic uppercase text-pink">Exchange</h2>
@@ -238,9 +228,11 @@
         const EXCHANGE_RATE = 41.5;
         let expenses = [];
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'busan-trip-2026';
-        
-        // 初始化 Firebase 的變數
-        let db, auth;
+        const firebaseConfig = JSON.parse(__firebase_config);
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
         // --- 旅遊數據 ---
         const itineraryData = [
@@ -255,7 +247,8 @@
                 { time: "20:00", activity: "南浦洞周邊覓食", type: "utensils", loc: "南浦洞", note: "景點：KPOP 唱片行。晚餐：人蔘雞湯粥或南浦雪濃湯。消夜：Bhc 炸雞或老爺炸雞。" }
             ]},
             { day: "DAY 2", date: "115/01/22 (四)", weather: { icon: "cloud", hi: "4°", lo: "-1°" }, events: [
-                { time: "08:00", activity: "吃早餐", type: "utensils", loc: "新昌吐司 / EggDrop", note: "南浦洞知名吐司店或路邊小吃。" },
+                { time: "08:00", activity: "釜田市場吃早餐", type: "utensils", loc: "釜田市場", note: "步行+地鐵或計程車。美食推薦：豬肉餅/海苔飯捲(明太子口味)。" },
+                { time: "09:30", activity: "前往海雲台", type: "car", loc: "海雲台站", note: "1. 地鐵：約 50 分鐘 (1 號線 > 西面轉 2 號線)。2. 計程車：約 40-60 分鐘。" },
                 { time: "10:30", activity: "東釜山樂天OUTLET", type: "shopping-bag", loc: "樂天OUTLET", note: "10:30 開門。採買北臉、國家地理比台灣便宜許多。斜坡滑車就在旁。" },
                 { time: "13:55", activity: "海雲台傳統市場", type: "utensils", loc: "海雲台市場", note: "推薦：31 公分海鮮湯麵、元祖糖餅、巨大牛骨湯。" },
                 { time: "15:30", activity: "SPA LAND 汗蒸幕", type: "map-pin", loc: "SPA LAND", note: "新世界百貨 B1。必喝甜米釀、吃烤蛋。預計停留 2-3 小時。" },
@@ -291,15 +284,15 @@
         ];
 
         const exchangeData = [
-            { region: "gimhae", name: "Money Box 金海機場店", note: "位置：走出航廈 GATE 3 橫跨馬路直走，就在『輕軌機場站』1 號出口正下方。這是 24 小時自助機台，匯率比機場內的銀行更好。操作介面有中文，非常適合第一天抵達時急用。" },
-            { region: "nampo", name: "映真換錢所 (Youngjin)", note: "位置：地鐵南浦站 7 號出口直走至第一個十字路口，看到便利商店右轉巷內約 30 公尺右手邊。這是釜山指標性的換錢所。建議帶台幣千元鈔或美金百元鈔直接更換。" },
-            { region: "nampo", name: "友利換錢所 (Woori)", note: "位置：緊鄰映真換錢所。如果映真排隊人潮太長，換這家即可。這兩家長期維持完全一致的匯率，是南浦洞最推薦的兩家。" },
-            { region: "seomyeon", name: "那英換錢所 (Nayoung)", note: "位置：西面站 7 號出口出站往前走，路過星巴克後在下一個路口右轉進入『西面市場』。豬肉湯飯街入口附近的一間傳統雜貨舖風格店面。匯率在西面區數一數二。" },
-            { region: "seomyeon", name: "Money Box 西面店", note: "位置：西面站 7 號出口附近的主要商務大樓內。提供 24 小時無人機台，匯率透明且顯示在螢幕上。適合晚上逛完西面地下街想換少量韓元時使用。" },
-            { region: "haeundae", name: "Money Box 海雲台店", note: "位置：地鐵海雲台站 5 號出口，往海灘方向直走步行約 2 分鐘轉角處。機台介面支援中文，方便在海雲台活動時兌換。" }
+            { region: "gimhae", name: "Money Box 金海機場店", note: "位置：機場航廈 GATE 3 橫跨馬路直走，就在『輕軌機場站』1 號出口正下方。這是 24 小時自助機台。匯率優於機場內，適合急用。" },
+            { region: "nampo", name: "映真換錢所 (Youngjin)", note: "位置：地鐵南浦站 7 號出口直走第一個十字路口。看到便利商店右轉巷內約 30 公尺。釜山指標，建議帶台幣千元大鈔直接更換。" },
+            { region: "nampo", name: "友利換錢所 (Woori)", note: "位置：映真換錢所正隔壁。若映真排隊過長，直接換這家即可。兩家匯率長期一致。" },
+            { region: "seomyeon", name: "那英換錢所 (Nayoung)", note: "位置：西面站 7 號出口直走，過星巴克後大路口右轉進入『西面市場』。豬肉湯飯街入口附近。老字號，匯率優。" },
+            { region: "seomyeon", name: "Money Box 西面店", note: "位置：西面站 7 號出口附近主要商務大樓內。24 小時自助換錢機，匯率透明顯示。" },
+            { region: "haeundae", name: "Money Box 海雲台店", note: "位置：地鐵海雲台站 5 號出口，往海灘步行 2 分鐘轉角處。介面支援中文，方便活動時兌換。" }
         ];
 
-        // --- UI 操作函數 (掛載至 window 以供 HTML 調用) ---
+        // --- 全域導覽與顯示邏輯 ---
         window.switchView = (viewId) => {
             document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -390,16 +383,16 @@
             totalTwdEl.innerText = `≈ NT$ ${Math.round(total/EXCHANGE_RATE).toLocaleString()}`;
             lucide.createIcons();
             
+            // 綁定事件
             document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.onclick = () => deleteExpense(btn.dataset.id);
+                btn.onclick = () => window.deleteExpense(btn.dataset.id);
             });
         };
 
-        const deleteExpense = async (id) => { 
+        window.deleteExpense = async (id) => { 
             if(!db || !auth.currentUser) return; 
             try {
-                const docRef = doc(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'shopping_records', id);
-                await deleteDoc(docRef);
+                await deleteDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'shopping_records', id));
             } catch(e) { console.error("Delete failed:", e); }
         };
 
@@ -411,8 +404,7 @@
 
             if (db && auth.currentUser && item && cost) {
                 try {
-                    const colRef = collection(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'shopping_records');
-                    await addDoc(colRef, { 
+                    await addDoc(collection(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'shopping_records'), { 
                         item: item, 
                         cost: Number(cost), 
                         createdAt: serverTimestamp() 
@@ -434,9 +426,8 @@
             }, (err) => console.error("Sync error:", err));
         };
 
-        // --- 初始化入口 ---
+        // --- 初始化 ---
         const init = async () => {
-            // 1. 立即渲染 UI (確保畫面不會空白)
             const nav = document.getElementById('day-nav');
             itineraryData.forEach((d, i) => { 
                 const b = document.createElement('button'); 
@@ -449,21 +440,18 @@
             renderDay(0);
             renderExchange();
             
-            // 2. 按鈕監聽綁定
             document.getElementById('btn-view-itinerary').onclick = () => window.switchView('itinerary');
             document.getElementById('btn-view-calculator').onclick = () => window.switchView('calculator');
             document.getElementById('btn-view-shopping').onclick = () => window.switchView('shopping');
             document.getElementById('btn-view-exchange').onclick = () => window.switchView('exchange');
             document.getElementById('add-expense-btn').onclick = () => window.addExpenseAction();
 
-            // 3. 匯率換算邏輯
             const t = document.getElementById('twd-input'), k = document.getElementById('krw-input');
             k.oninput = (e) => t.value = e.target.value ? (e.target.value / EXCHANGE_RATE).toFixed(0) : "";
             t.oninput = (e) => k.value = e.target.value ? Math.round(e.target.value * EXCHANGE_RATE) : "";
 
-            // 4. 執行 Firebase 初始化
             try {
-                if (typeof __firebase_config === 'undefined') throw new Error("Config not available");
+                if (typeof __firebase_config === 'undefined') throw new Error("Config missing");
                 const config = JSON.parse(__firebase_config);
                 const appInstance = initializeApp(config);
                 auth = getAuth(appInstance);
@@ -477,20 +465,23 @@
 
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
-                        const statusEl = document.getElementById('cloud-status');
-                        if(statusEl) statusEl.innerText = "Cloud Sync Active";
+                        document.getElementById('cloud-status').innerText = "Cloud Sync Active";
                         document.getElementById('user-display-id').innerText = `User ID: ${user.uid.substring(0, 8)}...`;
                         setupShoppingSync(user.uid);
                     }
                 });
             } catch(e) {
-                console.warn("Cloud connection error, using local UI.");
+                console.warn("Cloud error, using local UI.");
                 document.getElementById('cloud-status').innerText = "Local Mode";
             }
             lucide.createIcons();
         };
 
-        init();
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
     </script>
 </body>
 </html>
