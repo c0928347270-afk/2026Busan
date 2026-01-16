@@ -28,7 +28,7 @@
         /* 緊湊列表樣式 */
         .itinerary-item {
             background: var(--bp-card);
-            border-bottom: 1px solid var(--bp-border);
+            border-bottom: 2px solid var(--bp-dark);
             width: 100%;
             transition: background 0.2s;
         }
@@ -36,9 +36,15 @@
             background: #1a1a1a;
         }
 
+        /* 項目標題區域底色 */
+        .item-header {
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid var(--bp-border);
+        }
+
         /* 餐廳高亮樣式 */
         .food-item {
-            border-left: 6px solid var(--bp-pink);
+            border-left: 8px solid var(--bp-pink);
             background: #211216;
         }
 
@@ -96,13 +102,12 @@
 
         main { width: 100%; max-width: 500px; margin: 0 auto; }
 
-        /* 移除 Chrome/Safari/Edge 的數字輸入框箭頭 */
+        /* 移除數字輸入框箭頭 */
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
             -webkit-appearance: none;
             margin: 0;
         }
-        /* 移除 Firefox 的數字輸入框箭頭 */
         input[type=number] {
             -moz-appearance: textfield;
         }
@@ -123,7 +128,7 @@
             <div id="itinerary-list" class="space-y-3"></div>
         </div>
 
-        <!-- 視圖 2: 匯率 (優化為單頁佈局) -->
+        <!-- 視圖 2: 匯率 -->
         <div id="view-calculator" class="view-content">
             <div class="mb-4 text-center px-2">
                 <h2 class="text-3xl font-black italic uppercase text-pink leading-none">Currency</h2>
@@ -310,7 +315,7 @@
             { region: "nampo", name: "映真換錢所 (Youngjin)", note: "南浦站 7 號出口，釜山最指標。", query: "釜山映真換錢所" },
             { region: "nampo", name: "友利換錢所 (Woori)", note: "緊鄰映真，匯率通常同步。", query: "釜山友利換錢所" },
             { region: "seomyeon", name: "那英換錢所 (Nayoung)", note: "西面市場內老店，匯率優。", query: "釜山那英換錢所" },
-            { region: "seomyeon", name: "Money Box 西面店", note: "24H 自助機台，方便深夜兌換。", query: "MoneyBox西面店" },
+            { region: "seomyeon", name: "Money Box 西面店", note: "24H 自助機台，方便深夜兌換。", query: "MoneyBox面店" },
             { region: "haeundae", name: "Money Box 海雲台店", note: "地鐵站附近，操作透明便利。", query: "MoneyBox海雲台店" }
         ];
 
@@ -342,24 +347,32 @@
                 <div class="space-y-1">
                 ${data.events.map(e => {
                     const isFood = e.type === 'utensils';
-                    const itemClass = isFood ? 'itinerary-item food-item p-4' : 'itinerary-item p-4';
-                    const foodBadge = isFood ? '<span class="bg-pink text-black text-[10px] font-black px-2 py-0.5 rounded ml-2 uppercase italic">Must Eat</span>' : '';
+                    const itemClass = isFood ? 'itinerary-item food-item' : 'itinerary-item';
+                    const foodBadge = isFood ? '<span class="bg-pink text-black text-[11px] font-black px-2 py-0.5 rounded ml-2 uppercase italic tracking-tighter">MUST EAT</span>' : '';
                     
                     return `
                         <div class="${itemClass}">
-                            <div class="flex justify-between items-start mb-2">
-                                <span class="text-xl font-mono font-black text-[#666] leading-none">${e.time}</span>
-                                <i data-lucide="${e.type}" class="w-5 h-5 text-pink"></i>
+                            <!-- 項目標題區域：加底色以增強分界感 -->
+                            <div class="item-header px-4 py-3 flex justify-between items-center">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xl font-mono font-black text-[#888] tracking-tighter">${e.time}</span>
+                                    <i data-lucide="${e.type}" class="w-5 h-5 text-pink opacity-80"></i>
+                                </div>
+                                ${foodBadge}
                             </div>
-                            <h4 class="text-xl font-black text-white mb-2 leading-tight">
-                                ${e.activity}${foodBadge}
-                            </h4>
-                            <div class="flex items-center gap-2 mb-3">
-                                 <i data-lucide="map-pin" class="w-3 h-3 text-gray-500"></i>
-                                 <span class="text-xs text-gray-400 font-bold uppercase tracking-widest">${e.loc}</span>
-                            </div>
-                            <div class="text-gray-400 text-sm font-medium leading-relaxed mb-4 whitespace-pre-line">
-                                ${e.note}
+                            
+                            <!-- 行程內容區域 -->
+                            <div class="px-4 pb-4 pt-2">
+                                <h4 class="text-2xl font-black text-white leading-tight mb-2">
+                                    ${e.activity}
+                                </h4>
+                                <div class="flex items-center gap-1.5 mb-2 opacity-60">
+                                     <i data-lucide="map-pin" class="w-3.5 h-3.5 text-gray-400"></i>
+                                     <span class="text-xs text-gray-300 font-bold uppercase tracking-widest">${e.loc}</span>
+                                </div>
+                                <div class="text-gray-400 text-base font-medium leading-relaxed whitespace-pre-line border-l border-gray-800 pl-3">
+                                    ${e.note}
+                                </div>
                             </div>
                         </div>
                     `;
