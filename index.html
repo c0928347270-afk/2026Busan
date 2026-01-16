@@ -36,15 +36,15 @@
             background: #1a1a1a;
         }
 
-        /* 項目標題區域底色 */
+        /* 項目標題區域底色：增強分界感 */
         .item-header {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.06);
             border-bottom: 1px solid var(--bp-border);
         }
 
         /* 餐廳高亮樣式 */
         .food-item {
-            border-left: 10px solid var(--bp-pink);
+            border-left: 8px solid var(--bp-pink);
             background: #211216;
         }
 
@@ -102,17 +102,13 @@
 
         main { width: 100%; max-width: 500px; margin: 0 auto; }
 
-        /* 移除數字輸入框箭頭 */
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
+        /* 隱藏數字滾輪 */
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+            -webkit-appearance: none; margin: 0;
         }
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
+        input[type=number] { -moz-appearance: textfield; }
 
-        /* 匯率輸入框特定樣式：粉紅底黑字 */
+        /* 匯率輸入框：粉紅底黑字 */
         .calc-input-box {
             background-color: var(--bp-pink);
             padding: 24px;
@@ -124,15 +120,12 @@
             color: #000 !important;
             font-weight: 900 !important;
         }
-        .calc-input-box label {
-            color: rgba(0, 0, 0, 0.6) !important;
-        }
     </style>
 </head>
 <body class="selection:bg-[#f8a5c2] selection:text-black">
 
     <header id="main-header" class="pt-12 pb-6 border-b border-[#f8a5c2]/20 text-center bg-black">
-        <h1 class="text-4xl font-black tracking-tighter text-pink uppercase italic">Busan Vibe</h1>
+        <h1 class="text-4xl font-black tracking-tighter text-pink uppercase italic leading-none">Busan Vibe</h1>
         <p class="text-base tracking-[0.2em] text-gray-400 font-black mt-2 uppercase italic">韓國釜山 JAN 2026</p>
     </header>
 
@@ -148,14 +141,14 @@
         <div id="view-calculator" class="view-content">
             <div class="mb-6 text-center px-2">
                 <h2 class="text-4xl font-black italic uppercase text-pink leading-none">Currency</h2>
-                <p class="text-gray-400 text-sm tracking-widest mt-2 font-black">1 TWD : 41.5 KRW</p>
+                <p class="text-gray-400 text-sm tracking-widest mt-2 font-black uppercase">1 TWD : 41.5 KRW</p>
             </div>
             <div class="space-y-6">
                 <div class="calc-input-box">
-                    <label class="text-xs uppercase font-black tracking-widest mb-2 block">KRW 韓元</label>
+                    <label class="text-xs font-black tracking-widest mb-2 block text-black/60 uppercase">KRW 韓元</label>
                     <div class="flex items-center">
                         <span class="text-3xl font-mono mr-3 font-black text-black">₩</span>
-                        <input type="number" inputmode="decimal" id="krw-input" placeholder="0" class="w-full text-5xl font-mono bg-transparent outline-none text-black font-black placeholder-black/20">
+                        <input type="number" inputmode="decimal" id="krw-input" placeholder="0" class="w-full text-5xl font-mono bg-transparent outline-none text-black font-black">
                     </div>
                 </div>
                 
@@ -166,10 +159,10 @@
                 </div>
 
                 <div class="calc-input-box">
-                    <label class="text-xs uppercase font-black tracking-widest mb-2 block">TWD 台幣</label>
+                    <label class="text-xs font-black tracking-widest mb-2 block text-black/60 uppercase">TWD 台幣</label>
                     <div class="flex items-center">
                         <span class="text-2xl font-mono mr-3 font-black text-black">$</span>
-                        <input type="number" inputmode="decimal" id="twd-input" placeholder="0" class="w-full text-4xl font-mono bg-transparent outline-none text-black font-black placeholder-black/20">
+                        <input type="number" inputmode="decimal" id="twd-input" placeholder="0" class="w-full text-4xl font-mono bg-transparent outline-none text-black font-black">
                     </div>
                 </div>
             </div>
@@ -179,7 +172,7 @@
         <div id="view-shopping" class="view-content">
             <div class="mb-8 px-2">
                 <h2 class="text-4xl font-black italic uppercase text-pink">Shopping</h2>
-                <p id="user-display-id" class="text-[10px] text-gray-600 mt-1 uppercase tracking-tighter">Connecting...</p>
+                <p id="user-display-id" class="text-[10px] text-gray-600 mt-1 tracking-tighter uppercase font-bold tracking-widest">Local Mode</p>
             </div>
             <div class="bg-[#111] p-6 border-2 border-[#222] rounded-2xl mb-8">
                 <div class="grid grid-cols-12 gap-3">
@@ -228,22 +221,10 @@
     </main>
 
     <nav class="bottom-nav">
-        <button id="btn-itinerary" class="nav-item active">
-            <i data-lucide="calendar"></i>
-            <span>行程</span>
-        </button>
-        <button id="btn-calculator" class="nav-item">
-            <i data-lucide="calculator"></i>
-            <span>匯率</span>
-        </button>
-        <button id="btn-shopping" class="nav-item">
-            <i data-lucide="shopping-bag"></i>
-            <span>購物</span>
-        </button>
-        <button id="btn-exchange" class="nav-item">
-            <i data-lucide="map"></i>
-            <span>換匯</span>
-        </button>
+        <button id="btn-itinerary" class="nav-item active"><i data-lucide="calendar"></i><span>行程</span></button>
+        <button id="btn-calculator" class="nav-item"><i data-lucide="calculator"></i><span>匯率</span></button>
+        <button id="btn-shopping" class="nav-item"><i data-lucide="shopping-bag"></i><span>購物</span></button>
+        <button id="btn-exchange" class="nav-item"><i data-lucide="map"></i><span>換匯</span></button>
     </nav>
 
     <script type="module">
@@ -253,105 +234,64 @@
 
         const EXCHANGE_RATE = 41.5;
         let expenses = [];
-        const firebaseConfig = JSON.parse(__firebase_config);
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'busan-trip-2026';
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
+        // 行程數據
         const itineraryData = [
-            { 
-                day: "DAY 1", date: "115/01/21 (三)", 
-                weather: { icon: "sun", hi: "2°", lo: "-3°" }, 
-                events: [
-                    { time: "08:00", activity: "家裡出發", type: "car", loc: "斗六/虎尾", note: "開車約 2~3 小時。" },
-                    { time: "11:00", activity: "抵達連統停車場", type: "car", loc: "連統停車場", note: "地址：桃園市大園區國際路一段509-1號。" },
-                    { time: "12:00", activity: "抵達第二航廈", type: "bus", loc: "桃園機場 T2", note: "搭乘接駁車至航廈，辦理報到、託運並入關。" },
-                    { time: "13:55", activity: "登機時間", type: "clock", loc: "登機口", note: "請準時至指定登機門候機。" },
-                    { time: "14:25", activity: "飛機起飛 (BR164)", type: "plane", loc: "桃園機場 T2", note: "長榮航空 BR164，飛行時間約 2 小時 15 分。" },
-                    { time: "17:40", activity: "抵達金海機場", type: "plane", loc: "金海機場", note: "抵達釜山，辦理入境手續。" },
-                    { time: "18:10", activity: "取得行李", type: "shopping-bag", loc: "行李轉盤", note: "取得行李後前往地鐵站：由 GATE 3 走到馬路對面右轉。" },
-                    { time: "18:30", activity: "搭地鐵到沙上站", type: "train", loc: "沙上站", note: "搭乘紫色輕軌至沙上，轉乘綠色 2 號線往西面/萇山方向。" },
-                    { time: "18:40", activity: "西面轉乘至札嘎其站", type: "train", loc: "札嘎其站", note: "轉乘橘色 1 號線往多南浦/大浦海水浴場方向。" },
-                    { time: "19:00", activity: "抵達札嘎其站 7 號出口", type: "map-pin", loc: "札嘎其站", note: "出站正前方路口左轉第二棟大樓 (5 號出口有電梯，出電梯直行過 7 號出口左轉)。" },
-                    { time: "19:05", activity: "NewCZ 南浦店辦理入住", type: "hotel", loc: "NewCZ Nampo Hotel", note: "辦理入住後放置行李。" },
-                    { time: "20:00", activity: "南浦洞周邊覓食", type: "utensils", loc: "南浦洞", note: "景點：KPOP 唱片行。晚餐推薦：人蔘雞湯粥/南浦雪濃湯。消夜推薦：Bhc 炸雞或老爺炸雞。" }
-                ]
-            },
-            { 
-                day: "DAY 2", date: "115/01/22 (四)", 
-                weather: { icon: "cloud", hi: "4°", lo: "-1°" }, 
-                events: [
-                    { time: "08:00", activity: "吃早餐", type: "utensils", loc: "新昌吐司 / EggDrop", note: "可選擇新昌吐司、EggDrop 或是路邊小吃與便利商店。" },
-                    { time: "09:30", activity: "前往海雲台", type: "car", loc: "海雲台站", note: "1. 地鐵：約 50 分鐘 (1 號線 > 西面轉 2 號線)。2. 計程車：約 40-60 分鐘。" },
-                    { time: "10:30", activity: "東釜山樂天OUTLET", type: "shopping-bag", loc: "東釜山樂天OUTLET", note: "10:30 開門 (北臉、國家地理比台灣便宜許多)。斜坡滑車就在旁，不怕冷可前往嘗試。" },
-                    { time: "13:55", activity: "海雲台傳統市場", type: "utensils", loc: "海雲台傳統市場", note: "午餐建議：31 公分海鮮湯麵、小麥冷麵、元祖糖餅或巨大牛骨湯。" },
-                    { time: "14:25", activity: "新世界百貨", type: "shopping-bag", loc: "Centum City 新世界百貨", note: "逛街消化，準備前往汗蒸幕。" },
-                    { time: "15:30", activity: "SPA LAND 汗蒸幕", type: "map-pin", loc: "Spa Land Centum City", note: "預計停留 2-3 小時。必喝甜米釀、吃烤蛋。售票處換票 > 寄鞋 > 領衣服 > 洗浴泡湯 > 桑拿 > 結算。" },
-                    { time: "18:00", activity: "搭車前往西面站", type: "train", loc: "西面站", note: "搭乘地鐵 2 號線 (綠線) 可直達西面站。" },
-                    { time: "18:30", activity: "晚餐吃烤肉", type: "utensils", loc: "西面站烤肉街", note: "建議：烤肉的男子 (高CP)、釜山宅烤肉、味贊王 (較遠) 或 83 獬豸。" },
-                    { time: "18:40", activity: "西面地下街逛街", type: "shopping-bag", loc: "西面地下街", note: "逛西面地下街文創店或大創百貨。" },
-                    { time: "22:00", activity: "回飯店", type: "train", loc: "札嘎其站", note: "搭乘地鐵或計程車返回飯店休息。" }
-                ]
-            },
-            { 
-                day: "DAY 3", date: "115/01/23 (五)", 
-                weather: { icon: "snow", hi: "1°", lo: "-5°" }, 
-                events: [
-                    { time: "08:00", activity: "吃早餐", type: "utensils", loc: "南浦洞", note: "簡單吃附近小吃或便利商店，避免耽誤跟團集合時間。" },
-                    { time: "09:00", activity: "釜山站 1 號出口集合", type: "users", loc: "KTX 釜山站 1 號出口", note: "搭地鐵橘線往老匍方向。集合地點為 KTX 釜山站 1 號出口。" },
-                    { time: "10:30", activity: "天空膠囊 (藍線公園)", type: "train", loc: "海雲台藍線公園", note: "跟團午餐建議：1. 清沙浦 (道熙家/秀敏家/韓牛紙火鍋)。2. 松亭站 (31cm 海鮮麵)。" },
-                    { time: "13:10", activity: "海東龍宮寺", type: "map-pin", loc: "海東龍宮寺", note: "韓國唯一蓋在海邊的佛寺，景色絕佳。" },
-                    { time: "15:00", activity: "佛國寺", type: "map-pin", loc: "慶州 佛國寺", note: "UNESCO 世界文化遺產，欣賞千年古建築之美。" },
-                    { time: "16:40", activity: "大陵院 + 皇理團路", type: "utensils", loc: "慶州 皇理團路", note: "必吃：起司 10 元餅、南瓜薯條、皇南夾心餅。晚餐建議：鄉花亭或百年客人。" },
-                    { time: "19:00", activity: "東宮與月池夜景", type: "map-pin", loc: "東宮與月池", note: "欣賞唯美韓式燈光倒映池畔的壯麗夜景。" },
-                    { time: "21:30", activity: "返回西面站 / 釜山站", type: "bus", loc: "釜山站", note: "行程結束由跟團巴士送回指定地點後解散回飯店。" }
-                ]
-            },
-            { 
-                day: "DAY 4", date: "115/01/24 (六)", 
-                weather: { icon: "sun", hi: "3°", lo: "-2°" }, 
-                events: [
-                    { time: "08:00", activity: "早餐後出發", type: "utensils", loc: "古來司魚糕 札嘎其店", note: "推薦購買現做的魚糕或是在路邊小吃店進食。" },
-                    { time: "08:30", activity: "松島天空步道", type: "map-pin", loc: "松島天空步道", note: "搭乘計程車前往，漫步在海面上的透明步道。" },
-                    { time: "09:00", activity: "松島海上纜車", type: "map-pin", loc: "松島海上纜車", note: "09:00 開始營運，俯瞰松島海景。" },
-                    { time: "12:00", activity: "札嘎其市場午餐", type: "utensils", loc: "札嘎其市場", note: "帝王蟹必吃 (每公斤約 6-8 萬韓元)，現殺現煮。" },
-                    { time: "13:50", activity: "看影島大橋開橋", type: "map-pin", loc: "樂天百貨光復店頂樓", note: "14:00 準時開橋。建議先到百貨公司頂樓星光花園俯瞰。" },
-                    { time: "14:30", activity: "白淺灘文化村", type: "map-pin", loc: "白淺灘文化村", note: "停留 1-2 小時。釜山的聖托里尼，海邊彩色村莊非常美。" },
-                    { time: "15:30", activity: "太宗台", type: "car", loc: "太宗台", note: "體驗自然海岬美景。注意遊園車只開到 17:30。" },
-                    { time: "18:00", activity: "釜山塔夜景", type: "map-pin", loc: "釜山塔", note: "搭計程車至龍頭山公園手扶梯上山。觀景台售票至 21:30。" },
-                    { time: "19:30", activity: "富平罐頭市場", type: "utensils", loc: "富平罐頭市場", note: "吃晚餐。推薦美食：紅豆奶油艾草麻吉、魚板、各種韓式炸物。" },
-                    { time: "22:00", activity: "回飯店", type: "car", loc: "南浦洞", note: "步行約 1 公里穿過熱鬧的南浦洞商圈逛回飯店休息。" }
-                ]
-            },
-            { 
-                day: "DAY 5", date: "115/01/25 (日)", 
-                weather: { icon: "cloud", hi: "5°", lo: "0°" }, 
-                events: [
-                    { time: "08:00", activity: "早餐 + 整理行李", type: "clock", loc: "飯店", note: "享用早餐後辦理退房，行李可先寄存於櫃台。" },
-                    { time: "09:00", activity: "甘川洞文化村", type: "map-pin", loc: "甘川洞文化村", note: "搭乘計程車前往彩色積木村，拍攝經典小王子照片。" },
-                    { time: "12:00", activity: "南浦自由活動採買", type: "shopping-bag", loc: "樂天超市 南浦店", note: "最後一站伴手禮採買。午餐建議：李在模披薩 (人氣店需排隊)。" },
-                    { time: "14:30", activity: "回飯店領行李", type: "hotel", loc: "NewCZ Nampo Hotel", note: "回飯店領取寄存行李，準備前往機場。" },
-                    { time: "15:00", activity: "前往金海機場", type: "train", loc: "金海機場", note: "搭乘地鐵橘線轉綠線再轉輕軌返回金海機場。" },
-                    { time: "16:00", activity: "抵達金海機場", type: "plane", loc: "金海機場", note: "先去 KIOSK 機台掃描退稅條碼，再辦理報到手續。" },
-                    { time: "18:55", activity: "長榮航空起飛 (BR163)", type: "plane", loc: "金海機場", note: "預計起飛返回台灣桃園國際機場。" },
-                    { time: "20:25", activity: "抵達桃園機場", type: "plane", loc: "桃園機場 T2", note: "辦理入境後至連統停車場取車。" },
-                    { time: "23:00", activity: "回到溫暖的家", type: "car", loc: "斗六/虎尾", note: "開車返回斗六/虎尾家，行程圓滿結束。" }
-                ]
-            }
+            { day: "DAY 1", date: "115/01/21 (三)", weather: { icon: "sun", hi: "2°", lo: "-3°" }, events: [
+                { time: "08:00", activity: "家裡出發", type: "car", loc: "斗六/虎尾", note: "開車約 2~3 小時。" },
+                { time: "11:00", activity: "抵達連統停車場", type: "car", loc: "連統停車場", note: "地址：桃園市大園區國際路一段509-1號。" },
+                { time: "12:00", activity: "抵達第二航廈", type: "bus", loc: "桃園機場 T2", note: "辦理報到、託運並入關。" },
+                { time: "14:25", activity: "飛機起飛 (BR164)", type: "plane", loc: "桃園機場 T2", note: "飛行時間約 2 小時 15 分。" },
+                { time: "17:40", activity: "抵達金海機場", type: "plane", loc: "金海機場", note: "抵達釜山，辦理入境。" },
+                { time: "18:30", activity: "搭地鐵到沙上站", type: "train", loc: "沙上站", note: "轉乘綠色 2 號線往西面/萇山。" },
+                { time: "19:05", activity: "NewCZ 南浦店辦理入住", type: "hotel", loc: "NewCZ Nampo Hotel", note: "20 BIFFGWANGJANGRO, 中區。" },
+                { time: "20:00", activity: "南浦洞周邊覓食", type: "utensils", loc: "南浦洞", note: "景點：KPOP 唱片行。消夜推薦：Bhc 炸雞或老爺炸雞。" }
+            ]},
+            { day: "DAY 2", date: "115/01/22 (四)", weather: { icon: "cloud", hi: "4°", lo: "-1°" }, events: [
+                { time: "08:00", activity: "吃早餐", type: "utensils", loc: "新昌吐司 / EggDrop", note: "路邊小吃或便利商店。" },
+                { time: "10:30", activity: "東釜山樂天OUTLET", type: "shopping-bag", loc: "樂天OUTLET", note: "北臉、國家地理比台灣便宜許多。" },
+                { time: "13:55", activity: "海雲台傳統市場", type: "utensils", loc: "海雲台市場", note: "推薦：31公分海鮮湯麵、元祖糖餅。" },
+                { time: "15:30", activity: "SPA LAND 汗蒸幕", type: "map-pin", loc: "SPA LAND", note: "預計停留 2-3 小時。必喝甜米釀、吃烤蛋。" },
+                { time: "18:30", activity: "晚餐吃烤肉", type: "utensils", loc: "西面站烤肉街", note: "推薦：烤肉的男子 (高CP)、釜山宅。" },
+                { time: "22:00", activity: "回飯店", type: "train", loc: "札嘎其站", note: "搭乘地鐵或計程車返回。" }
+            ]},
+            { day: "DAY 3", date: "115/01/23 (五)", weather: { icon: "snow", hi: "1°", lo: "-5°" }, events: [
+                { time: "09:00", activity: "釜山站 1 號出口集合", type: "users", loc: "釜山站", note: "一日團行程，集合地點為 KTX 1 號出口。" },
+                { time: "10:30", activity: "天空膠囊 (藍線公園)", type: "train", loc: "海雲台藍線公園", note: "尾浦至青沙浦段風景絕佳。" },
+                { time: "13:10", activity: "海東龍宮寺", type: "map-pin", loc: "海東龍宮寺", note: "韓國唯一蓋在海邊的佛寺。" },
+                { time: "16:40", activity: "大陵院 + 皇理團路", type: "utensils", loc: "慶州", note: "必吃：起司 10 元餅、南瓜薯條。" },
+                { time: "19:00", activity: "東宮與月池夜景", type: "map-pin", loc: "東宮與月池", note: "唯美韓式燈光夜景。" },
+                { time: "21:50", activity: "返回釜山站", type: "bus", loc: "釜山站", note: "解散後回飯店。" }
+            ]},
+            { day: "DAY 4", date: "115/01/24 (六)", weather: { icon: "sun", hi: "3°", lo: "-2°" }, events: [
+                { time: "08:30", activity: "松島天空步道", type: "map-pin", loc: "松島", note: "漫步在海面上的透明步道。" },
+                { time: "12:00", activity: "札嘎其市場午餐", type: "utensils", loc: "札嘎其市場", note: "帝王蟹必吃 (每公斤約 6-8 萬韓元)。" },
+                { time: "13:50", activity: "影島大橋開橋", type: "map-pin", loc: "樂天百貨頂樓", note: "14:00 準時開橋，頂樓俯瞰最清楚。" },
+                { time: "14:30", activity: "白淺灘文化村", type: "map-pin", loc: "白淺灘", note: "釜山的聖托里尼，海邊彩色村莊。" },
+                { time: "18:00", activity: "釜山塔夜景", type: "map-pin", loc: "龍頭山公園", note: "龍頭山公園手扶梯上山，觀景台極美。" },
+                { time: "19:30", activity: "富平罐頭市場", type: "utensils", loc: "罐頭市場", note: "宵夜推薦：紅豆奶油艾草麻吉、魚板。" }
+            ]},
+            { day: "DAY 5", date: "115/01/25 (日)", weather: { icon: "cloud", hi: "5°", lo: "0°" }, events: [
+                { time: "09:00", activity: "甘川洞文化村", type: "map-pin", loc: "甘川洞", note: "彩色積木村，拍攝經典小王子照片。" },
+                { time: "12:00", activity: "南浦自由活動", type: "shopping-bag", loc: "樂天超市", note: "伴手禮採買。午餐：李在模披薩。" },
+                { time: "15:00", activity: "前往金海機場", type: "train", loc: "金海機場", note: "地鐵返回，準備退稅手續。" },
+                { time: "18:55", activity: "飛機起飛 (BR163)", type: "plane", loc: "金海機場", note: "返回台灣桃園機場。" },
+                { time: "23:00", activity: "回到溫暖的家", type: "car", loc: "斗六/虎尾", note: "開車平安返家。" }
+            ]}
         ];
 
         const exchangeData = [
-            { region: "gimhae", name: "Money Box 金海機場店 (輕軌站外)", note: "地址：金海輕軌機場站 1 號出口直走航廈對面。24 小時自助換錢服務。若機場內銀行關閉，可在此處兌換，匯率通常優於機場內。" },
-            { region: "nampo", name: "映真換錢所 (Youngjin)", note: "地址：南浦站 7 號出口直走右手邊。釜山匯率最高指標，推薦使用台幣或美金現金兌換。" },
-            { region: "nampo", name: "友利換錢所 (Woori)", note: "地址：映真換錢所正隔壁。若映真人潮太多，可直接去這家，匯率通常與映真一致。" },
-            { region: "seomyeon", name: "那英換錢所 (Nayoung)", note: "地址：西面站 7 號出口，西面市場內（靠近樂天百貨後門）。當地知名老字號，匯率極優。" },
-            { region: "seomyeon", name: "Money Box 西面店", note: "地址：西面站出口附近。提供 24 小時自助換錢機，支援台幣，適合深夜兌換。" },
-            { region: "haeundae", name: "Money Box 海雲台店", note: "地址：海雲台站 5 號出口步行 3 分鐘。自動機台操作透明，方便在海雲台活動時使用。" }
+            { region: "gimhae", name: "Money Box 金海機場店 (輕軌站外)", note: "機場站 1 號出口直走航廈對面。24 小時自助機台。" },
+            { region: "nampo", name: "映真換錢所 (Youngjin)", note: "南浦站 7 號出口。釜山匯率指標，推薦使用現金。" },
+            { region: "nampo", name: "友利換錢所 (Woori)", note: "映真隔壁。人潮過多時的首選，匯率通常相同。" },
+            { region: "seomyeon", name: "那英換錢所 (Nayoung)", note: "西面站 7 號出口，西面市場內。老字號匯率優。" },
+            { region: "seomyeon", name: "Money Box 西面店", note: "地鐵站出口附近。24 小時機台，支援台幣。" },
+            { region: "haeundae", name: "Money Box 海雲台店", note: "海雲台站 5 號出口步行 3 分鐘。快速透明。" }
         ];
 
-        window.switchView = (viewId) => {
+        // UI 渲染函數 (不依賴 Firebase)
+        const switchView = (viewId) => {
             document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             document.getElementById(`view-${viewId}`).classList.add('active');
@@ -359,38 +299,13 @@
             window.scrollTo(0, 0);
         };
 
-        window.addExpense = async () => {
-            if (!auth.currentUser) return;
-            const itemInput = document.getElementById('exp-item');
-            const costInput = document.getElementById('exp-cost');
-            if (itemInput.value && costInput.value) {
-                const userId = auth.currentUser.uid;
-                const colRef = collection(db, 'artifacts', appId, 'users', userId, 'shopping_records');
-                await addDoc(colRef, {
-                    item: itemInput.value,
-                    cost: Number(costInput.value),
-                    createdAt: Date.now()
-                });
-                itemInput.value = "";
-                costInput.value = "";
-            }
-        };
-
-        window.deleteExpense = async (docId) => {
-            if (!auth.currentUser) return;
-            const userId = auth.currentUser.uid;
-            const docRef = doc(db, 'artifacts', appId, 'users', userId, 'shopping_records', docId);
-            await deleteDoc(docRef);
-        };
-
-        function renderDay(index) {
+        const renderDay = (index) => {
             document.querySelectorAll('#day-nav button').forEach(b => b.classList.remove('active-day-pill'));
             const btn = document.getElementById(`day-pill-${index}`);
             if(btn) btn.classList.add('active-day-pill');
 
             const container = document.getElementById('itinerary-list');
             const data = itineraryData[index];
-
             container.innerHTML = `
                 <div class="mb-6 p-6 border-l-4 border-pink bg-[#111] rounded-r-2xl">
                     <div class="flex justify-between items-center">
@@ -406,7 +321,6 @@
                     const isFood = e.type === 'utensils';
                     const itemClass = isFood ? 'itinerary-item food-item' : 'itinerary-item';
                     const foodBadge = isFood ? '<span class="bg-pink text-black text-[11px] font-black px-2 py-0.5 rounded ml-2 uppercase italic tracking-tighter">MUST EAT</span>' : '';
-                    
                     return `
                         <div class="${itemClass}">
                             <div class="item-header px-4 py-3 flex justify-between items-center">
@@ -416,51 +330,36 @@
                                 </div>
                                 ${foodBadge}
                             </div>
-                            
                             <div class="px-4 pb-4 pt-2">
-                                <h4 class="text-2xl font-black text-white leading-tight mb-2">
-                                    ${e.activity}
-                                </h4>
+                                <h4 class="text-2xl font-black text-white leading-tight mb-2">${e.activity}</h4>
                                 <div class="flex items-center gap-1.5 mb-2 opacity-60">
                                      <i data-lucide="map-pin" class="w-3.5 h-3.5 text-gray-300"></i>
                                      <span class="text-xs text-gray-300 font-bold uppercase tracking-widest">${e.loc}</span>
                                 </div>
-                                <div class="text-gray-400 text-xl font-medium leading-relaxed whitespace-pre-line border-l border-gray-800 pl-3">
-                                    ${e.note}
-                                </div>
+                                <div class="text-gray-400 text-xl font-medium leading-relaxed border-l border-gray-800 pl-3">${e.note}</div>
                             </div>
-                        </div>
-                    `;
+                        </div>`;
                 }).join('')}
-                </div>
-            `;
+                </div>`;
             lucide.createIcons();
-        }
+        };
 
-        function renderExchange() {
+        const renderExchange = () => {
             const containers = { gimhae: "ex-gimhae", nampo: "ex-nampo", seomyeon: "ex-seomyeon", haeundae: "ex-haeundae" };
-            Object.values(containers).forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.innerHTML = "";
-            });
+            Object.keys(containers).forEach(k => { const el = document.getElementById(containers[k]); if(el) el.innerHTML = ""; });
             exchangeData.forEach(ex => {
-                const html = `
-                    <div class="bg-[#111] p-6 border-2 border-[#222] rounded-3xl">
-                        <h4 class="font-black text-white text-xl mb-2">${ex.name}</h4>
-                        <p class="text-base text-gray-400 font-bold leading-relaxed">${ex.note}</p>
-                    </div>
-                `;
+                const html = `<div class="bg-[#111] p-6 border-2 border-[#222] rounded-3xl"><h4 class="font-black text-white text-xl mb-2">${ex.name}</h4><p class="text-base text-gray-400 font-bold">${ex.note}</p></div>`;
                 const target = document.getElementById(containers[ex.region]);
                 if(target) target.innerHTML += html;
             });
             lucide.createIcons();
-        }
+        };
 
-        function renderExpenses() {
+        const renderExpenses = () => {
             const list = document.getElementById('expense-container');
-            if (!list) return;
             const totalKrwEl = document.getElementById('total-krw');
             const totalTwdEl = document.getElementById('total-twd');
+            if (!list) return;
 
             list.innerHTML = expenses.map(ex => `
                 <div class="flex justify-between items-center bg-[#111] p-6 rounded-3xl border border-[#222]">
@@ -469,78 +368,66 @@
                         <div class="text-xs text-gray-500 font-bold mt-1">≈ NT$ ${Math.round(ex.cost/EXCHANGE_RATE).toLocaleString()}</div>
                     </div>
                     <div class="flex items-center gap-4">
-                        <div class="text-right">
-                            <div class="text-pink font-mono font-black text-2xl leading-none">₩${ex.cost.toLocaleString()}</div>
-                        </div>
-                        <button onclick="window.deleteExpense('${ex.id}')" class="p-2 text-gray-600 hover:text-pink transition-colors">
-                            <i data-lucide="trash-2" class="w-5 h-5"></i>
-                        </button>
+                        <div class="text-right"><div class="text-pink font-mono font-black text-2xl">₩${ex.cost.toLocaleString()}</div></div>
+                        <button class="delete-btn p-2 text-gray-600 hover:text-pink" data-id="${ex.id}"><i data-lucide="trash-2" class="w-6 h-6"></i></button>
                     </div>
-                </div>
-            `).join('');
+                </div>`).join('');
 
             const total = expenses.reduce((s, c) => s + (c.cost || 0), 0);
             totalKrwEl.innerText = `₩${total.toLocaleString()}`;
             totalTwdEl.innerText = `≈ NT$ ${Math.round(total/EXCHANGE_RATE).toLocaleString()}`;
             lucide.createIcons();
-        }
+            
+            document.querySelectorAll('.delete-btn').forEach(btn => btn.onclick = () => window.deleteExpense(btn.dataset.id));
+        };
 
-        async function initApp() {
-            // 優先渲染不依賴資料庫的內容
+        // Firebase Operations
+        window.deleteExpense = async (id) => { if(!auth.currentUser) return; await deleteDoc(doc(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'shopping_records', id)); };
+        const addExpense = async () => {
+            const item = document.getElementById('exp-item'), cost = document.getElementById('exp-cost');
+            if (auth.currentUser && item.value && cost.value) {
+                await addDoc(collection(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'shopping_records'), { item: item.value, cost: Number(cost.value), createdAt: Date.now() });
+                item.value = ""; cost.value = "";
+            }
+        };
+
+        // 初始化
+        const init = async () => {
+            // 優先渲染 UI
             const nav = document.getElementById('day-nav');
-            itineraryData.forEach((d, idx) => {
-                const btn = document.createElement('button');
-                btn.id = `day-pill-${idx}`;
-                btn.className = "flex-shrink-0 px-6 py-2 rounded-full border border-[#333] text-sm font-black uppercase bg-[#0a0a0a]";
-                btn.innerText = d.day;
-                btn.onclick = () => renderDay(idx);
-                nav.appendChild(btn);
-            });
+            itineraryData.forEach((d, i) => { const b = document.createElement('button'); b.id = `day-pill-${i}`; b.className = "flex-shrink-0 px-6 py-2 rounded-full border border-[#333] text-sm font-black uppercase bg-[#0a0a0a]"; b.innerText = d.day; b.onclick = () => renderDay(i); nav.appendChild(b); });
             renderDay(0);
             renderExchange();
+            
+            document.getElementById('btn-itinerary').onclick = () => switchView('itinerary');
+            document.getElementById('btn-calculator').onclick = () => switchView('calculator');
+            document.getElementById('btn-shopping').onclick = () => switchView('shopping');
+            document.getElementById('btn-exchange').onclick = () => switchView('exchange');
+            document.getElementById('add-expense-btn').onclick = addExpense;
 
-            // 設置按鈕監聽 (取代 inline onclick)
-            document.getElementById('btn-itinerary').addEventListener('click', () => switchView('itinerary'));
-            document.getElementById('btn-calculator').addEventListener('click', () => switchView('calculator'));
-            document.getElementById('btn-shopping').addEventListener('click', () => switchView('shopping'));
-            document.getElementById('btn-exchange').addEventListener('click', () => switchView('exchange'));
-            document.getElementById('add-expense-btn').addEventListener('click', window.addExpense);
+            const t = document.getElementById('twd-input'), k = document.getElementById('krw-input');
+            k.oninput = (e) => t.value = e.target.value ? (e.target.value / EXCHANGE_RATE).toFixed(0) : "";
+            t.oninput = (e) => k.value = e.target.value ? Math.round(e.target.value * EXCHANGE_RATE) : "";
 
-            // 匯率計算邏輯
-            const twdInput = document.getElementById('twd-input');
-            const krwInput = document.getElementById('krw-input');
-            krwInput.oninput = (e) => twdInput.value = e.target.value ? (e.target.value / EXCHANGE_RATE).toFixed(0) : "";
-            twdInput.oninput = (e) => krwInput.value = e.target.value ? Math.round(e.target.value * EXCHANGE_RATE) : "";
-
-            // 執行身份驗證與資料監聽
+            // Firebase 連線
             try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-                
+                let config;
+                try { config = JSON.parse(__firebase_config); } catch(e) { return; }
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) { await signInWithCustomToken(auth, __initial_auth_token); } else { await signInAnonymously(auth); }
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
-                        const userEl = document.getElementById('user-display-id');
-                        if (userEl) userEl.innerText = `User ID: ${user.uid.substring(0, 8)}...`;
-                        
-                        const userId = user.uid;
-                        const colRef = collection(db, 'artifacts', appId, 'users', userId, 'shopping_records');
-                        onSnapshot(colRef, (snapshot) => {
-                            expenses = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                            expenses.sort((a, b) => b.createdAt - a.createdAt);
+                        document.getElementById('user-display-id').innerText = `User ID: ${user.uid.substring(0, 8)}...`;
+                        onSnapshot(collection(db, 'artifacts', appId, 'users', user.uid, 'shopping_records'), (s) => {
+                            expenses = s.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => b.createdAt - a.createdAt);
                             renderExpenses();
-                        }, (error) => console.error("Firestore Error:", error));
+                        });
                     }
                 });
-            } catch (err) {
-                console.error("Auth Initialization Failed:", err);
-            }
+            } catch(e) { console.warn("Cloud connection error, using local mode."); }
             lucide.createIcons();
-        }
+        };
 
-        initApp();
+        init();
     </script>
 </body>
 </html>
