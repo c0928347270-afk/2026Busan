@@ -6,7 +6,7 @@
     <title>韓國釜山 JAN 2026 - Blackpink Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700;900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Inter:wght@700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bp-pink: #f8a5c2;
@@ -19,31 +19,26 @@
             background-color: var(--bp-dark);
             color: #ffffff;
             overflow-x: hidden;
-            padding-bottom: 100px;
+            padding-bottom: 110px;
             width: 100vw;
         }
         .text-pink { color: var(--bp-pink); }
         .bg-pink { background-color: var(--bp-pink); }
-        .border-pink { border-color: var(--bp-pink); }
-
+        
+        /* 極大化卡片與字體 */
         .itinerary-card {
             background: var(--bp-card);
-            border: 1px solid var(--bp-border);
-            border-left: 4px solid transparent;
-            transition: all 0.2s ease;
+            border: 2px solid var(--bp-border);
+            border-left: 8px solid transparent;
             width: 100%;
-        }
-        .itinerary-card:active {
-            border-left-color: var(--bp-pink);
-            background: #1a1a1a;
-            transform: scale(0.98);
+            border-radius: 24px;
         }
 
-        /* 餐廳特別樣式 */
+        /* 餐廳特別樣式：顯眼粉紅 */
         .food-card {
-            background: #211619;
-            border: 1px solid rgba(248, 165, 194, 0.4);
-            border-left: 6px solid var(--bp-pink);
+            background: #2a161b;
+            border: 2px solid var(--bp-pink);
+            border-left: 12px solid var(--bp-pink);
         }
 
         .view-content {
@@ -59,21 +54,21 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* iOS 固定底部導覽列 */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            height: 85px;
+            height: 95px;
             background: rgba(10, 10, 10, 0.98);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid #222;
+            backdrop-filter: blur(25px);
+            border-top: 2px solid #222;
             display: flex;
             justify-content: space-around;
             align-items: center;
             padding-bottom: env(safe-area-inset-bottom);
             z-index: 100;
-            width: 100vw;
         }
         .nav-item {
             display: flex;
@@ -81,14 +76,13 @@
             align-items: center;
             gap: 4px;
             color: #555;
-            transition: color 0.2s;
             flex: 1;
         }
         .nav-item.active {
             color: var(--bp-pink);
         }
-        .nav-item i { width: 26px; height: 26px; }
-        .nav-item span { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .nav-item i { width: 32px; height: 32px; }
+        .nav-item span { font-size: 14px; font-weight: 900; text-transform: uppercase; }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -97,65 +91,56 @@
             background-color: var(--bp-pink) !important;
             color: #000 !important;
             border-color: var(--bp-pink) !important;
-            box-shadow: 0 0 15px rgba(248, 165, 194, 0.5);
+            box-shadow: 0 0 20px rgba(248, 165, 194, 0.6);
         }
 
-        input[type="number"], input[type="text"] {
-            font-size: 18px; /* 提升 iOS 輸入框字體 */
-        }
+        /* 限制網頁寬度，防止左右位移 */
+        main { width: 100%; max-width: 500px; margin: 0 auto; }
     </style>
 </head>
 <body class="selection:bg-[#f8a5c2] selection:text-black">
 
-    <header id="main-header" class="pt-14 pb-8 border-b border-[#f8a5c2]/10 text-center relative px-4 bg-black">
-        <h1 class="text-4xl font-black tracking-tighter text-pink uppercase italic leading-none">Busan Vibe</h1>
-        <p class="text-xs tracking-[0.4em] text-gray-400 font-bold mt-3 uppercase">韓國釜山 JAN 2026</p>
+    <header id="main-header" class="pt-16 pb-10 border-b border-[#f8a5c2]/20 text-center bg-black">
+        <h1 class="text-5xl font-black tracking-tighter text-pink uppercase italic italic">Busan Vibe</h1>
+        <p class="text-lg tracking-[0.3em] text-gray-400 font-black mt-4 uppercase italic">韓國釜山 JAN 2026</p>
     </header>
 
-    <main class="w-full max-w-md mx-auto px-4 pt-6">
+    <main class="px-4 pt-8">
 
         <!-- 視圖 1: 行程 -->
         <div id="view-itinerary" class="view-content active">
-            <div class="mb-6 p-5 bg-[#111] border border-[#222] rounded-2xl flex items-center gap-4">
-                <div class="bg-pink/10 p-3 rounded-xl">
-                    <i data-lucide="hotel" class="text-pink w-7 h-7"></i>
-                </div>
-                <div class="flex-1">
-                    <h4 class="text-white font-black text-sm uppercase tracking-tighter">NEWCZ NAMPO HOTEL</h4>
-                    <p class="text-xs text-gray-400 mt-1 leading-tight italic font-medium">釜山中區 20 BIFFGWANGJANGRO (1/21-1/25)</p>
-                </div>
-            </div>
-
-            <div id="day-nav" class="flex gap-2 overflow-x-auto pb-6 no-scrollbar sticky top-[0px] z-30 py-2 bg-black"></div>
-            <div id="itinerary-list" class="space-y-6"></div>
+            <div id="day-nav" class="flex gap-3 overflow-x-auto pb-8 no-scrollbar sticky top-[0px] z-30 py-4 bg-black"></div>
+            <div id="itinerary-list" class="space-y-8"></div>
         </div>
 
         <!-- 視圖 2: 匯率 -->
         <div id="view-calculator" class="view-content">
-            <div class="mb-8 px-1">
-                <h2 class="text-4xl font-black italic uppercase text-pink leading-tight">Currency</h2>
-                <p class="text-gray-500 text-xs tracking-widest mt-2 uppercase font-bold">Local Tool (1 TWD : 41.5 KRW)</p>
+            <div class="mb-10 px-2 text-center">
+                <h2 class="text-5xl font-black italic uppercase text-pink">Currency</h2>
+                <p class="text-gray-400 text-lg tracking-widest mt-4 font-black">1 TWD : 41.5 KRW</p>
             </div>
-            <div class="space-y-6">
-                <div class="bg-[#111] p-10 border border-[#222] rounded-3xl">
-                    <label class="text-xs text-gray-500 uppercase font-black tracking-widest mb-4 block">KRW 韓元</label>
+            <div class="space-y-8">
+                <!-- 韓元在上方，數字極大化 -->
+                <div class="bg-[#111] p-12 border-4 border-[#222] rounded-[48px]">
+                    <label class="text-base text-gray-500 uppercase font-black tracking-widest mb-6 block">KRW 韓元</label>
                     <div class="flex items-center">
-                        <span class="text-4xl text-pink font-mono mr-4">₩</span>
-                        <input type="number" id="krw-input" placeholder="0" class="w-full text-5xl font-mono bg-transparent outline-none text-white font-black" autofocus>
+                        <span class="text-6xl text-pink font-mono mr-6 font-black">₩</span>
+                        <input type="number" id="krw-input" placeholder="0" class="w-full text-8xl font-mono bg-transparent outline-none text-white font-black" autofocus>
                     </div>
                 </div>
                 
-                <div class="flex justify-center -my-6 relative z-10">
-                    <div class="w-16 h-16 rounded-full bg-pink flex items-center justify-center text-black shadow-[0_0_20px_rgba(248,165,194,0.6)]">
-                        <i data-lucide="arrow-down-up" class="w-7 h-7"></i>
+                <div class="flex justify-center -my-10 relative z-10">
+                    <div class="w-24 h-24 rounded-full bg-pink flex items-center justify-center text-black shadow-[0_0_40px_rgba(248,165,194,0.8)] border-8 border-black">
+                        <i data-lucide="arrow-down-up" class="w-12 h-12"></i>
                     </div>
                 </div>
 
-                <div class="bg-[#111] p-8 border border-[#222] rounded-3xl opacity-90">
-                    <label class="text-xs text-gray-500 uppercase font-black tracking-widest mb-3 block">TWD 台幣</label>
+                <!-- 台幣在下方 -->
+                <div class="bg-[#111] p-10 border-4 border-[#222] rounded-[48px] opacity-90">
+                    <label class="text-base text-gray-500 uppercase font-black tracking-widest mb-5 block">TWD 台幣</label>
                     <div class="flex items-center">
-                        <span class="text-3xl text-pink font-mono mr-3">$</span>
-                        <input type="number" id="twd-input" placeholder="0" class="w-full text-4xl font-mono bg-transparent outline-none text-gray-300 font-bold">
+                        <span class="text-5xl text-pink font-mono mr-5 font-black">$</span>
+                        <input type="number" id="twd-input" placeholder="0" class="w-full text-6xl font-mono bg-transparent outline-none text-gray-300 font-black">
                     </div>
                 </div>
             </div>
@@ -163,24 +148,23 @@
 
         <!-- 視圖 3: 紀錄 -->
         <div id="view-shopping" class="view-content">
-            <div class="mb-8 px-1">
-                <h2 class="text-4xl font-black italic uppercase text-pink">Shopping</h2>
-                <p class="text-gray-500 text-xs tracking-widest mt-2 uppercase font-bold">Expense Tracker</p>
+            <div class="mb-10 px-2">
+                <h2 class="text-5xl font-black italic uppercase text-pink">Shopping</h2>
             </div>
-            <div class="bg-[#111] p-6 border border-[#222] rounded-2xl mb-8">
-                <div class="grid grid-cols-12 gap-3">
-                    <input type="text" id="exp-item" placeholder="品項" class="col-span-7 bg-black border border-[#333] p-4 text-base rounded-xl outline-none focus:border-pink transition-colors font-bold">
-                    <input type="number" id="exp-cost" placeholder="KRW" class="col-span-3 bg-black border border-[#333] p-4 text-base rounded-xl font-mono outline-none focus:border-pink transition-colors">
-                    <button onclick="addExpense()" class="col-span-2 bg-pink text-black rounded-xl font-black text-3xl active:scale-90 transition-transform">+</button>
+            <div class="bg-[#111] p-8 border-4 border-[#222] rounded-3xl mb-10">
+                <div class="grid grid-cols-12 gap-4">
+                    <input type="text" id="exp-item" placeholder="品項" class="col-span-7 bg-black border-2 border-[#333] p-5 text-xl rounded-2xl font-black text-white">
+                    <input type="number" id="exp-cost" placeholder="KRW" class="col-span-3 bg-black border-2 border-[#333] p-5 text-xl rounded-2xl font-mono text-white">
+                    <button onclick="addExpense()" class="col-span-2 bg-pink text-black rounded-2xl font-black text-5xl active:scale-90 transition-transform">+</button>
                 </div>
             </div>
-            <div id="expense-container" class="space-y-4 mb-32"></div>
-            <div class="fixed bottom-[105px] left-4 right-4 max-w-md mx-auto z-50">
-                <div class="bg-pink p-6 rounded-2xl flex justify-between items-center shadow-[0_15px_40px_rgba(0,0,0,0.6)]">
-                    <span class="text-black font-black uppercase text-sm tracking-tight">Total Spend</span>
+            <div id="expense-container" class="space-y-6 mb-48"></div>
+            <div class="fixed bottom-[110px] left-4 right-4 max-w-md mx-auto z-50">
+                <div class="bg-pink p-8 rounded-[40px] flex justify-between items-center shadow-2xl border-4 border-black">
+                    <span class="text-black font-black uppercase text-lg italic">Total</span>
                     <div class="text-right">
-                        <div id="total-krw" class="text-black font-black text-3xl leading-none">₩0</div>
-                        <div id="total-twd" class="text-black/70 font-black text-xs mt-1.5 italic">≈ NT$ 0</div>
+                        <div id="total-krw" class="text-black font-black text-4xl leading-none">₩0</div>
+                        <div id="total-twd" class="text-black/80 font-black text-base mt-2">≈ NT$ 0</div>
                     </div>
                 </div>
             </div>
@@ -188,53 +172,24 @@
 
         <!-- 視圖 4: 換匯 -->
         <div id="view-exchange" class="view-content px-1">
-            <div class="mb-8">
-                <h2 class="text-4xl font-black italic uppercase text-pink">Exchange</h2>
-                <p class="text-gray-500 text-xs tracking-widest mt-2 uppercase font-bold">Busan Best Rates</p>
+            <div class="mb-10 text-center">
+                <h2 class="text-5xl font-black italic uppercase text-pink">Exchange</h2>
             </div>
-            <div class="space-y-8 pb-12">
+            <div class="space-y-12 pb-20">
                 <!-- 南浦洞 -->
                 <div>
-                    <h3 class="text-pink font-black text-lg uppercase tracking-widest mb-4 border-l-4 border-pink pl-3">Nampo 南浦洞</h3>
-                    <div class="grid gap-4">
-                        <div class="bg-[#111] p-6 border border-[#222] rounded-2xl">
-                            <h4 class="font-black text-white text-lg">映真換錢所 (Youngjin)</h4>
-                            <p class="text-sm text-gray-500 mt-2 leading-relaxed italic">南浦站 7 號出口，釜山最知名據點。</p>
-                            <button onclick="window.open('https://m.map.naver.com/search2/search.naver?query=釜山映真換錢所', '_blank')" class="w-full mt-4 flex items-center justify-center gap-2 bg-white text-black py-3 text-xs font-black rounded-xl uppercase tracking-widest">Navigate <i data-lucide="external-link" class="w-3 h-3"></i></button>
-                        </div>
-                        <div class="bg-[#111] p-6 border border-[#222] rounded-2xl">
-                            <h4 class="font-black text-white text-lg">友利換錢所 (Woori)</h4>
-                            <p class="text-sm text-gray-500 mt-2 leading-relaxed italic">緊鄰映真，人潮較少時首選。</p>
-                            <button onclick="window.open('https://m.map.naver.com/search2/search.naver?query=釜山友利換錢所', '_blank')" class="w-full mt-4 flex items-center justify-center gap-2 bg-white text-black py-3 text-xs font-black rounded-xl uppercase tracking-widest">Navigate <i data-lucide="external-link" class="w-3 h-3"></i></button>
-                        </div>
-                    </div>
+                    <h3 class="text-pink font-black text-2xl uppercase tracking-widest mb-6 border-l-8 border-pink pl-4 italic">Nampo 南浦洞</h3>
+                    <div class="grid gap-6" id="ex-nampo"></div>
                 </div>
                 <!-- 西面 -->
                 <div>
-                    <h3 class="text-pink font-black text-lg uppercase tracking-widest mb-4 border-l-4 border-pink pl-3">Seomyeon 西面</h3>
-                    <div class="grid gap-4">
-                        <div class="bg-[#111] p-6 border border-[#222] rounded-2xl">
-                            <h4 class="font-black text-white text-lg">那英換錢所 (Nayoung)</h4>
-                            <p class="text-sm text-gray-500 mt-2 leading-relaxed italic">西面市場內知名老店，匯率極佳。</p>
-                            <button onclick="window.open('https://m.map.naver.com/search2/search.naver?query=釜山那英換錢所', '_blank')" class="w-full mt-4 flex items-center justify-center gap-2 bg-white text-black py-3 text-xs font-black rounded-xl uppercase tracking-widest">Navigate <i data-lucide="external-link" class="w-3 h-3"></i></button>
-                        </div>
-                        <div class="bg-[#111] p-6 border border-[#222] rounded-2xl">
-                            <h4 class="font-black text-white text-lg">Money Box (西面店)</h4>
-                            <p class="text-sm text-gray-500 mt-2 leading-relaxed italic">自動機台，適合晚班機抵達。</p>
-                            <button onclick="window.open('https://m.map.naver.com/search2/search.naver?query=MoneyBox西面店', '_blank')" class="w-full mt-4 flex items-center justify-center gap-2 bg-white text-black py-3 text-xs font-black rounded-xl uppercase tracking-widest">Navigate <i data-lucide="external-link" class="w-3 h-3"></i></button>
-                        </div>
-                    </div>
+                    <h3 class="text-pink font-black text-2xl uppercase tracking-widest mb-6 border-l-8 border-pink pl-4 italic">Seomyeon 西面</h3>
+                    <div class="grid gap-6" id="ex-seomyeon"></div>
                 </div>
                 <!-- 海雲台 -->
                 <div>
-                    <h3 class="text-pink font-black text-lg uppercase tracking-widest mb-4 border-l-4 border-pink pl-3">Haeundae 海雲台</h3>
-                    <div class="grid gap-4">
-                        <div class="bg-[#111] p-6 border border-[#222] rounded-2xl">
-                            <h4 class="font-black text-white text-lg">Money Box (海雲台店)</h4>
-                            <p class="text-sm text-gray-500 mt-2 leading-relaxed italic">近地鐵站，操作便利透明。</p>
-                            <button onclick="window.open('https://m.map.naver.com/search2/search.naver?query=MoneyBox海雲台店', '_blank')" class="w-full mt-4 flex items-center justify-center gap-2 bg-white text-black py-3 text-xs font-black rounded-xl uppercase tracking-widest">Navigate <i data-lucide="external-link" class="w-3 h-3"></i></button>
-                        </div>
-                    </div>
+                    <h3 class="text-pink font-black text-2xl uppercase tracking-widest mb-6 border-l-8 border-pink pl-4 italic">Haeundae 海雲台</h3>
+                    <div class="grid gap-6" id="ex-haeundae"></div>
                 </div>
             </div>
         </div>
@@ -264,59 +219,98 @@
         const EXCHANGE_RATE = 41.5;
         let expenses = [];
 
+        // 完整行程數據 (無簡化版)
         const itineraryData = [
             { 
-                day: "DAY 1", date: "115/01/21 (三)", theme: "Arrival & Nampo", 
+                day: "DAY 1", date: "115/01/21 (三)", 
                 weather: { icon: "sun", hi: "2°", lo: "-3°" }, 
                 events: [
-                    { time: "08:00 - 11:00", activity: "前往桃園機場", type: "car", loc: "桃園機場連統停車場", note: "斗六/虎尾出發，桃園市大園區國際路一段509-1號" },
-                    { time: "12:00 - 14:25", activity: "報到與起飛 (BR164)", type: "plane", loc: "桃園機場第二航廈", note: "13:55 登機，14:25 起飛" },
-                    { time: "17:40 - 19:05", activity: "抵達金海機場與入住", type: "train", loc: "Gimhae International Airport", note: "地鐵：機場 -> 沙上 -> 西面 -> 札嘎其站，辦理入住" },
-                    { time: "20:00 之後", activity: "南浦洞周邊覓食", type: "utensils", loc: "南浦洞", note: "景點：KPOP唱片行；晚餐建議：人蔘雞湯、南浦雪濃湯、Bhc炸雞" }
+                    { time: "08:00", activity: "家裡出發", type: "car", loc: "斗六/虎尾", note: "開車 2~3hr" },
+                    { time: "11:00", activity: "抵達連統停車場", type: "car", loc: "連統停車場", note: "桃園市大園區國際路一段509-1號" },
+                    { time: "12:00", activity: "抵達第二航廈", type: "bus", loc: "桃園機場 T2", note: "搭乘接駁車、辦理報到、託運、入關" },
+                    { time: "13:55", activity: "登機時間", type: "clock", loc: "登機口", note: "預計登機" },
+                    { time: "14:25", activity: "飛機起飛 (BR164)", type: "plane", loc: "桃園機場 T2", note: "長榮航空 BR164" },
+                    { time: "17:40", activity: "抵達金海機場", type: "plane", loc: "金海機場", note: "預計抵達釜山" },
+                    { time: "18:10", activity: "取得行李", type: "shopping-bag", loc: "行李轉盤", note: "前往地鐵站：由 GATE3 走到馬路對面右轉" },
+                    { time: "18:30", activity: "搭地鐵到沙上站", type: "train", loc: "沙上站", note: "地鐵轉乘綠色 2 號線往西面/萇山方向" },
+                    { time: "18:40", activity: "西面轉乘至札嘎其站", type: "train", loc: "札嘎其站", note: "轉乘橘色 1 號線往多南浦/大浦海水浴場方向" },
+                    { time: "19:00", activity: "抵達札嘎其站 7 號出口", type: "map-pin", loc: "札嘎其站", note: "7號出口出站正前方路口左轉第二棟大樓 (5號出口有電梯，出梯直行過7號出口左轉)" },
+                    { time: "19:05", activity: "NewCZ 南浦店辦理入住", type: "hotel", loc: "NewCZ Nampo Hotel", note: "飯店地址：20 BIFFGWANGJANGRO, 中區" },
+                    { time: "20:00", activity: "南浦洞周邊覓食", type: "utensils", loc: "南浦洞", note: "景點：KPOP唱片行。晚餐建議：人蔘雞湯粥/南浦雪濃湯。消夜：Bhc炸雞、老爺炸雞" }
                 ]
             },
             { 
-                day: "DAY 2", date: "115/01/22 (四)", theme: "Outlet & Spa Day", 
+                day: "DAY 2", date: "115/01/22 (四)", 
                 weather: { icon: "cloud", hi: "4°", lo: "-1°" }, 
                 events: [
-                    { time: "08:00 - 09:30", activity: "早餐前往海雲台", type: "utensils", loc: "新昌吐司 南浦", note: "新昌吐司/EggDrop 後出發海雲台" },
-                    { time: "10:30 - 13:55", activity: "東釜山樂天與滑車", type: "shopping-bag", loc: "樂天名牌折扣購物中心東釜山店", note: "OUTLET採買、Skyline Luge；午餐：海雲台傳統市場" },
-                    { time: "14:25 - 18:00", activity: "新世界百貨與 SPA LAND", type: "map-pin", loc: "Spa Land Centum City", note: "新世界百貨逛街、享受高級汗蒸幕" },
-                    { time: "18:30 - 22:00", activity: "西面站美食購物", type: "utensils", loc: "西面站", note: "烤肉晚餐建議：烤肉的男子 / 釜山宅 / 味贊王 / 83獬豸" }
+                    { time: "08:00", activity: "吃早餐", type: "utensils", loc: "新昌吐司 / EggDrop", note: "新昌吐司/路邊小吃/便利商店" },
+                    { time: "09:30", activity: "前往海雲台", type: "car", loc: "海雲台站", note: "1.地鐵: 約50分,1800韓幣 (1號線>西面轉2號線)。2.計程車: 約40-60分,約20000韓幣" },
+                    { time: "10:30", activity: "東釜山樂天OUTLET", type: "shopping-bag", loc: "樂天名牌折扣購物中心東釜山店", note: "10:30開門 (北臉/國家地理比台灣便宜)。滑車就在OUTLET旁 (不怕冷可去)" },
+                    { time: "13:55", activity: "海雲台傳統市場", type: "utensils", loc: "海雲台傳統市場", note: "午餐建議：31公分海鮮湯麵/小麥冷麵/元祖糖餅/巨大牛骨湯" },
+                    { time: "14:25", activity: "新世界百貨", type: "shopping-bag", loc: "Centum City 新世界百貨", note: "逛街消化，準備去汗蒸幕" },
+                    { time: "15:30", activity: "SPA LAND 汗蒸幕", type: "map-pin", loc: "Spa Land Centum City", note: "必喝甜米釀/吃烤蛋。步驟：購票>鞋櫃>領手環衣服毛巾>洗浴>泡湯>換裝>桑拿>換回私服>結算" },
+                    { time: "18:00", activity: "搭車前往西面站", type: "train", loc: "西面站", note: "地鐵綠線直達西面" },
+                    { time: "18:30", activity: "晚餐吃烤肉", type: "utensils", loc: "西面站烤肉街", note: "4選1：烤肉的男子(高CP)、釜山宅、味贊王、83獬豸" },
+                    { time: "18:40", activity: "西面地下街逛街", type: "shopping-bag", loc: "西面地下街", note: "景點：文創店/大創百貨" },
+                    { time: "22:00", activity: "回飯店", type: "train", loc: "札嘎其站", note: "地鐵或計程車返回" }
                 ]
             },
             { 
-                day: "DAY 3", date: "115/01/23 (五)", theme: "Sky Capsule & Gyeongju", 
+                day: "DAY 3", date: "115/01/23 (五)", 
                 weather: { icon: "snow", hi: "1°", lo: "-5°" }, 
                 events: [
-                    { time: "09:00", activity: "釜山站集合 (跟團)", type: "users", loc: "釜山站", note: "KTX 釜山站 1 號出口集合" },
-                    { time: "10:30 - 15:00", activity: "天空膠囊與佛國寺", type: "train", loc: "海雲台藍線公園", note: "天空膠囊、海東龍宮寺、慶州佛國寺巡禮" },
-                    { time: "16:40 - 19:00", activity: "大陵院與皇理團路", type: "utensils", loc: "慶州 大陵院", note: "必吃：起司10元餅、南瓜薯條；晚餐建議：鄉花亭或百年客人" },
-                    { time: "19:00 - 21:50", activity: "東宮與月池夜景", type: "map-pin", loc: "東宮與月池", note: "欣賞唯美夜景後返回西面或釜山站" }
+                    { time: "08:00", activity: "吃早餐", type: "utensils", loc: "南浦洞", note: "吃附近小吃或便利商店，避免耽誤集合" },
+                    { time: "09:00", activity: "釜山站 1 號出口集合", type: "users", loc: "KTX 釜山站 1 號出口", note: "搭地鐵往老匍方向。集合座標：35.1147, 129.0410" },
+                    { time: "10:30", activity: "天空膠囊 (藍線公園)", type: "train", loc: "海雲台藍線公園", note: "午餐1：清沙浦 (道熙家/秀敏家/韓牛紙火鍋)。午餐2：松亭站 (31cm海鮮麵)" },
+                    { time: "13:10", activity: "海東龍宮寺", type: "map-pin", loc: "海東龍宮寺", note: "跟團行程" },
+                    { time: "15:00", activity: "佛國寺", type: "map-pin", loc: "慶州 佛國寺", note: "跟團行程" },
+                    { time: "16:40", activity: "大陵院 + 皇理團路", type: "utensils", loc: "慶州 皇理團路", note: "必買：爆漿起司10元餅、南瓜薯條、皇南夾心餅。晚餐建議：鄉花亭(韓料) / 百年客人(烤肉)" },
+                    { time: "19:00", activity: "東宮與月池夜景", type: "map-pin", loc: "東宮與月池", note: "欣賞唯美韓式燈光" },
+                    { time: "21:30", activity: "返回西面站 / 釜山站", type: "bus", loc: "釜山站", note: "解散後回飯店" }
                 ]
             },
             { 
-                day: "DAY 4", date: "115/01/24 (六)", theme: "Coastal & Culture", 
+                day: "DAY 4", date: "115/01/24 (六)", 
                 weather: { icon: "sun", hi: "3°", lo: "-2°" }, 
                 events: [
-                    { time: "08:00 - 12:00", activity: "松島步道與海上纜車", type: "map-pin", loc: "松島海上纜車", note: "體驗天空步道與海上纜車景緻" },
-                    { time: "12:00 - 14:30", activity: "札嘎其與影島大橋", type: "utensils", loc: "Jagalchi Market", note: "午餐帝王蟹；14:00 樂天百貨光復店看影島大橋開橋" },
-                    { time: "14:30 - 19:30", activity: "白淺灘、太宗台與釜山塔", type: "map-pin", loc: "白淺灘文化村", note: "韓版聖托里尼；太宗台遊園車 (至17:30)；釜山塔夜景" },
-                    { time: "19:30 - 22:00", activity: "富平罐頭市場", type: "utensils", loc: "富平罐頭市場", note: "晚餐宵夜小吃 (艾草麻吉、魚板)，返回飯店" }
+                    { time: "08:00", activity: "早餐後出發", type: "utensils", loc: "古來司魚糕 札嘎其店", note: "吃早餐或帶一點魚板路上吃" },
+                    { time: "08:30", activity: "松島天空步道", type: "map-pin", loc: "松島天空步道", note: "計程車前往" },
+                    { time: "09:00", activity: "松島海上纜車", type: "map-pin", loc: "松島海上纜車", note: "09:00 開始營運" },
+                    { time: "12:00", activity: "札嘎其市場午餐", type: "utensils", loc: "札嘎其市場", note: "帝王蟹必吃 (每公斤 6-8 萬韓元)" },
+                    { time: "13:50", activity: "看影島大橋開橋", type: "map-pin", loc: "樂天百貨光復店頂樓", note: "14:00 開橋。可進百貨逛超市或直接去橋邊" },
+                    { time: "14:30", activity: "白淺灘文化村", type: "map-pin", loc: "白淺灘文化村", note: "停留 1-2 小時" },
+                    { time: "15:30", activity: "太宗台", type: "car", loc: "太宗台", note: "遊園車只開到 17:30，請注意時間" },
+                    { time: "18:00", activity: "釜山塔夜景", type: "map-pin", loc: "釜山塔 (龍頭山公園)", note: "搭計程車至龍頭山公園手扶梯。售票至 21:30" },
+                    { time: "19:30", activity: "富平罐頭市場", type: "utensils", loc: "富平罐頭市場", note: "吃晚餐。推薦：紅豆奶油艾草麻吉、魚板" },
+                    { time: "22:00", activity: "回飯店", type: "car", loc: "南浦洞", note: "步行約 1 公里逛回飯店" }
                 ]
             },
             { 
-                day: "DAY 5", date: "115/01/25 (日)", theme: "Gamcheon & Return", 
+                day: "DAY 5", date: "115/01/25 (日)", 
                 weather: { icon: "cloud", hi: "5°", lo: "0°" }, 
                 events: [
-                    { time: "08:00 - 12:00", activity: "甘川洞文化村", type: "map-pin", loc: "甘川洞文化村", note: "漫步彩色積木村、整理行李" },
-                    { time: "12:00 - 14:30", activity: "南浦自由活動採買", type: "shopping-bag", loc: "南浦洞", note: "午餐建議：李在模披薩；最後伴手禮採買" },
-                    { time: "15:00 - 18:55", activity: "機場辦理退稅", type: "plane", loc: "Gimhae International Airport", note: "辦理手續，搭乘 18:55 BR163 返台" },
-                    { time: "20:25 - 23:00", activity: "抵達台灣與賦歸", type: "car", loc: "桃園機場", note: "20:25 抵台後開車返回溫暖的家" }
+                    { time: "08:00", activity: "早餐 + 整理行李", type: "clock", loc: "飯店", note: "準備退房" },
+                    { time: "09:00", activity: "甘川洞文化村", type: "map-pin", loc: "甘川洞文化村", note: "計程車前往彩色積木村" },
+                    { time: "12:00", activity: "南浦自由活動 / 採買", type: "shopping-bag", loc: "樂天超市 南浦店", note: "補齊伴手禮。午餐建議：李在模披薩 (熱門排隊店)" },
+                    { time: "14:30", activity: "回飯店領行李", type: "hotel", loc: "NewCZ Nampo Hotel", note: "準備前往機場" },
+                    { time: "15:00", activity: "前往金海機場", type: "train", loc: "金海機場", note: "搭乘地鐵返回機場" },
+                    { time: "16:00", activity: "抵達金海機場", type: "plane", loc: "金海機場", note: "退稅：先去 KIOSK 掃描退稅條碼" },
+                    { time: "18:55", activity: "長榮航空起飛 (BR163)", type: "plane", loc: "金海機場", note: "釜山 -> 桃園" },
+                    { time: "20:25", activity: "抵達桃園機場", type: "plane", loc: "桃園機場 T2", note: "準備入境" },
+                    { time: "23:00", activity: "到家", type: "car", loc: "斗六/虎尾", note: "開車返回溫暖的家" }
                 ]
             }
         ];
 
+        const exchangeData = [
+            { region: "nampo", name: "映真換錢所 (Youngjin)", note: "南浦站 7 號出口，釜山最指標匯率店。", query: "釜山映真換錢所" },
+            { region: "nampo", name: "友利換錢所 (Woori)", note: "緊鄰映真，匯率通常同步。", query: "釜山友利換錢所" },
+            { region: "seomyeon", name: "那英換錢所 (Nayoung)", note: "西面市場內知名老店，匯率優。", query: "釜山那英換錢所" },
+            { region: "seomyeon", name: "Money Box 西面店", note: "24H 自助機台，方便深夜兌換。", query: "MoneyBox西面店" },
+            { region: "haeundae", name: "Money Box 海雲台店", note: "地鐵站附近，操作透明便利。", query: "MoneyBox海雲台店" }
+        ];
+
+        // 核心邏輯
         function switchView(viewId) {
             document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -327,51 +321,71 @@
 
         function renderDay(index) {
             document.querySelectorAll('#day-nav button').forEach(b => b.classList.remove('active-day-pill'));
-            const activeBtn = document.getElementById(`day-pill-${index}`);
-            if(activeBtn) activeBtn.classList.add('active-day-pill');
+            document.getElementById(`day-pill-${index}`).classList.add('active-day-pill');
 
             const container = document.getElementById('itinerary-list');
             const data = itineraryData[index];
 
             container.innerHTML = `
-                <div class="mb-8 p-6 border-l-4 border-pink bg-[#111] rounded-r-2xl">
-                    <div class="flex justify-between items-start">
-                        <div class="flex-1">
-                            <h3 class="text-4xl font-black italic uppercase leading-none text-white">${data.theme}</h3>
-                            <p class="text-pink font-mono text-xs mt-5 font-black tracking-[0.2em] uppercase">${data.date}</p>
+                <div class="mb-10 p-8 border-l-8 border-pink bg-[#111] rounded-r-[40px]">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="text-4xl font-black text-white leading-tight tracking-tight">${data.date}</h3>
+                            <p class="text-pink font-mono text-sm mt-4 font-black tracking-widest uppercase italic">Coastal Adventure</p>
                         </div>
                         <div class="text-right">
-                             <i data-lucide="${data.weather.icon}" class="text-pink w-10 h-10 ml-auto mb-2"></i>
-                             <div class="text-2xl font-mono font-black leading-none">${data.weather.hi}<span class="text-gray-600 mx-1">/</span><span class="text-blue-400">${data.weather.lo}</span></div>
+                             <i data-lucide="${data.weather.icon}" class="text-pink w-14 h-14 ml-auto mb-3"></i>
+                             <div class="text-4xl font-mono font-black">${data.weather.hi}<span class="text-gray-600 mx-1">/</span><span class="text-blue-400">${data.weather.lo}</span></div>
                         </div>
                     </div>
                 </div>
                 ${data.events.map(e => {
                     const isFood = e.type === 'utensils';
-                    const cardClass = isFood ? 'itinerary-card food-card p-6 rounded-2xl' : 'itinerary-card p-6 rounded-2xl';
-                    const foodBadge = isFood ? '<span class="bg-pink text-black text-[10px] font-black px-2 py-0.5 rounded ml-2 uppercase italic">Must Eat</span>' : '';
+                    const cardClass = isFood ? 'itinerary-card food-card p-8' : 'itinerary-card p-8';
+                    const foodBadge = isFood ? '<span class="bg-pink text-black text-[14px] font-black px-3 py-1 rounded ml-3 uppercase italic">MUST EAT</span>' : '';
                     
                     return `
                         <div class="${cardClass}">
-                            <div class="flex justify-between items-start mb-4">
-                                <span class="text-base font-mono font-black text-[#666] leading-none tracking-tight underline decoration-pink/40 underline-offset-4">${e.time}</span>
-                                <div class="bg-black/50 p-2.5 rounded-full border border-pink/30">
-                                    <i data-lucide="${e.type}" class="w-5 h-5 text-pink"></i>
+                            <div class="flex justify-between items-start mb-6">
+                                <span class="text-2xl font-mono font-black text-[#666] leading-none tracking-tight underline decoration-pink/60 underline-offset-8">${e.time}</span>
+                                <div class="bg-black/50 p-3 rounded-full border-2 border-pink/40">
+                                    <i data-lucide="${e.type}" class="w-7 h-7 text-pink"></i>
                                 </div>
                             </div>
-                            <h4 class="text-xl font-black uppercase italic tracking-tight text-white mb-3 leading-tight">
+                            <h4 class="text-3xl font-black uppercase italic tracking-tighter text-white mb-5 leading-none">
                                 ${e.activity}${foodBadge}
                             </h4>
-                            <div class="flex items-center gap-2 mb-4">
-                                 <i data-lucide="map-pin" class="w-4 h-4 text-gray-500"></i>
-                                 <span class="text-xs text-gray-400 font-black uppercase tracking-widest">${e.loc}</span>
+                            <div class="flex items-center gap-3 mb-6">
+                                 <i data-lucide="map-pin" class="w-6 h-6 text-gray-500"></i>
+                                 <span class="text-base text-gray-400 font-black uppercase tracking-widest italic">${e.loc}</span>
                             </div>
-                            <p class="text-gray-400 text-sm font-medium leading-relaxed mb-6 bg-black/40 p-3 rounded-xl border-l-2 border-gray-800">${e.note}</p>
-                            <button onclick="window.open('https://m.map.naver.com/search2/search.naver?query=${encodeURIComponent(e.loc)}', '_blank')" class="w-full flex items-center justify-center gap-2 bg-white text-black py-3.5 rounded-xl text-xs font-black uppercase tracking-widest shadow-xl active:bg-pink transition-colors">Naver 地圖導航 <i data-lucide="external-link" class="w-3.5 h-3.5"></i></button>
+                            <div class="text-gray-200 text-lg font-bold leading-relaxed mb-8 bg-black/40 p-6 rounded-3xl border-l-4 border-gray-800 whitespace-pre-line">
+                                ${e.note}
+                            </div>
+                            <button onclick="window.open('https://m.map.naver.com/search2/search.naver?query=${encodeURIComponent(e.loc)}', '_blank')" class="w-full flex items-center justify-center gap-4 bg-white text-black py-5 rounded-[24px] text-lg font-black uppercase tracking-widest shadow-2xl active:bg-pink transition-colors">NAVER MAP 導航 <i data-lucide="external-link" class="w-5 h-5"></i></button>
                         </div>
                     `;
                 }).join('')}
             `;
+            lucide.createIcons();
+        }
+
+        function renderExchange() {
+            const containers = { nampo: "ex-nampo", seomyeon: "ex-seomyeon", haeundae: "ex-haeundae" };
+            Object.values(containers).forEach(id => document.getElementById(id).innerHTML = "");
+            
+            exchangeData.forEach(ex => {
+                const html = `
+                    <div class="bg-[#111] p-8 border-4 border-[#222] rounded-[40px]">
+                        <h4 class="font-black text-white text-2xl mb-3">${ex.name}</h4>
+                        <p class="text-lg text-gray-500 italic mb-6 font-bold">${ex.note}</p>
+                        <button onclick="window.open('https://m.map.naver.com/search2/search.naver?query=${encodeURIComponent(ex.query)}', '_blank')" class="w-full bg-white text-black py-5 text-base font-black rounded-2xl uppercase tracking-widest flex items-center justify-center gap-3">
+                            導航去這裡 <i data-lucide="map" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                `;
+                document.getElementById(containers[ex.region]).innerHTML += html;
+            });
             lucide.createIcons();
         }
 
@@ -380,12 +394,13 @@
             itineraryData.forEach((d, idx) => {
                 const btn = document.createElement('button');
                 btn.id = `day-pill-${idx}`;
-                btn.className = "flex-shrink-0 px-7 py-2.5 rounded-full border border-[#333] text-xs font-black uppercase bg-[#0a0a0a] transition-all";
+                btn.className = "flex-shrink-0 px-10 py-4 rounded-full border-2 border-[#333] text-base font-black uppercase bg-[#0a0a0a]";
                 btn.innerText = d.day;
                 btn.onclick = () => renderDay(idx);
                 nav.appendChild(btn);
             });
             renderDay(0);
+            renderExchange();
             setupCalc();
             lucide.createIcons();
         };
@@ -410,11 +425,11 @@
         function renderExpenses() {
             const list = document.getElementById('expense-container');
             list.innerHTML = expenses.map(ex => `
-                <div class="flex justify-between items-center bg-[#111] p-6 rounded-2xl border border-[#222] shadow-sm">
-                    <span class="text-base font-black uppercase tracking-tight text-white">${ex.item}</span>
+                <div class="flex justify-between items-center bg-[#111] p-8 rounded-[40px] border-2 border-[#222]">
+                    <span class="text-2xl font-black uppercase text-white">${ex.item}</span>
                     <div class="text-right">
-                        <div class="text-pink font-mono font-black text-xl leading-none">₩${ex.cost.toLocaleString()}</div>
-                        <div class="text-[10px] text-gray-600 font-black mt-2 italic">≈ NT$ ${Math.round(ex.cost/EXCHANGE_RATE).toLocaleString()}</div>
+                        <div class="text-pink font-mono font-black text-3xl leading-none">₩${ex.cost.toLocaleString()}</div>
+                        <div class="text-base text-gray-500 font-black mt-2">≈ NT$ ${Math.round(ex.cost/EXCHANGE_RATE).toLocaleString()}</div>
                     </div>
                 </div>
             `).join('');
