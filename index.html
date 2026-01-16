@@ -1,246 +1,195 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🌊 2026 釜山旅遊行程</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;900&display=swap');
-        body { font-family: 'Noto Sans TC', sans-serif; background-color: #f0f9ff; margin: 0; -webkit-tap-highlight-color: transparent; }
-        [v-cloak] { display: none; }
-        .remarks-wrap { white-space: pre-wrap; word-break: break-all; }
-        .wave-header { background: linear-gradient(135deg, #0c4a6e 0%, #0284c7 100%); clip-path: ellipse(150% 100% at 50% 0%); }
-        .ocean-card { border-radius: 1.5rem; border: 2px solid #bae6fd; background-color: white; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        button:active { opacity: 0.7; transform: scale(0.96); }
-    </style>
-</head>
-<body class="text-slate-800 text-lg">
-    <div id="app" v-cloak class="max-w-xl mx-auto min-h-screen flex flex-col bg-white shadow-2xl relative pb-10">
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Plane, Hotel, MapPin, Clock, Utensils, Train, Wallet, CloudSun, ShoppingBag, Calculator, ExternalLink } from 'lucide-react';
+
+const BusanLuxuryTrip = () => {
+  const [activeDay, setActiveDay] = useState(0);
+  const [twdAmount, setTwdAmount] = useState(0);
+  const [krwAmount, setKrwAmount] = useState(0);
+  const [expenses, setExpenses] = useState([]);
+  const [newExpense, setNewExpense] = useState({ item: '', cost: '' });
+
+  // 匯率設定 (範例值)
+  const EXCHANGE_RATE = 41.5; 
+
+  // NAVER 地圖連結生成函數
+  const getNaverLink = (location) => `https://map.naver.com/v5/search/${encodeURIComponent(location)}`;
+
+  const itinerary = [
+    {
+      day: "DAY 1", date: "01/21", theme: "Arrival & Nampo",
+      weather: "2°C / -3°C ☀️",
+      events: [
+        { time: "14:25", activity: "桃園機場 (BR164)", type: "flight", loc: "桃園機場" },
+        { time: "19:05", activity: "NewCZ 南浦店 Check-in", type: "hotel", loc: "NEWCZ NAMPO HOTEL" },
+        { time: "20:00", activity: "南浦洞周邊 (Bhc炸雞)", type: "food", loc: "南浦洞" }
+      ]
+    },
+    {
+      day: "DAY 2", date: "01/22", theme: "Haeundae & Spa",
+      weather: "4°C / -1°C ⛅",
+      events: [
+        { time: "10:30", activity: "東釜山樂天 OUTLET", type: "spot", loc: "樂天名牌折扣購物中心東釜山店" },
+        { time: "15:30", activity: "SPA LAND 汗蒸幕", type: "spot", loc: "新世界 Centum City SPA LAND" },
+        { time: "18:30", activity: "西面站烤肉", type: "food", loc: "西面站" }
+      ]
+    },
+    {
+      day: "DAY 3", date: "01/23", theme: "Gyeongju Heritage",
+      weather: "1°C / -5°C ❄️",
+      events: [
+        { time: "10:30", activity: "藍線公園天空膠囊", type: "spot", loc: "Blueline Park" },
+        { time: "15:00", activity: "佛國寺 & 大陵院", type: "spot", loc: "佛國寺" },
+        { time: "19:00", activity: "東宮與月池", type: "spot", loc: "東宮與月池" }
+      ]
+    },
+    {
+      day: "DAY 4", date: "01/24", theme: "Coastal Culture",
+      weather: "3°C / -2°C ☀️",
+      events: [
+        { time: "09:00", activity: "松島海上纜車", type: "spot", loc: "松島海上纜車" },
+        { time: "12:00", activity: "札嘎其市場 (帝王蟹)", type: "food", loc: "札嘎其市場" },
+        { time: "14:30", activity: "白淺灘文化村", type: "spot", loc: "白淺灘文化村" }
+      ]
+    },
+    {
+      day: "DAY 5", date: "01/25", theme: "Gamcheon & Return",
+      weather: "5°C / 0°C ☁️",
+      events: [
+        { time: "09:00", activity: "甘川洞文化村", type: "spot", loc: "甘川洞文化村" },
+        { time: "18:55", activity: "金海機場歸途", type: "flight", loc: "金海國際機場" }
+      ]
+    }
+  ];
+
+  const addExpense = () => {
+    if(newExpense.item && newExpense.cost) {
+      setExpenses([...expenses, { ...newExpense, id: Date.now() }]);
+      setNewExpense({ item: '', cost: '' });
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-[#000000] text-[#FFFFFF] font-sans selection:bg-[#f8a5c2]">
+      {/* Blackpink Header */}
+      <header className="py-10 border-b border-[#f8a5c2]/30 text-center relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-1 bg-[#f8a5c2]"></div>
+        <h1 className="text-6xl font-black tracking-tighter text-[#f8a5c2] uppercase">Busan <span className="text-white">Vibe</span></h1>
+        <p className="mt-2 text-gray-400 tracking-[0.3em] uppercase text-sm">Luxury Travel Itinerary</p>
+      </header>
+
+      <main className="max-w-5xl mx-auto px-6 py-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        <header class="wave-header text-white p-8 pb-14 text-center">
-            <h1 class="text-2xl font-black mb-2 tracking-tighter">🐳 釜山・海景冒險 2026</h1>
-            <nav class="flex bg-sky-900/40 backdrop-blur-md rounded-2xl mt-6 p-1 border border-white/20">
-                <button @click="view = 'itinerary'" :class="view === 'itinerary' ? 'bg-white text-sky-700 shadow-lg' : 'text-white'" class="flex-1 py-3 rounded-xl font-black transition-all">🐚 行程</button>
-                <button @click="view = 'accounting'" :class="view === 'accounting' ? 'bg-white text-sky-700 shadow-lg' : 'text-white'" class="flex-1 py-3 rounded-xl font-black transition-all">🦀 記帳</button>
-                <button @click="view = 'checklist'" :class="view === 'checklist' ? 'bg-white text-sky-700 shadow-lg' : 'text-white'" class="flex-1 py-3 rounded-xl font-black transition-all">🎒 清單</button>
-            </nav>
-        </header>
+        {/* Left Column: Itinerary */}
+        <div className="lg:col-span-2 space-y-8">
+          <div className="flex gap-2 overflow-x-auto pb-4 scrollbar-hide">
+            {itinerary.map((item, idx) => (
+              <button key={idx} onClick={() => setActiveDay(idx)}
+                className={`flex-shrink-0 px-6 py-3 rounded-sm font-bold border-2 transition-all ${
+                  activeDay === idx ? 'bg-[#f8a5c2] border-[#f8a5c2] text-black' : 'border-[#333] text-gray-500 hover:border-[#f8a5c2]'
+                }`}>
+                {item.day}
+              </button>
+            ))}
+          </div>
 
-        <main class="flex-grow px-4 -mt-6 relative z-10">
-            
-            <div v-if="view === 'itinerary'">
-                <div class="flex space-x-2 mb-6 overflow-x-auto py-2 no-scrollbar">
-                    <button v-for="d in 5" :key="d" @click="activeDay = d" 
-                        :class="activeDay === d ? 'bg-sky-600 text-white shadow-md' : 'bg-sky-50 text-sky-400 border border-sky-100'"
-                        class="px-5 py-3 rounded-2xl font-black flex-shrink-0 transition-all text-center min-w-[90px]">
-                        <div class="text-xl">D{{ d }}</div>
-                        <div class="text-xs opacity-80">{{ weatherData[d].icon }} {{ weatherData[d].temp }}</div>
-                    </button>
+          <AnimatePresence mode="wait">
+            <motion.div key={activeDay} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+              <div className="flex justify-between items-end border-b border-[#333] pb-4">
+                <div>
+                  <h2 className="text-4xl font-bold italic">{itinerary[activeDay].theme}</h2>
+                  <p className="text-[#f8a5c2] font-mono mt-1">{itinerary[activeDay].date} BUSAN, KR</p>
                 </div>
+                <div className="text-right">
+                  <CloudSun className="inline-block mr-2 text-[#f8a5c2]" />
+                  <span className="font-mono">{itinerary[activeDay].weather}</span>
+                </div>
+              </div>
 
-                <div class="space-y-8">
-                    <div v-for="(item, idx) in itineraries[activeDay]" :key="idx" class="relative">
-                        <div class="flex items-center space-x-3 mb-2">
-                            <span class="font-mono font-black text-sky-600 text-2xl tracking-tight">{{ item.time }}</span>
-                            <span class="text-xs bg-sky-100 text-sky-600 px-3 py-1 rounded-full font-black uppercase">{{ item.transport }}</span>
-                        </div>
-                        <h3 class="text-2xl font-black text-slate-900 mb-3 leading-snug">{{ item.activity }}</h3>
-                        <div class="ocean-card p-5 mb-3">
-                            <p class="text-slate-700 text-lg leading-relaxed remarks-wrap font-medium">{{ item.desc }}</p>
-                        </div>
-                        
-                        <div class="grid grid-cols-2 gap-2">
-                            <button @click="openMap('naver', item.activity)" class="bg-green-500 text-white py-3 rounded-xl font-black text-sm shadow-sm">📍 Naver Map</button>
-                            <button @click="openMap('google', item.activity)" class="bg-blue-500 text-white py-3 rounded-xl font-black text-sm shadow-sm">🗺️ Google Map</button>
-                        </div>
-                        <div v-if="idx !== itineraries[activeDay].length - 1" class="mt-8 border-b-2 border-dotted border-sky-100"></div>
-                    </div>
+              {itinerary[activeDay].events.map((event, idx) => (
+                <div key={idx} className="group bg-[#111] border border-[#222] p-6 flex flex-col md:flex-row gap-6 items-start md:items-center hover:border-[#f8a5c2] transition-colors">
+                  <div className="text-2xl font-mono font-black text-[#333] group-hover:text-[#f8a5c2]">{event.time}</div>
+                  <div className="flex-1">
+                    <h4 className="text-xl font-bold">{event.activity}</h4>
+                    <p className="text-gray-500 text-sm mt-1 flex items-center gap-1">
+                      <MapPin size={14} /> {event.loc}
+                    </p>
+                  </div>
+                  <a href={getNaverLink(event.loc)} target="_blank" rel="noreferrer"
+                    className="flex items-center gap-2 bg-white text-black px-4 py-2 text-xs font-bold uppercase hover:bg-[#f8a5c2] transition-colors">
+                    Naver Map <ExternalLink size={14} />
+                  </a>
                 </div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Right Column: Tools */}
+        <div className="space-y-8">
+          {/* Currency Calculator */}
+          <section className="bg-[#111] p-6 border-t-4 border-[#f8a5c2]">
+            <h3 className="flex items-center gap-2 font-bold mb-4 uppercase text-[#f8a5c2]"><Calculator size={18}/> 匯率換算 (1:{EXCHANGE_RATE})</h3>
+            <div className="space-y-3">
+              <div>
+                <label className="text-[10px] text-gray-500 uppercase">TWD 台幣</label>
+                <input type="number" value={twdAmount} onChange={(e) => {setTwdAmount(e.target.value); setKrwAmount(e.target.value * EXCHANGE_RATE)}} 
+                  className="w-full bg-black border border-[#333] p-2 text-white focus:border-[#f8a5c2] outline-none" />
+              </div>
+              <div className="text-center text-[#f8a5c2]">⬇⬆</div>
+              <div>
+                <label className="text-[10px] text-gray-500 uppercase">KRW 韓元</label>
+                <input type="number" value={krwAmount} onChange={(e) => {setKrwAmount(e.target.value); setTwdAmount(e.target.value / EXCHANGE_RATE)}}
+                  className="w-full bg-black border border-[#333] p-2 text-white focus:border-[#f8a5c2] outline-none" />
+              </div>
             </div>
+          </section>
 
-            <div v-if="view === 'accounting'" class="space-y-6">
-                <div class="ocean-card p-6 text-center">
-                    <h2 class="text-xs font-black text-sky-400 uppercase mb-2">KRW ➜ TWD (0.024)</h2>
-                    <div class="flex items-center justify-center space-x-3">
-                        <input v-model.number="calcInput" type="number" pattern="\d*" class="w-1/2 text-center text-3xl font-black text-sky-600 border-b-2 border-sky-100 outline-none pb-1" placeholder="0">
-                        <span class="text-xl font-black text-slate-300">₩</span>
-                    </div>
-                    <div class="mt-2 text-2xl font-black text-slate-400">≈ <span class="text-sky-500">NT$ {{ Math.round(calcInput * 0.024) }}</span></div>
-                </div>
+          {/* Money Exchange Point */}
+          <section className="bg-[#111] p-6 border-t-4 border-white">
+            <h3 className="flex items-center gap-2 font-bold mb-4 uppercase text-white"><Wallet size={18}/> 換匯點推薦</h3>
+            <ul className="text-sm space-y-3 text-gray-400">
+              <li className="border-b border-[#222] pb-2">
+                <span className="text-white block font-bold">南浦洞友利/映真換錢所</span>
+                匯率最優，步行可達飯店
+              </li>
+              <li>
+                <span className="text-white block font-bold">西面站 Money Box</span>
+                24小時機台，適合晚班機
+              </li>
+            </ul>
+          </section>
 
-                <div class="ocean-card bg-sky-600 p-6 text-white shadow-lg border-none">
-                    <h2 class="text-xl font-black mb-4 text-center">🐙 新增支出</h2>
-                    <div class="space-y-4">
-                        <input v-model="expenseName" type="text" class="w-full bg-white/20 rounded-xl px-4 py-3 text-lg font-black outline-none placeholder:text-sky-200 border border-white/30" placeholder="項目名稱">
-                        <input v-model.number="expenseAmount" type="number" pattern="\d*" class="w-full bg-white/20 rounded-xl px-4 py-3 text-2xl font-black outline-none placeholder:text-sky-200 border border-white/30" placeholder="金額 (KRW)">
-                        <button @click="saveExpense" class="w-full bg-white text-sky-600 py-4 rounded-2xl font-black text-xl shadow-md">儲存 ＋</button>
-                    </div>
-                </div>
-
-                <div class="ocean-card overflow-hidden">
-                    <div class="p-4 bg-sky-50 border-b border-sky-100 font-black text-sky-700">明細 ({{ expenses.length }})</div>
-                    <div class="divide-y divide-sky-50">
-                        <div v-for="(exp, index) in expenses" :key="exp.id" class="p-5 flex justify-between items-center">
-                            <div class="flex-grow">
-                                <div class="font-black text-slate-800 text-lg leading-tight">{{ exp.name }}</div>
-                                <div class="text-xs font-bold text-slate-400 font-mono">₩{{ exp.amount.toLocaleString() }} | NT${{ Math.round(exp.amount * 0.024) }}</div>
-                            </div>
-                            <button @click="handleDelete(index)" class="bg-rose-50 text-rose-500 font-black px-4 py-2 rounded-xl text-sm border border-rose-100">
-                                刪除
-                            </button>
-                        </div>
-                        <div v-if="expenses.length === 0" class="p-10 text-center text-sky-200 font-black">無紀錄</div>
-                    </div>
-                </div>
+          {/* Shopping Tracker */}
+          <section className="bg-[#111] p-6 border-t-4 border-[#f8a5c2]">
+            <h3 className="flex items-center gap-2 font-bold mb-4 uppercase text-[#f8a5c2]"><ShoppingBag size={18}/> 購物清單/花費</h3>
+            <div className="flex gap-2 mb-4">
+              <input placeholder="品項" className="flex-1 bg-black border border-[#333] p-2 text-xs" 
+                value={newExpense.item} onChange={e => setNewExpense({...newExpense, item: e.target.value})} />
+              <input placeholder="KRW" type="number" className="w-20 bg-black border border-[#333] p-2 text-xs" 
+                value={newExpense.cost} onChange={e => setNewExpense({...newExpense, cost: e.target.value})} />
+              <button onClick={addExpense} className="bg-[#f8a5c2] text-black px-3 font-bold">+</button>
             </div>
-
-            <div v-if="view === 'checklist'" class="space-y-6">
-                <div class="ocean-card p-6">
-                    <h2 class="font-black text-2xl mb-6 text-sky-700 text-center">行前準備 🐧</h2>
-                    <div class="flex flex-col space-y-3 mb-6">
-                        <input v-model="newItem" @keyup.enter="addItem" type="text" 
-                            class="w-full bg-sky-50 rounded-xl px-4 py-4 text-lg font-bold outline-none border-2 border-transparent focus:border-sky-200" 
-                            placeholder="輸入攜帶項目...">
-                        <button @click="addItem" 
-                            class="w-full bg-sky-500 text-white py-4 rounded-xl font-black text-xl shadow-md">
-                            新增項目 ＋
-                        </button>
-                    </div>
-                    <ul class="space-y-3">
-                        <li v-for="(task, idx) in listItems" :key="idx" @click="task.done = !task.done" 
-                            class="flex items-center p-4 bg-sky-50/50 rounded-2xl border border-sky-50" :class="task.done ? 'opacity-40' : ''">
-                            <div class="w-8 h-8 rounded-full border-2 flex items-center justify-center flex-shrink-0" 
-                                :class="task.done ? 'bg-green-400 border-green-300' : 'bg-white border-sky-200'">
-                                <span v-if="task.done" class="text-white text-sm">✓</span>
-                            </div>
-                            <span :class="task.done ? 'line-through' : ''" class="ml-4 font-black text-lg flex-grow text-slate-700">{{ task.title }}</span>
-                            <button @click.stop="listItems.splice(idx, 1)" class="text-rose-200 text-2xl px-2 font-black">✕</button>
-                        </li>
-                    </ul>
+            <div className="max-h-40 overflow-y-auto space-y-2">
+              {expenses.map(ex => (
+                <div key={ex.id} className="flex justify-between text-xs border-b border-[#222] pb-1">
+                  <span>{ex.item}</span>
+                  <span className="text-[#f8a5c2]">₩{Number(ex.cost).toLocaleString()}</span>
                 </div>
+              ))}
             </div>
-        </main>
+            <div className="mt-4 pt-2 border-t border-[#333] text-right font-bold">
+              Total: ₩{expenses.reduce((sum, current) => sum + Number(current.cost), 0).toLocaleString()}
+            </div>
+          </section>
+        </div>
+      </main>
 
-        <footer class="mt-8 p-6 text-center text-sky-200 text-xs font-black tracking-widest">
-            ✈️ BUSAN ADVENTURE 2026
-        </footer>
+      <footer className="text-center py-20 opacity-20 hover:opacity-100 transition-opacity">
+        <p className="tracking-widest font-light">BLACKPINK IN YOUR BUSAN • 2025</p>
+      </footer>
     </div>
+  );
+};
 
-    <script>
-        const { createApp, ref } = Vue;
-        createApp({
-            setup() {
-                const view = ref('itinerary');
-                const activeDay = ref(1);
-                const calcInput = ref(null);
-                const weatherData = ref({
-                    1: { icon: '☀️', temp: '-1°/7°' }, 2: { icon: '⛅', temp: '0°/8°' },
-                    3: { icon: '☁️', temp: '-2°/6°' }, 4: { icon: '☀️', temp: '1°/9°' }, 5: { icon: '🌦️', temp: '0°/7°' }
-                });
-
-                // 記帳與清單邏輯
-                const expenseName = ref('');
-                const expenseAmount = ref(null);
-                const expenses = ref([]);
-                const saveExpense = () => {
-                    const name = expenseName.value.trim();
-                    const amount = Number(expenseAmount.value);
-                    if (name && amount > 0) {
-                        expenses.value.unshift({ id: Date.now(), name, amount });
-                        expenseName.value = ''; expenseAmount.value = null;
-                        if (document.activeElement) document.activeElement.blur();
-                    }
-                };
-                const handleDelete = (idx) => { expenses.value.splice(idx, 1); };
-
-                const newItem = ref('');
-                const listItems = ref([
-                    { title: '換匯韓元', done: true }, { title: '下載 NAVER Map', done: true }, { title: 'WOWPASS 申辦', done: false }
-                ]);
-                const addItem = () => {
-                    if (newItem.value.trim()) {
-                        listItems.value.push({ title: newItem.value, done: false });
-                        newItem.value = '';
-                        if (document.activeElement) document.activeElement.blur();
-                    }
-                };
-
-                // 地圖連動語法修正
-                const openMap = (type, query) => {
-                    const q = encodeURIComponent(query);
-                    const url = type === 'naver' 
-                        ? `https://map.naver.com/v5/search/${q}`
-                        : `https://www.google.com/maps/search/${q}`;
-                    window.open(url, '_blank');
-                };
-
-                // 行程資料 (更新為您的內容)
-                const itineraries = ref({
-                    1: [
-                        { time: '08:00', activity: '從家裡出發', transport: '開車2~3hr', desc: '斗六/虎尾' },
-                        { time: '11:00', activity: '抵達連統停車場', transport: '開車', desc: '桃園市大園區國際路一段509-1號' },
-                        { time: '12:00', activity: '到達第二航廈', transport: '接駁車', desc: '辦理報到、託運、入關' },
-                        { time: '14:25', activity: '飛機起飛 (BR164)', transport: '飛機', desc: '長榮航空' },
-                        { time: '17:40', activity: '抵達金海機場', transport: '飛機', desc: '辦理入境手續' },
-                        { time: '18:10', activity: '前往地鐵站', transport: '步行', desc: '由GATE3走到馬路對面右轉' },
-                        { time: '18:30', activity: '搭乘地鐵到沙上站', transport: '地鐵', desc: '轉乘綠色2號線往西面/萇山方向' },
-                        { time: '18:40', activity: '由西面站到札嘎其站', transport: '地鐵', desc: '轉乘橘色1號線往多南浦/大浦海水浴場方向' },
-                        { time: '19:00', activity: '札嘎其站7號出口出站', transport: '步行', desc: '出站正前方路口左轉第二棟大樓。5號出口有電梯，出電梯直走過7號出口左轉' },
-                        { time: '19:05', activity: 'NewCZ南浦店入住', transport: '步行', desc: '飯店辦理手續' },
-                        { time: '20:00', activity: '周邊覓食', transport: '步行', desc: 'KPOP唱片行(南浦洞)\n晚餐：人蔘雞湯粥/南浦雪濃湯\n消夜：Bhc炸雞或老爺炸雞' }
-                    ],
-                    2: [
-                        { time: '08:00', activity: '吃早餐', transport: '步行', desc: '新昌吐司/EggDrop/路邊小吃' },
-                        { time: '09:30', activity: '前往海雲台', transport: '地鐵/計程車', desc: '1.約50分鐘：1號線(札嘎其)>西面轉2號線(海雲台)\n2.約40-60分鐘：計程車約20000韓幣' },
-                        { time: '10:30', activity: '東釜山OUTLET/滑車', transport: '計程車', desc: '10:30開門 (北臉/國家地理便宜)\n斜坡滑車(10:00開門)就在OUTLET旁' },
-                        { time: '13:55', activity: '海雲台傳統市場', transport: '計程車', desc: '午餐：31公分海鮮湯麵/小麥冷麵/元祖糖餅/巨大牛骨湯' },
-                        { time: '14:25', activity: '新世界百貨', transport: '計程車/地鐵', desc: '逛街消化一下接著去汗蒸幕' },
-                        { time: '15:30', activity: 'SPA LAND 汗蒸幕', transport: '汗蒸幕', desc: '必喝甜米釀/吃烤蛋。\n汗蒸幕步驟:售票處換(買)票→拖鞋寄鞋櫃→櫃台領取手環+衣服+毛巾→脫衣服→清洗→泡湯(熱湯/溫湯/冷湯可選擇)→穿發的衣服→桑拿房/泡腳池/用餐區→換自己的衣服→手環結算費用→穿鞋' },
-                        { time: '18:30', activity: '回西面站吃烤肉', transport: '美食', desc: '烤肉的男子/釜山宅烤肉/味贊王/83獬豸\n4選1'},
-                        { time: '20:00', activity: '西面站逛街', transport: '步行', desc: '景點：西面地下街文創店 / 大創百貨' },
-                        { time: '23:00', activity: '飯店', transport: '交通', desc: '返回飯店休息' }
-                    ],
-                    3: [
-                        { time: '08:00', activity: '吃早餐', transport: '步行', desc: '附近小吃或前一晚便利商店買早餐，避免耽誤集合時間' },
-                        { time: '09:00', activity: '釜山站1號出口集合', transport: '地鐵', desc: 'KTX 釜山站 1 號出口跟團集合' },
-                        { time: '10:30', activity: '天空膠囊 (藍線公園)', transport: '跟團', desc: '1.青沙浦下車：道熙家도희네/秀敏家/우봉 샤브(韓牛紙火鍋)\n松亭站下車：31cm海鮮刀削麵' },
-                        { time: '13:10', activity: '海東龍宮寺', transport: '跟團', desc: '臨海佛寺觀光' },
-                        { time: '15:00', activity: '佛國寺', transport: '跟團', desc: '慶州世界文化遺產' },
-                        { time: '16:40', activity: '大陵院+皇理團路', transport: '跟團', desc: '必吃：10元餅、南瓜薯條\n晚餐：鄉花亭(韓式料理)/百年客人(烤肉)' },
-                        { time: '19:00', activity: '東宮與月池', transport: '跟團', desc: '夜景導覽' },
-                        { time: '21:50', activity: '返抵釜山站', transport: '跟團', desc: '結束一日團行程\n看時間是否提前於西面站下車?' }
-                    ],
-                    4: [
-                        { time: '08:00', activity: '吃早餐', transport: '步行', desc: '古來司魚糕(札嘎其店)/路邊小吃' },
-                        { time: '08:30', activity: '松島天空步道', transport: '計程車', desc: '步道散步' },
-                        { time: '09:00', activity: '松島海上纜車', transport: '纜車', desc: '09:00營運開始' },
-                        { time: '12:00', activity: '札嘎其市場午餐', transport: '海鮮', desc: '帝王蟹必吃 (每公斤約6-8萬韓元)' },
-                        { time: '13:50', activity: '樂天百貨看開橋', transport: '步行', desc: '1.行程提早可進樂天百貨逛超市\n2.行程較晚吃完午餐直接步行至橋邊觀賞' },
-                        { time: '15:30', activity: '太宗台', transport: '計程車', desc: '遊園車營運至17:30' },
-                        { time: '18:00', activity: '釜山塔', transport: '計程車', desc: '龍頭山公園手扶梯，營業至22:00' },
-                        { time: '19:30', activity: '富平罐頭市場', transport: '步行', desc: '晚餐：紅豆艾草麻吉/魚板' },
-                        { time: '23:00', activity: '飯店', transport: '步行', desc: '回飯店' }
-                    ],
-                    5: [
-                        { time: '08:00', activity: '早餐+整理行李', transport: '步行', desc: '隨意吃，飯店 Check-out' },
-                        { time: '09:00', activity: '甘川洞文化村', transport: '計程車', desc: '尋找小王子與壁畫村拍照' },
-                        { time: '12:00', activity: '飯店附近活動', transport: '步行', desc: '樂天超市最後補齊伴手禮' },
-                        { time: '13:00', activity: '午餐', transport: '美食', desc: '李在模披薩或自由發揮' },
-                        { time: '16:00', activity: '抵達金海機場', transport: '地鐵', desc: '辦理 Check-in、KIOSK 退稅' },
-                        { time: '18:55', activity: '返台起飛 (BR163)', transport: '飛機', desc: '預計 20:25 抵達桃園回溫暖的家' }
-                    ]
-                });
-
-                return {
-                    view, activeDay, itineraries, calcInput, weatherData,
-                    newItem, listItems, addItem, 
-                    expenses, expenseName, expenseAmount, saveExpense, handleDelete, openMap
-                };
-            }
-        }).mount('#app');
-    </script>
-</body>
-</html>
+export default BusanLuxuryTrip;
